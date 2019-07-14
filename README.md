@@ -166,8 +166,7 @@ pip install -r requirements-python-lib.txt --target mongo_lib/lib --trusted-host
 ```
 cd {Python_Project}/mysql-db-admin
 test/unit/mysql_db_admin/help_message.py
-test/unit/mysql_db_admin/
-test/unit/mysql_db_admin/
+test/unit/mysql_db_admin/run_analyze.py
 test/unit/mysql_db_admin/run_program.py
 test/unit/mysql_db_admin/main.py
 ```

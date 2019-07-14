@@ -30,6 +30,7 @@ pipeline {
                 pip2 install mysql-connector-python --user
                 pip2 install pymongo --user
                 ./test/unit/mysql_db_admin/help_message.py
+                ./test/unit/mysql_db_admin/run_analyze.py
                 deactivate
                 rm -rf test_env
                 """

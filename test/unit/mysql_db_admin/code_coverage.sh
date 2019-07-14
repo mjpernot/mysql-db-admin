@@ -9,6 +9,7 @@ coverage erase
 echo ""
 echo "Running unit test modules in conjunction with coverage"
 coverage run -a --source=mysql_db_admin test/unit/mysql_db_admin/help_message.py
+coverage run -a --source=mysql_db_admin test/unit/mysql_db_admin/run_analyze.py
 
 echo ""
 echo "Producing code coverage report"
