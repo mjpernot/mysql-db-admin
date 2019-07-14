@@ -36,7 +36,7 @@ Breaking Change
 ### Changed
 - Convert program to use local libraries from ./lib directory.
 - Change single quotes to double quotes.
-- Help_Message:  Replace docstring with printing the programs __doc__.
+- Help_Message:  Replace docstring with printing the programs \_\_doc\_\_.
 
 
 ## [1.5.0] - 2016-12-20
@@ -65,11 +65,11 @@ Breaking Change
 ### Changed
 - Run_Program:  Processing for some of the new options and passing to the functions.  Setup a Mongo instance.
 - main:  Added options "-M", "-m", "-f", "-i", and "-o" options to a number of variables and added a number of new function call checks.
-- Optimize:  Pass **kwargs to Process_Request function call.
-- Checksum:  Pass **kwargs to Process_Request function call.
-- Analyze:  Pass **kwargs to Process_Request function call.
-- Check:  Pass **kwargs to Process_Request function call.
-- Process_Request:  Receive **kwargs into function and passed **kwargs to Run_Check, Run_Analyze, Run_Checksum, and Run_Optimize functions.
+- Optimize:  Pass \*\*kwargs to Process_Request function call.
+- Checksum:  Pass \*\*kwargs to Process_Request function call.
+- Analyze:  Pass \*\*kwargs to Process_Request function call.
+- Check:  Pass \*\*kwargs to Process_Request function call.
+- Process_Request:  Receive \*\*kwargs into function and passed \*\*kwargs to Run_Check, Run_Analyze, Run_Checksum, and Run_Optimize functions.
 
 ### Added
 - Status function.
