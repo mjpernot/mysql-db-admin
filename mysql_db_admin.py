@@ -103,7 +103,6 @@ import mysql_lib.mysql_class as mysql_class
 import mongo_lib.mongo_libs as mongo_libs
 import version
 
-# Version
 __version__ = version.__version__
 
 
@@ -153,8 +152,6 @@ def run_checksum(SERVER, db, tbl, **kwargs):
         (input) SERVER -> Server database instance.
         (input) db -> Database name.
         (input) tbl -> Table name.
-        (input) **kwargs:
-            None
 
     """
 
@@ -203,8 +200,6 @@ def run_check(SERVER, db, tbl, **kwargs):
         (input) SERVER -> Server database instance.
         (input) db -> Database name.
         (input) tbl -> Table name.
-        (input) **kwargs:
-            None
 
     """
 
@@ -223,8 +218,6 @@ def detect_dbs(sub_db_list, full_db_list, **kwargs):
     Arguments:
         (input) sub_db_list -> Subset Database list.
         (input) full_db_list -> Full Database list.
-        (input) **kwargs:
-            None
 
     """
 
