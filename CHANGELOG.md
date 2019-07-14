@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on "Keep a Changelog".  This project adheres to Semantic Versioning.
 
 
+## [3.0.0] - 2019-07-14
+Breaking Change
+
+- Modified program to use the mysql_class v4.0.0 version.  The v4.0.0 replaces the MySQLdb support library with the mysql.connector support library.
+
+
 ## [2.0.1] - 2018-12-06
 ### Fixed
 - process_request:  Changed function parameter mutable argument default to immutable argument default.
