@@ -116,6 +116,7 @@ class UnitTest(unittest.TestCase):
         self.tbl_name2 = ["tbl1"]
         self.tbl_name3 = ["tbl3"]
 
+    @mock.patch("mysql_db_admin.detect_dbs")
     @mock.patch("mysql_db_admin.gen_libs.dict_2_list")
     @mock.patch("mysql_db_admin.mysql_libs.fetch_tbl_dict")
     @mock.patch("mysql_db_admin.mysql_libs.fetch_db_dict")
@@ -138,14 +139,15 @@ class UnitTest(unittest.TestCase):
         with gen_libs.no_std_out():
             self.assertFalse(mysql_db_admin.process_request(self.server, 
                                                             self.func_name,
-                                                            self.db_name2
-                                                            seld.tbl_name2))
+                                                            self.db_name2,
+                                                            self.tbl_name2))
 
+    @mock.patch("mysql_db_admin.detect_dbs")
     @mock.patch("mysql_db_admin.gen_libs.dict_2_list")
     @mock.patch("mysql_db_admin.mysql_libs.fetch_tbl_dict")
     @mock.patch("mysql_db_admin.mysql_libs.fetch_db_dict")
     def test_single_tbl(self, mock_fetch_db, mock_fetch_tbl, mock_list,
-                      mock_detect):
+                        mock_detect):
 
         """Function:  test_single_tbl
 
@@ -162,9 +164,10 @@ class UnitTest(unittest.TestCase):
 
         self.assertFalse(mysql_db_admin.process_request(self.server, 
                                                         self.func_name,
-                                                        self.db_name2
-                                                        seld.tbl_name2))
+                                                        self.db_name2,
+                                                        self.tbl_name2))
 
+    @mock.patch("mysql_db_admin.detect_dbs")
     @mock.patch("mysql_db_admin.gen_libs.dict_2_list")
     @mock.patch("mysql_db_admin.mysql_libs.fetch_tbl_dict")
     @mock.patch("mysql_db_admin.mysql_libs.fetch_db_dict")
@@ -186,8 +189,8 @@ class UnitTest(unittest.TestCase):
 
         self.assertFalse(mysql_db_admin.process_request(self.server, 
                                                         self.func_name,
-                                                        self.db_name2
-                                                        seld.tbl_name))
+                                                        self.db_name2,
+                                                        self.tbl_name))
 
     @mock.patch("mysql_db_admin.gen_libs.dict_2_list")
     @mock.patch("mysql_db_admin.mysql_libs.fetch_tbl_dict")
@@ -208,8 +211,8 @@ class UnitTest(unittest.TestCase):
 
         self.assertFalse(mysql_db_admin.process_request(self.server, 
                                                         self.func_name,
-                                                        self.db_name
-                                                        seld.tbl_name))
+                                                        self.db_name,
+                                                        self.tbl_name))
 
 
 if __name__ == "__main__":

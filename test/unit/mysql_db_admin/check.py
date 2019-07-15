@@ -106,8 +106,7 @@ class UnitTest(unittest.TestCase):
 
         mock_process.return_value = True
 
-        self.assertFalse(mysql_db_admin.check(self.server, self.run_check,
-                                              self.args_array))
+        self.assertFalse(mysql_db_admin.check(self.server, self.args_array))
 
 
 if __name__ == "__main__":
