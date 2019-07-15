@@ -92,7 +92,7 @@ class UnitTest(unittest.TestCase):
 
         self.server = Server()
         self.run_checksum = True
-        self.args_array = {"-A": True}
+        self.args_array = {"-S": True}
 
     @mock.patch("mysql_db_admin.process_request")
     def test_checksum(self, mock_process):
