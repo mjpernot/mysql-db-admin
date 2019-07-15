@@ -140,7 +140,7 @@ class UnitTest(unittest.TestCase):
             self.assertFalse(mysql_db_admin.process_request(self.server, 
                                                             self.func_name,
                                                             self.db_name2,
-                                                            self.tbl_name2))
+                                                            self.tbl_name3))
 
     @mock.patch("mysql_db_admin.detect_dbs")
     @mock.patch("mysql_db_admin.gen_libs.dict_2_list")

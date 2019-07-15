@@ -143,7 +143,7 @@ class UnitTest(unittest.TestCase):
 
         mock_arg.return_value = self.args_array
         mock_help.return_value = False
-        mock_req.return_value = True
+        mock_req.return_value = False
         mock_xor.return_value = False
 
         self.assertFalse(mysql_db_admin.main())
@@ -164,7 +164,7 @@ class UnitTest(unittest.TestCase):
 
         mock_arg.return_value = self.args_array
         mock_help.return_value = False
-        mock_req.return_value = True
+        mock_req.return_value = False
         mock_xor.return_value = False
 
         self.assertFalse(mysql_db_admin.main())
@@ -187,7 +187,7 @@ class UnitTest(unittest.TestCase):
 
         mock_arg.return_value = self.args_array
         mock_help.return_value = False
-        mock_req.return_value = True
+        mock_req.return_value = False
         mock_xor.return_value = True
         mock_cond.return_value = False
 
@@ -212,7 +212,7 @@ class UnitTest(unittest.TestCase):
 
         mock_arg.return_value = self.args_array
         mock_help.return_value = False
-        mock_req.return_value = True
+        mock_req.return_value = False
         mock_xor.return_value = True
         mock_cond.return_value = True
         mock_dir.return_value = True
@@ -233,7 +233,7 @@ class UnitTest(unittest.TestCase):
 
         mock_arg.arg_parse2.return_value = self.args_array
         mock_help.return_value = False
-        mock_arg.arg_require.return_value = True
+        mock_arg.arg_require.return_value = False
         mock_arg.arg_xor_dict.return_value = True
         mock_arg.arg_cond_req.return_value = True
         mock_arg.arg_dir_chk_crt.return_value = False
@@ -256,7 +256,7 @@ class UnitTest(unittest.TestCase):
 
         mock_arg.arg_parse2.return_value = self.args_array
         mock_help.return_value = False
-        mock_arg.arg_require.return_value = True
+        mock_arg.arg_require.return_value = False
         mock_arg.arg_xor_dict.return_value = True
         mock_arg.arg_cond_req.return_value = True
         mock_arg.arg_dir_chk_crt.return_value = False
