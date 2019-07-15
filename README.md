@@ -176,6 +176,7 @@ test/unit/mysql_db_admin/run_check.py
 test/unit/mysql_db_admin/run_checksum.py
 test/unit/mysql_db_admin/run_optimize.py
 test/unit/mysql_db_admin/run_analyze.py
+test/unit/mysql_db_admin/status.py
 test/unit/mysql_db_admin/run_program.py
 test/unit/mysql_db_admin/main.py
 ```
