@@ -41,9 +41,9 @@ class Server(object):
 
     Description:  Class stub holder for mysql_class.Server class.
 
-    Super-Class:  None
+    Super-Class:
 
-    Sub-Classes:  None
+    Sub-Classes:
 
     Methods:
         __init__ -> Class initialization.
@@ -57,7 +57,6 @@ class Server(object):
         Description:  Class initialization.
 
         Arguments:
-            None
 
         """
 
