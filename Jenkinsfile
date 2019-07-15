@@ -31,6 +31,15 @@ pipeline {
                 pip2 install pymongo --user
                 ./test/unit/mysql_db_admin/help_message.py
                 ./test/unit/mysql_db_admin/run_analyze.py
+                ./test/unit/mysql_db_admin/analyze.py
+                ./test/unit/mysql_db_admin/check.py
+                ./test/unit/mysql_db_admin/checksum.py
+                ./test/unit/mysql_db_admin/detect_dbs.py
+                ./test/unit/mysql_db_admin/optimize.py
+                ./test/unit/mysql_db_admin/process_request.py
+                ./test/unit/mysql_db_admin/run_check.py
+                ./test/unit/mysql_db_admin/run_checksum.py
+                ./test/unit/mysql_db_admin/run_optimize.py
                 deactivate
                 rm -rf test_env
                 """
