@@ -27,6 +27,7 @@ Breaking Change
 - process_request:  Replaced sections of code with calls to \_proc_some_tbls, \_proc_all_dbs, and \_proc_all_tbls.
 
 ### Added
+- setup_mail:  Initialize a mail instance.
 - \_proc_some_tbls:  Private function for process_request.  Process some tables in listed databases.
 - \_proc_all_tbls:  Private function for process_request.  Process all tables.
 - \_proc_all_dbs:  Private function for process_request.  Process all tables in listed databases.
