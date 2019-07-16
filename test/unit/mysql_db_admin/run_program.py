@@ -107,6 +107,7 @@ class UnitTest(unittest.TestCase):
     Methods:
         setUp -> Initialize testing environment.
         test_email -> Test with email option.
+        test_mongo -> Test with mongo option.
         test_run_program -> Test run_program function.
 
     """
@@ -122,10 +123,11 @@ class UnitTest(unittest.TestCase):
         """
 
         self.server = Server()
-        self.args_array = {"-m": True, "-d": True, "-c": True, "-C": True}
         self.func_dict = {"-C": check}
+        self.args_array = {"-m": True, "-d": True, "-c": True, "-C": True}
         self.args_array2 = {"-m": True, "-d": True, "-c": True, "-C": True,
                             "-e": "ToEmail", "-s": "SubjectLine"}
+        self.args_array3 = {"-d": True, "-c": True, "-C": True}
 
     @mock.patch("mysql_db_admin.cmds_gen.disconnect")
     @mock.patch("mysql_db_admin.gen_libs.load_module")
@@ -150,11 +152,11 @@ class UnitTest(unittest.TestCase):
     @mock.patch("mysql_db_admin.cmds_gen.disconnect")
     @mock.patch("mysql_db_admin.gen_libs.load_module")
     @mock.patch("mysql_db_admin.mysql_libs.create_instance")
-    def test_run_program(self, mock_inst, mock_mongo, mock_disconn):
+    def test_mongo(self, mock_inst, mock_mongo, mock_disconn):
 
-        """Function:  test_run_program
+        """Function:  test_mongo
 
-        Description:  Test run_program function.
+        Description:  Test with mongo option.
 
         Arguments:
 
@@ -165,6 +167,24 @@ class UnitTest(unittest.TestCase):
         mock_disconn.return_value = True
 
         self.assertFalse(mysql_db_admin.run_program(self.args_array,
+                                                    self.func_dict))
+
+    @mock.patch("mysql_db_admin.cmds_gen.disconnect")
+    @mock.patch("mysql_db_admin.mysql_libs.create_instance")
+    def test_run_program(self, mock_inst, mock_disconn):
+
+        """Function:  test_run_program
+
+        Description:  Test run_program function.
+
+        Arguments:
+
+        """
+
+        mock_inst.return_value = self.server
+        mock_disconn.return_value = True
+
+        self.assertFalse(mysql_db_admin.run_program(self.args_array3,
                                                     self.func_dict))
 
 
