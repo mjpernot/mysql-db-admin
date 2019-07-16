@@ -263,41 +263,18 @@ def process_request(server, func_name, db_name=None, tbl_name=None, **kwargs):
     db_list = gen_libs.dict_2_list(mysql_libs.fetch_db_dict(server),
                                    "Database")
 
+    # Process all databases
     if not db_name:
-
         _proc_all_dbs(server, func_name, db_list, **kwargs)
 
-    # Process all tables in listed databases.
+    # Process all tables in some databases
     elif not tbl_name:
+        _proc_all_tbls(server, func_name, db_list, db_name, **kwargs)
 
-        detect_dbs(db_name, db_list, **kwargs)
-
-        for db in set(db_name) & set(db_list):
-
-            for tbl in gen_libs.dict_2_list(mysql_libs.fetch_tbl_dict(server,
-                                                                      db),
-                                            "table_name"):
-
-                func_name(server, db, tbl, **kwargs)
-
-    # Process listed tables in listed databases.
+    # Process specific tables.
     else:
-
-        detect_dbs(db_name, db_list, **kwargs)
-
-        for db in set(db_name) & set(db_list):
-            tbl_list = gen_libs.dict_2_list(mysql_libs.fetch_tbl_dict(server,
-                                                                      db),
-                                            "table_name")
-
-            tbls = list(set(tbl_name) - set(tbl_list))
-
-            if tbls:
-                print("Warning: Database (%s) Tables that do not exist %s."
-                      % (db, tbls))
-
-            for tbl in set(tbl_name) & set(tbl_list):
-                func_name(server, db, tbl, **kwargs)
+        _proc_some_tbls(server, func_name, db_list, db_name, tbl_name,
+                        **kwargs)
 
 
 def _proc_all_dbs(server, func_name, db_list, **kwargs):
@@ -320,6 +297,71 @@ def _proc_all_dbs(server, func_name, db_list, **kwargs):
     for db in db_list:
         for tbl in gen_libs.dict_2_list(mysql_libs.fetch_tbl_dict(server, db),
                                         "table_name"):
+            func_name(server, db, tbl, **kwargs)
+
+
+def _proc_all_tbls(server, func_name, db_list, db_name, **kwargs):
+
+    """Function:  _proc_all_tbls
+
+    Description:  Private function for process_requests().  Process all tables
+        in listed databases.
+
+    Arguments:
+        (input) server -> Server instance.
+        (input) func_name -> Name of a function.
+        (input) db_list -> List of all databases.
+        (input) db_name -> List of database names.
+        (input) **kwargs:
+            sys_dbs -> List of system databases.
+            multi_val -> List of options that may have multiple values.
+
+    """
+
+    db_name = list(db_name)
+    db_list = list(db_list)
+    detect_dbs(db_name, db_list, **kwargs)
+
+    for db in set(db_name) & set(db_list):
+        for tbl in gen_libs.dict_2_list(mysql_libs.fetch_tbl_dict(server, db),
+                                        "table_name"):
+            func_name(server, db, tbl, **kwargs)
+
+
+def _proc_some_tbls(server, func_name, db_list, db_name, tbl_name, **kwargs):
+
+    """Function:  _proc_some_tbls
+
+    Description:  Private function for process_requests().  Process somes
+        tables in listed databases.
+
+    Arguments:
+        (input) server -> Server instance.
+        (input) func_name -> Name of a function.
+        (input) db_list -> List of all databases.
+        (input) db_name -> List of database names.
+        (input) tbl_name -> List of table names.
+        (input) **kwargs:
+            sys_dbs -> List of system databases.
+            multi_val -> List of options that may have multiple values.
+
+    """
+
+    db_name = list(db_name)
+    db_list = list(db_list)
+    tbl_name = list(tbl_name)
+    detect_dbs(db_name, db_list, **kwargs)
+
+    for db in set(db_name) & set(db_list):
+        tbl_list = gen_libs.dict_2_list(mysql_libs.fetch_tbl_dict(server, db),
+                                        "table_name")
+        tbls = list(set(tbl_name) - set(tbl_list))
+
+        if tbls:
+            print("Warning: Database (%s) Tables that do not exist %s."
+                  % (db, tbls))
+
+        for tbl in set(tbl_name) & set(tbl_list):
             func_name(server, db, tbl, **kwargs)
 
 

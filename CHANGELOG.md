@@ -20,10 +20,12 @@ Breaking Change
 - detect_dbs:  Fixed problem with mutable default arguments issue.
 
 ### Changed
-- process_request:  Replaced section of code with call to \_proc_all_dbs.
+- process_request:  Replaced sections of code with calls to \_proc_some_tbls, \_proc_all_dbs, and \_proc_all_tbls.
 
 ### Added
-- \_proc_all_dbs:  Private function for process_request.  Process all databases.
+- \_proc_some_tbls:  Private function for process_request.  Process some tables in listed databases.
+- \_proc_all_tbls:  Private function for process_request.  Process all tables.
+- \_proc_all_dbs:  Private function for process_request.  Process all tables in listed databases.
 
 
 ## [2.0.1] - 2018-12-06
