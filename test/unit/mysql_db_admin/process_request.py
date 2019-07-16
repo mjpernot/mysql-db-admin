@@ -137,7 +137,7 @@ class UnitTest(unittest.TestCase):
         mock_detect.return_value = True
 
         with gen_libs.no_std_out():
-            self.assertFalse(mysql_db_admin.process_request(self.server, 
+            self.assertFalse(mysql_db_admin.process_request(self.server,
                                                             self.func_name,
                                                             self.db_name2,
                                                             self.tbl_name3))
@@ -162,7 +162,7 @@ class UnitTest(unittest.TestCase):
         mock_list.side_effect = [["db1"], ["tbl1", "tbl2"]]
         mock_detect.return_value = True
 
-        self.assertFalse(mysql_db_admin.process_request(self.server, 
+        self.assertFalse(mysql_db_admin.process_request(self.server,
                                                         self.func_name,
                                                         self.db_name2,
                                                         self.tbl_name2))
@@ -187,7 +187,7 @@ class UnitTest(unittest.TestCase):
         mock_list.side_effect = [["db1"], ["tbl1", "tbl2"]]
         mock_detect.return_value = True
 
-        self.assertFalse(mysql_db_admin.process_request(self.server, 
+        self.assertFalse(mysql_db_admin.process_request(self.server,
                                                         self.func_name,
                                                         self.db_name2,
                                                         self.tbl_name))
@@ -209,7 +209,7 @@ class UnitTest(unittest.TestCase):
         mock_fetch_tbl.return_value = True
         mock_list.side_effect = [["db1"], ["tbl1", "tbl2"]]
 
-        self.assertFalse(mysql_db_admin.process_request(self.server, 
+        self.assertFalse(mysql_db_admin.process_request(self.server,
                                                         self.func_name,
                                                         self.db_name,
                                                         self.tbl_name))

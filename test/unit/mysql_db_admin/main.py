@@ -74,7 +74,6 @@ class UnitTest(unittest.TestCase):
 
         self.args_array = {"-c": "CfgFile", "-d": "CfgDir"}
 
-
     @mock.patch("mysql_db_admin.gen_libs.help_func")
     @mock.patch("mysql_db_admin.arg_parser.arg_parse2")
     def test_help_true(self, mock_arg, mock_help):
@@ -202,7 +201,7 @@ class UnitTest(unittest.TestCase):
     @mock.patch("mysql_db_admin.gen_libs.help_func")
     @mock.patch("mysql_db_admin.arg_parser.arg_parse2")
     def test_arg_cond_false(self, mock_arg, mock_help, mock_req, mock_xor,
-                          mock_cond):
+                            mock_cond):
 
         """Function:  test_arg_cond_false
 

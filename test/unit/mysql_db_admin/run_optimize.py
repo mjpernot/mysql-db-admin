@@ -91,10 +91,11 @@ class UnitTest(unittest.TestCase):
 
         self.server = Server()
 
-        self.optimize_tbl = [{"Msg_type": "note",
-            "Msg_text": "Table does not support optimize, doing recreate + \
+        self.optimize_tbl = \
+            [{"Msg_type": "note",
+              "Msg_text": "Table does not support optimize, doing recreate + \
 analyze instead"},
-                             {"Msg_type": "Type2", "Msg_text": "Message2"}]
+             {"Msg_type": "Type2", "Msg_text": "Message2"}]
 
     @mock.patch("mysql_db_admin.gen_libs.prt_msg")
     @mock.patch("mysql_db_admin.mysql_libs.optimize_tbl")
