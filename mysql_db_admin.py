@@ -220,6 +220,8 @@ def detect_dbs(sub_db_list, full_db_list, **kwargs):
 
     """
 
+    sub_db_list = list(sub_db_list)
+    full_db_list = list(full_db_list)
     dbs = list(set(sub_db_list) - set(full_db_list))
 
     if dbs:
