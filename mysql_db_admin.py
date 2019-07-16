@@ -182,7 +182,7 @@ def run_optimize(server, db, tbl, **kwargs):
                "Table does not support optimize, doing recreate + \
 analyze instead":
 
-                pass
+                continue
 
             else:
                 print("DB: {0:20} Table: {1:50}\t".format(db, tbl), end="")
