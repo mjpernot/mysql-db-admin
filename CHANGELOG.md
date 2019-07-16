@@ -4,6 +4,36 @@ All notable changes to this project will be documented in this file.
 The format is based on "Keep a Changelog".  This project adheres to Semantic Versioning.
 
 
+## [3.0.0] - 2019-07-16
+Breaking Change
+
+- Modified program to use the mysql_class v4.0.0 version.  The v4.0.0 replaces the MySQLdb support library with the mysql.connector support library.
+
+### Fixed
+- run_program:  Fixed problem with mutable default arguments issue.
+- status:  Fixed problem with mutable default arguments issue.
+- check:  Fixed problem with mutable default arguments issue.
+- optimize:  Fixed problem with mutable default arguments issue.
+- checksum:  Fixed problem with mutable default arguments issue.
+- analyze:  Fixed problem with mutable default arguments issue.
+- process_request:  Fixed problem with mutable default arguments issue.
+- detect_dbs:  Fixed problem with mutable default arguments issue.
+
+### Changed
+- status:  Added capability to mail out JSON formatted data.
+- run_program:  Added setup of mail instance and passing mail instance to functions.
+- main:  Added '-e' and '-s' options to allow for email capability for some options.
+- status:  Removed "mongo_libs.json_prt_ins_2_db" and replaced with own internal code to do the same thing.
+- status:  Converted JSON document to using camelCase for keys.
+- process_request:  Replaced sections of code with calls to \_proc_some_tbls, \_proc_all_dbs, and \_proc_all_tbls.
+
+### Added
+- setup_mail:  Initialize a mail instance.
+- \_proc_some_tbls:  Private function for process_request.  Process some tables in listed databases.
+- \_proc_all_tbls:  Private function for process_request.  Process all tables.
+- \_proc_all_dbs:  Private function for process_request.  Process all tables in listed databases.
+
+
 ## [2.0.1] - 2018-12-06
 ### Fixed
 - process_request:  Changed function parameter mutable argument default to immutable argument default.
@@ -36,7 +66,7 @@ Breaking Change
 ### Changed
 - Convert program to use local libraries from ./lib directory.
 - Change single quotes to double quotes.
-- Help_Message:  Replace docstring with printing the programs __doc__.
+- Help_Message:  Replace docstring with printing the programs \_\_doc\_\_.
 
 
 ## [1.5.0] - 2016-12-20
@@ -65,11 +95,11 @@ Breaking Change
 ### Changed
 - Run_Program:  Processing for some of the new options and passing to the functions.  Setup a Mongo instance.
 - main:  Added options "-M", "-m", "-f", "-i", and "-o" options to a number of variables and added a number of new function call checks.
-- Optimize:  Pass **kwargs to Process_Request function call.
-- Checksum:  Pass **kwargs to Process_Request function call.
-- Analyze:  Pass **kwargs to Process_Request function call.
-- Check:  Pass **kwargs to Process_Request function call.
-- Process_Request:  Receive **kwargs into function and passed **kwargs to Run_Check, Run_Analyze, Run_Checksum, and Run_Optimize functions.
+- Optimize:  Pass \*\*kwargs to Process_Request function call.
+- Checksum:  Pass \*\*kwargs to Process_Request function call.
+- Analyze:  Pass \*\*kwargs to Process_Request function call.
+- Check:  Pass \*\*kwargs to Process_Request function call.
+- Process_Request:  Receive \*\*kwargs into function and passed \*\*kwargs to Run_Check, Run_Analyze, Run_Checksum, and Run_Optimize functions.
 
 ### Added
 - Status function.
