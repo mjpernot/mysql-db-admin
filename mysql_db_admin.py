@@ -465,22 +465,22 @@ def status(server, args_array, **kwargs):
     server.upd_srv_stat()
 
     if "-j" in args_array:
-        outdata = {"Application": "MySQL Database",
-                   "Server": server.name,
-                   "Asof": datetime.datetime.strftime(datetime.datetime.now(),
+        outdata = {"application": "MySQL Database",
+                   "server": server.name,
+                   "asOf": datetime.datetime.strftime(datetime.datetime.now(),
                                                       "%Y-%m-%d %H:%M:%S")}
 
     else:
         print("\nDatabase Status Check for Server: %s" % (server.name))
 
     if "-j" in args_array:
-        outdata.update({"Memory": {"Current_Usage": server.cur_mem_mb,
-                                   "Max_Usage": server.max_mem_mb,
-                                   "Percent_Used": server.prct_mem},
-                        "Uptime": server.days_up,
-                        "Connections": {"Current_Connected": server.cur_conn,
-                                        "Max_Connections": server.max_conn,
-                                        "Percent_Used": server.prct_conn}})
+        outdata.update({"memory": {"currentUsage": server.cur_mem_mb,
+                                   "maxUsage": server.max_mem_mb,
+                                   "percentUsed": server.prct_mem},
+                        "upTime": server.days_up,
+                        "connections": {"currentConnected": server.cur_conn,
+                                        "maxConnections": server.max_conn,
+                                        "percentUsed": server.prct_conn}})
 
     else:
         gen_libs.prt_msg("Uptime (days)", server.days_up, 0)

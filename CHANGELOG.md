@@ -20,6 +20,7 @@ Breaking Change
 - detect_dbs:  Fixed problem with mutable default arguments issue.
 
 ### Changed
+- status:  Converted JSON document to using camelCase for keys.
 - process_request:  Replaced sections of code with calls to \_proc_some_tbls, \_proc_all_dbs, and \_proc_all_tbls.
 
 ### Added
