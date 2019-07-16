@@ -538,14 +538,19 @@ def run_program(args_array, func_dict, **kwargs):
     outfile = args_array.get("-o", None)
     db_tbl = args_array.get("-i", None)
     mongo = None
+    mail = None
 
     if args_array.get("-m", None):
         mongo = gen_libs.load_module(args_array["-m"], args_array["-d"])
 
+    if args_array.get("-e", None):
+        mail = setup_mail(args_array.get("-e"),
+                          subj=args_array.get("-s", None))
+
     # Intersect args_array and func_dict to determine which functions to call.
     for x in set(args_array.keys()) & set(func_dict.keys()):
         func_dict[x](server, args_array, ofile=outfile, db_tbl=db_tbl,
-                     class_cfg=mongo, **kwargs)
+                     class_cfg=mongo, mail=mail, **kwargs)
 
     cmds_gen.disconnect([server])
 
