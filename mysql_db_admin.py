@@ -167,7 +167,7 @@ def run_optimize(server, db, tbl, **kwargs):
     Description:  Calls the optimize table command and print the results.
 
     Arguments:
-        (input) server -> Server database instance.
+        (input) server -> Server instance.
         (input) db -> Database name.
         (input) tbl -> Table name.
         (input) **kwargs:
@@ -196,7 +196,7 @@ def run_check(server, db, tbl, **kwargs):
     Description:  Calls the check table command and print the results.
 
     Arguments:
-        (input) server -> Server database instance.
+        (input) server -> Server instance.
         (input) db -> Database name.
         (input) tbl -> Table name.
 
@@ -238,7 +238,7 @@ def process_request(server, func_name, db_name=None, tbl_name=None, **kwargs):
             process all databases/tables repsectively.
 
     Arguments:
-        (input) server -> Database server instance.
+        (input) server -> Server instance.
         (input) func_name -> Name of a function.
         (input) db_name -> Database name.
         (input) tbl_name -> Table name.
@@ -314,8 +314,8 @@ def analyze(server, args_array, **kwargs):
     Description:  Sets up the processing for the analyze table command.
 
     Arguments:
-        (input) server -> Database server instance.
-        (input) args_array -> Array of command line options and values.
+        (input) server -> Server instance.
+        (input) args_array -> Dictionary of command line options.
         (input) **kwargs:
             sys_dbs -> List of system databases to skip.
             multi_val -> List of options that may have multiple values.
@@ -334,8 +334,8 @@ def checksum(server, args_array, **kwargs):
     Description:  Sets up the processing for the checksum table command.
 
     Arguments:
-        (input) server -> Database server instance.
-        (input) args_array -> Array of command line options and values.
+        (input) server -> Server instance.
+        (input) args_array -> Dictionary of command line options.
         (input) **kwargs:
             multi_val -> List of options that may have multiple values.
 
@@ -353,8 +353,8 @@ def optimize(server, args_array, **kwargs):
     Description:  Sets up the processing for the optimization table command.
 
     Arguments:
-        (input) server -> Database server instance.
-        (input) args_array -> Array of command line options and values.
+        (input) server -> Server instance.
+        (input) args_array -> Dictionary of command line options.
         (input) **kwargs:
             sys_dbs -> List of system databases.
             multi_val -> List of options that may have multiple values.
@@ -373,8 +373,8 @@ def check(server, args_array, **kwargs):
     Description:  Sets up the processing for the check table command.
 
     Arguments:
-        (input) server -> Database server instance.
-        (input) args_array -> Array of command line options and values.
+        (input) server -> Server instance.
+        (input) args_array -> Dictionary of command line options.
         (input) **kwargs:
             multi_val -> List of options that may have multiple values.
 
@@ -394,8 +394,8 @@ def status(server, args_array, **kwargs):
         is printed and poissibly inserted into a Mongo database.
 
     Arguments:
-        (input) server -> Database server instance.
-        (input) args_array -> Array of command line options and values.
+        (input) server -> Server instance.
+        (input) args_array -> Dictionary of command line options.
         (input) **kwargs:
             ofile -> file name - Name of output file.
             db_tbl database:table_name -> Mongo database and table name.
@@ -403,6 +403,7 @@ def status(server, args_array, **kwargs):
 
     """
 
+    args_array = dict(args_array)
     server.upd_srv_stat()
 
     if "-j" in args_array:
@@ -445,22 +446,23 @@ def run_program(args_array, func_dict, **kwargs):
     Description:  Creates class instance(s) and controls flow of the program.
 
     Arguments:
-        (input) args_array -> Array of command line options and values.
-        (input) func_dict -> Dictionary list of functions and options.
+        (input) args_array -> Dictionary of command line options.
+        (input) func_dict -> Dictionary of functions.
         (input) **kwargs:
             sys_dbs -> List of system databases.
             multi_val -> List of options that may have multiple values.
 
     """
 
+    args_array = dict(args_array)
+    func_dict = dict(func_dict)
     server = mysql_libs.create_instance(args_array["-c"], args_array["-d"],
                                         mysql_class.Server)
     server.connect()
-
     outfile = args_array.get("-o", None)
     db_tbl = args_array.get("-i", None)
-
     mongo = None
+
     if args_array.get("-m", None):
         mongo = gen_libs.load_module(args_array["-m"], args_array["-d"])
 

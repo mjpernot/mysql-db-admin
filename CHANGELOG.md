@@ -10,6 +10,8 @@ Breaking Change
 - Modified program to use the mysql_class v4.0.0 version.  The v4.0.0 replaces the MySQLdb support library with the mysql.connector support library.
 
 ### Fixed
+- run_program:  Fixed problem with mutable default arguments issue.
+- status:  Fixed problem with mutable default arguments issue.
 - check:  Fixed problem with mutable default arguments issue.
 - optimize:  Fixed problem with mutable default arguments issue.
 - checksum:  Fixed problem with mutable default arguments issue.
