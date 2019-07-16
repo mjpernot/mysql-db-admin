@@ -94,6 +94,8 @@ class UnitTest(unittest.TestCase):
 
     Methods:
         setUp -> Initialize testing environment.
+        test_file -> Test with writing to file.
+        test_mongo -> Test with mongo connection.
         test_non_json -> Test with in non-JSON format.
         test_json -> Test with in JSON format.
 
@@ -113,6 +115,43 @@ class UnitTest(unittest.TestCase):
         self.args_array = {"-j": True}
         self.args_array2 = {}
 
+    @mock.patch("mysql_db_admin.mongo_libs.ins_doc")
+    @mock.patch("mysql_db_admin.gen_libs.write_file")
+    def test_file(self, mock_write, mock_mongo):
+
+        """Function:  test_file
+
+        Description:  Test with writing to file.
+
+        Arguments:
+
+        """
+
+        mock_write.return_value = True
+        mock_mongo.return_value = True
+
+        self.assertFalse(mysql_db_admin.status(self.server, self.args_array,
+                                               ofile="FileName"))
+
+    @mock.patch("mysql_db_admin.mongo_libs.ins_doc")
+    @mock.patch("mysql_db_admin.gen_libs.write_file")
+    def test_mongo(self, mock_write, mock_mongo):
+
+        """Function:  test_mongo
+
+        Description:  Test with mongo connection.
+
+        Arguments:
+
+        """
+
+        mock_write.return_value = True
+        mock_mongo.return_value = True
+
+        self.assertFalse(mysql_db_admin.status(self.server, self.args_array,
+                                               class_cfg="Cfg",
+                                               db_tbl="db:tbl"))
+
     def test_non_json(self):
 
         """Function:  test_non_json
@@ -127,8 +166,9 @@ class UnitTest(unittest.TestCase):
             self.assertFalse(mysql_db_admin.status(self.server,
                                                    self.args_array2))
 
-    @mock.patch("mysql_db_admin.mongo_libs.json_prt_ins_2_db")
-    def test_json(self, mock_mongo):
+    @mock.patch("mysql_db_admin.mongo_libs.ins_doc")
+    @mock.patch("mysql_db_admin.gen_libs.write_file")
+    def test_json(self, mock_write, mock_mongo):
 
         """Function:  test_json
 
@@ -138,6 +178,7 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        mock_write.return_value = True
         mock_mongo.return_value = True
 
         self.assertFalse(mysql_db_admin.status(self.server, self.args_array))
