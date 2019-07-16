@@ -263,16 +263,9 @@ def process_request(server, func_name, db_name=None, tbl_name=None, **kwargs):
     db_list = gen_libs.dict_2_list(mysql_libs.fetch_db_dict(server),
                                    "Database")
 
-    # Process all tables in all databases.
     if not db_name:
 
-        for db in db_list:
-
-            for tbl in gen_libs.dict_2_list(mysql_libs.fetch_tbl_dict(server,
-                                                                      db),
-                                            "table_name"):
-
-                func_name(server, db, tbl, **kwargs)
+        _proc_all_dbs(server, func_name, db_list, **kwargs)
 
     # Process all tables in listed databases.
     elif not tbl_name:
@@ -305,6 +298,29 @@ def process_request(server, func_name, db_name=None, tbl_name=None, **kwargs):
 
             for tbl in set(tbl_name) & set(tbl_list):
                 func_name(server, db, tbl, **kwargs)
+
+
+def _proc_all_dbs(server, func_name, db_list, **kwargs):
+
+    """Function:  _proc_all_dbs
+
+    Description:  Private function for process_requests().  Process all
+        databases.
+
+    Arguments:
+        (input) server -> Server instance.
+        (input) func_name -> Name of a function.
+        (input) db_list -> List of all databases.
+        (input) **kwargs:
+            sys_dbs -> List of system databases.
+            multi_val -> List of options that may have multiple values.
+
+    """
+
+    for db in db_list:
+        for tbl in gen_libs.dict_2_list(mysql_libs.fetch_tbl_dict(server, db),
+                                        "table_name"):
+            func_name(server, db, tbl, **kwargs)
 
 
 def analyze(server, args_array, **kwargs):
