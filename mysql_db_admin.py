@@ -120,14 +120,14 @@ def help_message():
     print(__doc__)
 
 
-def run_analyze(SERVER, db, tbl, **kwargs):
+def run_analyze(server, db, tbl, **kwargs):
 
     """Function:  run_analyze
 
     Description:  Calls the analyze table command and prints the results.
 
     Arguments:
-        (input) SERVER -> Server database instance.
+        (input) server -> Server instance.
         (input) db -> Database name.
         (input) tbl -> Table name.
         (input) **kwargs:
@@ -137,37 +137,37 @@ def run_analyze(SERVER, db, tbl, **kwargs):
 
     if db not in kwargs.get("sys_dbs", []):
 
-        for x in mysql_libs.analyze_tbl(SERVER, db, tbl):
+        for x in mysql_libs.analyze_tbl(server, db, tbl):
             print("DB: {0:20} Table: {1:50}\t".format(db, tbl), end="")
             gen_libs.prt_msg(x["Msg_type"], x["Msg_text"])
 
 
-def run_checksum(SERVER, db, tbl, **kwargs):
+def run_checksum(server, db, tbl, **kwargs):
 
     """Function:  run_checksum
 
     Description:  Calls the checksum table command and prints the results.
 
     Arguments:
-        (input) SERVER -> Server database instance.
+        (input) server -> Server instance.
         (input) db -> Database name.
         (input) tbl -> Table name.
 
     """
 
-    for x in mysql_libs.checksum(SERVER, db, tbl):
+    for x in mysql_libs.checksum(server, db, tbl):
         print("DB: {0:20} Table: {1:50}\tCheckSum: {2}".format(db, tbl,
                                                                x["Checksum"]))
 
 
-def run_optimize(SERVER, db, tbl, **kwargs):
+def run_optimize(server, db, tbl, **kwargs):
 
     """Function:  run_optimize
 
     Description:  Calls the optimize table command and print the results.
 
     Arguments:
-        (input) SERVER -> Server database instance.
+        (input) server -> Server database instance.
         (input) db -> Database name.
         (input) tbl -> Table name.
         (input) **kwargs:
@@ -175,14 +175,13 @@ def run_optimize(SERVER, db, tbl, **kwargs):
 
     """
 
-    # Skip some system databases.
     if db not in kwargs.get("sys_dbs", []):
 
-        for x in mysql_libs.optimize_tbl(SERVER, db, tbl):
-
+        for x in mysql_libs.optimize_tbl(server, db, tbl):
             if x["Msg_type"] == "note" and x["Msg_text"] == \
                "Table does not support optimize, doing recreate + \
 analyze instead":
+
                 pass
 
             else:
@@ -190,20 +189,20 @@ analyze instead":
                 gen_libs.prt_msg(x["Msg_type"], x["Msg_text"])
 
 
-def run_check(SERVER, db, tbl, **kwargs):
+def run_check(server, db, tbl, **kwargs):
 
     """Function:  run_check
 
     Description:  Calls the check table command and print the results.
 
     Arguments:
-        (input) SERVER -> Server database instance.
+        (input) server -> Server database instance.
         (input) db -> Database name.
         (input) tbl -> Table name.
 
     """
 
-    for x in mysql_libs.check_tbl(SERVER, db, tbl):
+    for x in mysql_libs.check_tbl(server, db, tbl):
         print("DB: {0:20} Table: {1:50}\t".format(db, tbl), end="")
         gen_libs.prt_msg(x["Msg_type"], x["Msg_text"])
 
@@ -227,18 +226,20 @@ def detect_dbs(sub_db_list, full_db_list, **kwargs):
         print("Warning: Database(s) that do not exist: %s." % (dbs))
 
 
-def process_request(SERVER, func_name, db_name=None, tbl_name=None, **kwargs):
+def process_request(server, func_name, db_name=None, tbl_name=None, **kwargs):
 
     """Function:  process_request
 
     Description:  Prepares for the type of check based on the arguments passed
         to the function and then calls the "func_name" function.
+        NOTE:  If db_name and/or tbl_name is set to None, then assumes to
+            process all databases/tables repsectively.
 
     Arguments:
-        (input) SERVER -> Database server instance.
+        (input) server -> Database server instance.
         (input) func_name -> Name of a function.
-        (input) db_name -> Database name | 'all'
-        (input) tbl_name -> Table name | 'all' | None.
+        (input) db_name -> Database name.
+        (input) tbl_name -> Table name.
         (input) **kwargs:
             sys_dbs -> List of system databases.
             multi_val -> List of options that may have multiple values.
@@ -251,7 +252,7 @@ def process_request(SERVER, func_name, db_name=None, tbl_name=None, **kwargs):
     if tbl_name is None:
         tbl_name = []
 
-    db_list = gen_libs.dict_2_list(mysql_libs.fetch_db_dict(SERVER),
+    db_list = gen_libs.dict_2_list(mysql_libs.fetch_db_dict(server),
                                    "Database")
 
     # Process all tables in all databases.
@@ -259,11 +260,11 @@ def process_request(SERVER, func_name, db_name=None, tbl_name=None, **kwargs):
 
         for db in db_list:
 
-            for tbl in gen_libs.dict_2_list(mysql_libs.fetch_tbl_dict(SERVER,
+            for tbl in gen_libs.dict_2_list(mysql_libs.fetch_tbl_dict(server,
                                                                       db),
                                             "table_name"):
 
-                func_name(SERVER, db, tbl, **kwargs)
+                func_name(server, db, tbl, **kwargs)
 
     # Process all tables in listed databases.
     elif not tbl_name:
@@ -272,11 +273,11 @@ def process_request(SERVER, func_name, db_name=None, tbl_name=None, **kwargs):
 
         for db in set(db_name) & set(db_list):
 
-            for tbl in gen_libs.dict_2_list(mysql_libs.fetch_tbl_dict(SERVER,
+            for tbl in gen_libs.dict_2_list(mysql_libs.fetch_tbl_dict(server,
                                                                       db),
                                             "table_name"):
 
-                func_name(SERVER, db, tbl, **kwargs)
+                func_name(server, db, tbl, **kwargs)
 
     # Process listed tables in listed databases.
     else:
@@ -284,7 +285,7 @@ def process_request(SERVER, func_name, db_name=None, tbl_name=None, **kwargs):
         detect_dbs(db_name, db_list, **kwargs)
 
         for db in set(db_name) & set(db_list):
-            tbl_list = gen_libs.dict_2_list(mysql_libs.fetch_tbl_dict(SERVER,
+            tbl_list = gen_libs.dict_2_list(mysql_libs.fetch_tbl_dict(server,
                                                                       db),
                                             "table_name")
 
@@ -295,17 +296,17 @@ def process_request(SERVER, func_name, db_name=None, tbl_name=None, **kwargs):
                       % (db, tbls))
 
             for tbl in set(tbl_name) & set(tbl_list):
-                func_name(SERVER, db, tbl, **kwargs)
+                func_name(server, db, tbl, **kwargs)
 
 
-def analyze(SERVER, args_array, **kwargs):
+def analyze(server, args_array, **kwargs):
 
     """Function:  analyze
 
     Description:  Sets up the processing for the analyze table command.
 
     Arguments:
-        (input) SERVER -> Database server instance.
+        (input) server -> Database server instance.
         (input) args_array -> Array of command line options and values.
         (input) **kwargs:
             sys_dbs -> List of system databases to skip.
@@ -313,36 +314,36 @@ def analyze(SERVER, args_array, **kwargs):
 
     """
 
-    process_request(SERVER, run_analyze, args_array["-A"],
+    process_request(server, run_analyze, args_array["-A"],
                     args_array.get("-t", None), **kwargs)
 
 
-def checksum(SERVER, args_array, **kwargs):
+def checksum(server, args_array, **kwargs):
 
     """Function:  checksum
 
     Description:  Sets up the processing for the checksum table command.
 
     Arguments:
-        (input) SERVER -> Database server instance.
+        (input) server -> Database server instance.
         (input) args_array -> Array of command line options and values.
         (input) **kwargs:
             multi_val -> List of options that may have multiple values.
 
     """
 
-    process_request(SERVER, run_checksum, args_array["-S"],
+    process_request(server, run_checksum, args_array["-S"],
                     args_array.get("-t", None), **kwargs)
 
 
-def optimize(SERVER, args_array, **kwargs):
+def optimize(server, args_array, **kwargs):
 
     """Function:  optimize
 
     Description:  Sets up the processing for the optimization table command.
 
     Arguments:
-        (input) SERVER -> Database server instance.
+        (input) server -> Database server instance.
         (input) args_array -> Array of command line options and values.
         (input) **kwargs:
             sys_dbs -> List of system databases.
@@ -350,29 +351,29 @@ def optimize(SERVER, args_array, **kwargs):
 
     """
 
-    process_request(SERVER, run_optimize, args_array["-D"],
+    process_request(server, run_optimize, args_array["-D"],
                     args_array.get("-t", None), **kwargs)
 
 
-def check(SERVER, args_array, **kwargs):
+def check(server, args_array, **kwargs):
 
     """Function:  check
 
     Description:  Sets up the processing for the check table command.
 
     Arguments:
-        (input) SERVER -> Database server instance.
+        (input) server -> Database server instance.
         (input) args_array -> Array of command line options and values.
         (input) **kwargs:
             multi_val -> List of options that may have multiple values.
 
     """
 
-    process_request(SERVER, run_check, args_array["-C"],
+    process_request(server, run_check, args_array["-C"],
                     args_array.get("-t", None), **kwargs)
 
 
-def status(SERVER, args_array, **kwargs):
+def status(server, args_array, **kwargs):
 
     """Function:  status
 
@@ -381,7 +382,7 @@ def status(SERVER, args_array, **kwargs):
         is printed and poissibly inserted into a Mongo database.
 
     Arguments:
-        (input) SERVER -> Database server instance.
+        (input) server -> Database server instance.
         (input) args_array -> Array of command line options and values.
         (input) **kwargs:
             ofile -> file name - Name of output file.
@@ -390,36 +391,36 @@ def status(SERVER, args_array, **kwargs):
 
     """
 
-    SERVER.upd_srv_stat()
+    server.upd_srv_stat()
 
     if "-j" in args_array:
         outdata = {"Application": "MySQL Database",
-                   "Server": SERVER.name,
+                   "Server": server.name,
                    "Asof": datetime.datetime.strftime(datetime.datetime.now(),
                                                       "%Y-%m-%d %H:%M:%S")}
 
     else:
-        print("\nDatabase Status Check for Server: %s" % (SERVER.name))
+        print("\nDatabase Status Check for Server: %s" % (server.name))
 
     if "-j" in args_array:
-        outdata.update({"Memory": {"Current_Usage": SERVER.cur_mem_mb,
-                                   "Max_Usage": SERVER.max_mem_mb,
-                                   "Percent_Used": SERVER.prct_mem},
-                        "Uptime": SERVER.days_up,
-                        "Connections": {"Current_Connected": SERVER.cur_conn,
-                                        "Max_Connections": SERVER.max_conn,
-                                        "Percent_Used": SERVER.prct_conn}})
+        outdata.update({"Memory": {"Current_Usage": server.cur_mem_mb,
+                                   "Max_Usage": server.max_mem_mb,
+                                   "Percent_Used": server.prct_mem},
+                        "Uptime": server.days_up,
+                        "Connections": {"Current_Connected": server.cur_conn,
+                                        "Max_Connections": server.max_conn,
+                                        "Percent_Used": server.prct_conn}})
 
     else:
-        gen_libs.prt_msg("Uptime (days)", SERVER.days_up, 0)
+        gen_libs.prt_msg("Uptime (days)", server.days_up, 0)
         gen_libs.prt_msg("Memory", "", 0)
-        gen_libs.prt_msg("Max Mem", SERVER.max_mem_mb, 1)
-        gen_libs.prt_msg("Current Mem", SERVER.cur_mem_mb, 1)
-        gen_libs.prt_msg("Percent Used", SERVER.prct_mem, 1)
+        gen_libs.prt_msg("Max Mem", server.max_mem_mb, 1)
+        gen_libs.prt_msg("Current Mem", server.cur_mem_mb, 1)
+        gen_libs.prt_msg("Percent Used", server.prct_mem, 1)
         gen_libs.prt_msg("Connections", "", 0)
-        gen_libs.prt_msg("Max Connections", SERVER.max_conn, 1)
-        gen_libs.prt_msg("Current Connections", SERVER.cur_conn, 1)
-        gen_libs.prt_msg("Percent Used", SERVER.prct_conn, 1)
+        gen_libs.prt_msg("Max Connections", server.max_conn, 1)
+        gen_libs.prt_msg("Current Connections", server.cur_conn, 1)
+        gen_libs.prt_msg("Percent Used", server.prct_conn, 1)
 
     if "-j" in args_array:
         mongo_libs.json_prt_ins_2_db(outdata, **kwargs)
@@ -440,23 +441,23 @@ def run_program(args_array, func_dict, **kwargs):
 
     """
 
-    SERVER = mysql_libs.create_instance(args_array["-c"], args_array["-d"],
+    server = mysql_libs.create_instance(args_array["-c"], args_array["-d"],
                                         mysql_class.Server)
-    SERVER.connect()
+    server.connect()
 
     outfile = args_array.get("-o", None)
     db_tbl = args_array.get("-i", None)
 
-    MONGO_SVR = None
+    mongo = None
     if args_array.get("-m", None):
-        MONGO_SVR = gen_libs.load_module(args_array["-m"], args_array["-d"])
+        mongo = gen_libs.load_module(args_array["-m"], args_array["-d"])
 
     # Intersect args_array and func_dict to determine which functions to call.
     for x in set(args_array.keys()) & set(func_dict.keys()):
-        func_dict[x](SERVER, args_array, ofile=outfile, db_tbl=db_tbl,
-                     class_cfg=MONGO_SVR, **kwargs)
+        func_dict[x](server, args_array, ofile=outfile, db_tbl=db_tbl,
+                     class_cfg=mongo, **kwargs)
 
-    cmds_gen.disconnect([SERVER])
+    cmds_gen.disconnect([server])
 
 
 def main():
@@ -507,15 +508,15 @@ def main():
     args_array = arg_parser.arg_parse2(sys.argv, opt_val_list, opt_def_dict,
                                        multi_val=opt_multi_list)
 
-    if not gen_libs.help_func(args_array, __version__, help_message):
-        if not arg_parser.arg_require(args_array, opt_req_list) \
-           and arg_parser.arg_xor_dict(args_array, opt_xor_dict) \
-           and arg_parser.arg_cond_req(args_array, opt_con_req_list) \
-           and not arg_parser.arg_dir_chk_crt(args_array, dir_chk_list) \
-           and not arg_parser.arg_file_chk(args_array, file_chk_list,
-                                           file_crt_list):
-            run_program(args_array, func_dict, sys_dbs=sys_dbs,
-                        multi_val=opt_multi_list)
+    if not gen_libs.help_func(args_array, __version__, help_message) \
+       not arg_parser.arg_require(args_array, opt_req_list) \
+       and arg_parser.arg_xor_dict(args_array, opt_xor_dict) \
+       and arg_parser.arg_cond_req(args_array, opt_con_req_list) \
+       and not arg_parser.arg_dir_chk_crt(args_array, dir_chk_list) \
+       and not arg_parser.arg_file_chk(args_array, file_chk_list,
+                                       file_crt_list):
+        run_program(args_array, func_dict, sys_dbs=sys_dbs,
+                    multi_val=opt_multi_list)
 
 
 if __name__ == "__main__":
