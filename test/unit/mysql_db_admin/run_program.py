@@ -106,6 +106,7 @@ class UnitTest(unittest.TestCase):
 
     Methods:
         setUp -> Initialize testing environment.
+        test_email -> Test with email option.
         test_run_program -> Test run_program function.
 
     """
@@ -123,6 +124,28 @@ class UnitTest(unittest.TestCase):
         self.server = Server()
         self.args_array = {"-m": True, "-d": True, "-c": True, "-C": True}
         self.func_dict = {"-C": check}
+        self.args_array2 = {"-m": True, "-d": True, "-c": True, "-C": True,
+                            "-e": "ToEmail", "-s": "SubjectLine"}
+
+    @mock.patch("mysql_db_admin.cmds_gen.disconnect")
+    @mock.patch("mysql_db_admin.gen_libs.load_module")
+    @mock.patch("mysql_db_admin.mysql_libs.create_instance")
+    def test_email(self, mock_inst, mock_mongo, mock_disconn):
+
+        """Function:  test_email
+
+        Description:  Test with email option.
+
+        Arguments:
+
+        """
+
+        mock_inst.return_value = self.server
+        mock_mongo.return_value = True
+        mock_disconn.return_value = True
+
+        self.assertFalse(mysql_db_admin.run_program(self.args_array2,
+                                                    self.func_dict))
 
     @mock.patch("mysql_db_admin.cmds_gen.disconnect")
     @mock.patch("mysql_db_admin.gen_libs.load_module")
