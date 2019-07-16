@@ -509,7 +509,7 @@ def main():
                                        multi_val=opt_multi_list)
 
     if not gen_libs.help_func(args_array, __version__, help_message) \
-       not arg_parser.arg_require(args_array, opt_req_list) \
+       and not arg_parser.arg_require(args_array, opt_req_list) \
        and arg_parser.arg_xor_dict(args_array, opt_xor_dict) \
        and arg_parser.arg_cond_req(args_array, opt_con_req_list) \
        and not arg_parser.arg_dir_chk_crt(args_array, dir_chk_list) \
