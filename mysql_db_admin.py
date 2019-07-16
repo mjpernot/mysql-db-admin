@@ -94,6 +94,9 @@ from __future__ import print_function
 import sys
 import datetime
 
+# Third party
+import json
+
 # Local
 import lib.arg_parser as arg_parser
 import lib.gen_libs as gen_libs
@@ -494,7 +497,17 @@ def status(server, args_array, **kwargs):
         gen_libs.prt_msg("Percent Used", server.prct_conn, 1)
 
     if "-j" in args_array:
-        mongo_libs.json_prt_ins_2_db(outdata, **kwargs)
+        jdata = json.dumps(outdata, indent=4)
+        mongo_cfg = kwargs.get("class_cfg", None)
+        db_tbl = kwargs.get("db_tbl", None)
+        ofile = kwargs.get("ofile", None)
+
+        if mongo_cfg and db_tbl:
+            db, tbl = db_tbl.split(":")
+            mongo_libs.ins_doc(mongo_cfg, db, tbl, outdata)
+
+        if ofile:
+            gen_libs.write_file(ofile, "w", jdata)
 
 
 def run_program(args_array, func_dict, **kwargs):
