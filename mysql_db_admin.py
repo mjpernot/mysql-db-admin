@@ -322,6 +322,7 @@ def analyze(server, args_array, **kwargs):
 
     """
 
+    args_array = dict(args_array)
     process_request(server, run_analyze, args_array["-A"],
                     args_array.get("-t", None), **kwargs)
 
@@ -340,6 +341,7 @@ def checksum(server, args_array, **kwargs):
 
     """
 
+    args_array = dict(args_array)
     process_request(server, run_checksum, args_array["-S"],
                     args_array.get("-t", None), **kwargs)
 
@@ -359,6 +361,7 @@ def optimize(server, args_array, **kwargs):
 
     """
 
+    args_array = dict(args_array)
     process_request(server, run_optimize, args_array["-D"],
                     args_array.get("-t", None), **kwargs)
 
@@ -377,6 +380,7 @@ def check(server, args_array, **kwargs):
 
     """
 
+    args_array = dict(args_array)
     process_request(server, run_check, args_array["-C"],
                     args_array.get("-t", None), **kwargs)
 
