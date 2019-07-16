@@ -1,12 +1,12 @@
 #!/usr/bin/python
 # Classification (U)
 
-"""Program:  run_analyze.py
+"""Program:  check.py
 
-    Description:  Unit testing of run_analyze in mysql_db_admin.py.
+    Description:  Unit testing of check in mysql_db_admin.py.
 
     Usage:
-        test/unit/mysql_db_admin/run_analyze.py
+        test/unit/mysql_db_admin/check.py
 
     Arguments:
 
@@ -75,7 +75,7 @@ class UnitTest(unittest.TestCase):
 
     Methods:
         setUp -> Initialize testing environment.
-        test_run_analyze -> Test run_analyze function.
+        test_check -> Test check function.
 
     """
 
@@ -90,28 +90,23 @@ class UnitTest(unittest.TestCase):
         """
 
         self.server = Server()
+        self.run_check = True
+        self.args_array = {"-C": True}
 
-        self.analyze_tables = [{"Msg_type": "Type", "Msg_text": "Message"},
-                               {"Msg_type": "Type2", "Msg_text": "Message2"}]
+    @mock.patch("mysql_db_admin.process_request")
+    def test_check(self, mock_process):
 
-    @mock.patch("mysql_db_admin.gen_libs.prt_msg")
-    @mock.patch("mysql_db_admin.mysql_libs.analyze_tbl")
-    def test_run_analyze(self, mock_analyze, mock_prt):
+        """Function:  test_check
 
-        """Function:  test_run_analyze
-
-        Description:  Test run_analyze function.
+        Description:  Test check function.
 
         Arguments:
 
         """
 
-        mock_analyze.return_value = self.analyze_tables
-        mock_prt.return_value = True
+        mock_process.return_value = True
 
-        with gen_libs.no_std_out():
-            self.assertFalse(mysql_db_admin.run_analyze(self.server, "db",
-                                                        "tbl"))
+        self.assertFalse(mysql_db_admin.check(self.server, self.args_array))
 
 
 if __name__ == "__main__":

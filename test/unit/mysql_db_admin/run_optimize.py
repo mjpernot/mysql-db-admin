@@ -1,12 +1,12 @@
 #!/usr/bin/python
 # Classification (U)
 
-"""Program:  run_analyze.py
+"""Program:  run_optimize.py
 
-    Description:  Unit testing of run_analyze in mysql_db_admin.py.
+    Description:  Unit testing of run_optimize in mysql_db_admin.py.
 
     Usage:
-        test/unit/mysql_db_admin/run_analyze.py
+        test/unit/mysql_db_admin/run_optimize.py
 
     Arguments:
 
@@ -75,7 +75,7 @@ class UnitTest(unittest.TestCase):
 
     Methods:
         setUp -> Initialize testing environment.
-        test_run_analyze -> Test run_analyze function.
+        test_run_optimize -> Test run_optimize function.
 
     """
 
@@ -91,27 +91,30 @@ class UnitTest(unittest.TestCase):
 
         self.server = Server()
 
-        self.analyze_tables = [{"Msg_type": "Type", "Msg_text": "Message"},
-                               {"Msg_type": "Type2", "Msg_text": "Message2"}]
+        self.optimize_tbl = \
+            [{"Msg_type": "note",
+              "Msg_text": "Table does not support optimize, doing recreate + \
+analyze instead"},
+             {"Msg_type": "Type2", "Msg_text": "Message2"}]
 
     @mock.patch("mysql_db_admin.gen_libs.prt_msg")
-    @mock.patch("mysql_db_admin.mysql_libs.analyze_tbl")
-    def test_run_analyze(self, mock_analyze, mock_prt):
+    @mock.patch("mysql_db_admin.mysql_libs.optimize_tbl")
+    def test_run_optimize(self, mock_optimize, mock_prt):
 
-        """Function:  test_run_analyze
+        """Function:  test_run_optimize
 
-        Description:  Test run_analyze function.
+        Description:  Test run_optimize function.
 
         Arguments:
 
         """
 
-        mock_analyze.return_value = self.analyze_tables
+        mock_optimize.return_value = self.optimize_tbl
         mock_prt.return_value = True
 
         with gen_libs.no_std_out():
-            self.assertFalse(mysql_db_admin.run_analyze(self.server, "db",
-                                                        "tbl"))
+            self.assertFalse(mysql_db_admin.run_optimize(self.server, "db",
+                                                         "tbl"))
 
 
 if __name__ == "__main__":

@@ -4,10 +4,34 @@ All notable changes to this project will be documented in this file.
 The format is based on "Keep a Changelog".  This project adheres to Semantic Versioning.
 
 
-## [3.0.0] - 2019-07-14
+## [3.0.0] - 2019-07-16
 Breaking Change
 
 - Modified program to use the mysql_class v4.0.0 version.  The v4.0.0 replaces the MySQLdb support library with the mysql.connector support library.
+
+### Fixed
+- run_program:  Fixed problem with mutable default arguments issue.
+- status:  Fixed problem with mutable default arguments issue.
+- check:  Fixed problem with mutable default arguments issue.
+- optimize:  Fixed problem with mutable default arguments issue.
+- checksum:  Fixed problem with mutable default arguments issue.
+- analyze:  Fixed problem with mutable default arguments issue.
+- process_request:  Fixed problem with mutable default arguments issue.
+- detect_dbs:  Fixed problem with mutable default arguments issue.
+
+### Changed
+- status:  Added capability to mail out JSON formatted data.
+- run_program:  Added setup of mail instance and passing mail instance to functions.
+- main:  Added '-e' and '-s' options to allow for email capability for some options.
+- status:  Removed "mongo_libs.json_prt_ins_2_db" and replaced with own internal code to do the same thing.
+- status:  Converted JSON document to using camelCase for keys.
+- process_request:  Replaced sections of code with calls to \_proc_some_tbls, \_proc_all_dbs, and \_proc_all_tbls.
+
+### Added
+- setup_mail:  Initialize a mail instance.
+- \_proc_some_tbls:  Private function for process_request.  Process some tables in listed databases.
+- \_proc_all_tbls:  Private function for process_request.  Process all tables.
+- \_proc_all_dbs:  Private function for process_request.  Process all tables in listed databases.
 
 
 ## [2.0.1] - 2018-12-06
