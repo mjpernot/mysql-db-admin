@@ -35,6 +35,62 @@ import version
 __version__ = version.__version__
 
 
+class Mail(object):
+
+    """Class:  Mail
+
+    Description:  Class stub holder for gen_class.Mail class.
+
+    Super-Class:
+
+    Sub-Classes:
+
+    Methods:
+        __init__ -> Class initialization.
+        get_time -> Stub method holder for SlaveRep.get_time.
+        get_name -> Stub method holder for SlaveRep.get_name.
+        upd_slv_time -> Stub method holder for SlaveRep.upd_slv_time.
+
+    """
+
+    def __init__(self, lag_time=1):
+
+        """Method:  __init__
+
+        Description:  Class initialization.
+
+        Arguments:
+            None
+
+        """
+
+        pass
+
+    def add_2_msg(self, data):
+
+        """Method:  add_2_msg
+
+        Description:  Stub method holder for Mail.add_2_msg.
+
+        Arguments:
+
+        """
+
+        return True
+
+    def send_mail(self):
+
+        """Method:  get_name
+
+        Description:  Stub method holder for Mail.send_mail.
+
+        Arguments:
+
+        """
+
+        return True
+
+
 class Server(object):
 
     """Class:  Server
@@ -94,6 +150,7 @@ class UnitTest(unittest.TestCase):
 
     Methods:
         setUp -> Initialize testing environment.
+        test_mail -> Test with emailing out.
         test_file -> Test with writing to file.
         test_mongo -> Test with mongo connection.
         test_non_json -> Test with in non-JSON format.
@@ -112,8 +169,27 @@ class UnitTest(unittest.TestCase):
         """
 
         self.server = Server()
+        self.mail = Mail()
         self.args_array = {"-j": True}
         self.args_array2 = {}
+
+    @mock.patch("mysql_db_admin.mongo_libs.ins_doc")
+    @mock.patch("mysql_db_admin.gen_libs.write_file")
+    def test_mail(self, mock_write, mock_mongo):
+
+        """Function:  test_mail
+
+        Description:  Test with emailing out.
+
+        Arguments:
+
+        """
+
+        mock_write.return_value = True
+        mock_mongo.return_value = True
+
+        self.assertFalse(mysql_db_admin.status(self.server, self.args_array,
+                                               mail=self.mail))
 
     @mock.patch("mysql_db_admin.mongo_libs.ins_doc")
     @mock.patch("mysql_db_admin.gen_libs.write_file")
