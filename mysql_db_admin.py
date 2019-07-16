@@ -16,7 +16,8 @@
             | -A [db_name [db_name ...] | -S [db_name [db_name ...]]
             | -D [db_name [db_name ...] ] | -M {-j
             | -i {db_name: table_name} | -m file} | -o dir_path/file}}
-            [ -t [table_name [table_name ...]]] [-v | -h]
+            [-t [table_name [table_name ...]]]
+            [-e ToEmail {ToEmail2 ToEmail3 ...} {-s SubjectLine}] [-v | -h]
 
     Arguments:
         -c file => Server configuration file.  Required arg.
@@ -32,14 +33,18 @@
         -m file => Mongo config file.  Is loaded as a python, do not
             include the .py extension with the name.
         -j => Convert output to JSON format.
-        -i { database:collection } => Name of database and collection.
+        -i {database:collection} => Name of database and collection.
             Delimited by colon (:).  Default: sysmon:mysql_db_status
         -o path/file => Directory path and file name for output.
-        -t [ table name(s) ] =>  Used with the -C, -A, -S & -D options.
+        -t [table name(s)] =>  Used with the -C, -A, -S & -D options.
+        -e to_email_addresses => Enables emailing capability for an option if
+            the option allows it.  Sends output to one or more email addresses.
+        -s subject_line => Subject line of email.  Optional, will create own
+            subject line if one is not provided.
         -v => Display version of this program.
         -h => Help and usage message.
 
-         NOTE 1:  -v or -h overrides the other options.
+        NOTE 1:  -v or -h overrides the other options.
 
         NOTE 2:  Options -A, -C, -D, and -S: If no name is passed, will
              do all database names, can also pass multiple databases
@@ -576,12 +581,13 @@ def main():
     file_crt_list = ["-o"]
     func_dict = {"-A": analyze, "-C": check, "-D": optimize, "-S": checksum,
                  "-M": status}
-    opt_con_req_list = {"-i": ["-m"]}
+    opt_con_req_list = {"-i": ["-m"], "-s": ["-e"]}
     opt_def_dict = {"-t": None, "-A": [], "-C": [], "-D": [], "-S": [],
                     "-i": "sysmon:mysql_db_status"}
-    opt_multi_list = ["-A", "-C", "-D", "-S", "-t"]
+    opt_multi_list = ["-A", "-C", "-D", "-S", "-t", "-e", "-s"]
     opt_req_list = ["-c", "-d"]
-    opt_val_list = ["-c", "-d", "-t", "-A", "-C", "-D", "-S", "-i", "-m", "-o"]
+    opt_val_list = ["-c", "-d", "-t", "-A", "-C", "-D", "-S", "-i", "-m", "-o",
+                    , "-e", "-s"]
     opt_xor_dict = {"-A": ["-C", "-D", "-M", "-S"],
                     "-C": ["-A", "-D", "-M", "-S"],
                     "-D": ["-A", "-C", "-M", "-S"],

@@ -20,6 +20,7 @@ Breaking Change
 - detect_dbs:  Fixed problem with mutable default arguments issue.
 
 ### Changed
+- main:  Added '-e' and '-s' options to allow for email capability for some options.
 - status:  Removed "mongo_libs.json_prt_ins_2_db" and replaced with own internal code to do the same thing.
 - status:  Converted JSON document to using camelCase for keys.
 - process_request:  Replaced sections of code with calls to \_proc_some_tbls, \_proc_all_dbs, and \_proc_all_tbls.
