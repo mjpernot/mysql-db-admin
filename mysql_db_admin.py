@@ -98,6 +98,8 @@
 from __future__ import print_function
 import sys
 import datetime
+import getpass
+import socket
 
 # Third party
 import json
@@ -619,7 +621,7 @@ def main():
     opt_multi_list = ["-A", "-C", "-D", "-S", "-t", "-e", "-s"]
     opt_req_list = ["-c", "-d"]
     opt_val_list = ["-c", "-d", "-t", "-A", "-C", "-D", "-S", "-i", "-m", "-o",
-                    , "-e", "-s"]
+                    "-e", "-s"]
     opt_xor_dict = {"-A": ["-C", "-D", "-M", "-S"],
                     "-C": ["-A", "-D", "-M", "-S"],
                     "-D": ["-A", "-C", "-M", "-S"],
