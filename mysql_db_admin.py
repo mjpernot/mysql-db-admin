@@ -509,6 +509,7 @@ def status(server, args_array, **kwargs):
         mongo_cfg = kwargs.get("class_cfg", None)
         db_tbl = kwargs.get("db_tbl", None)
         ofile = kwargs.get("ofile", None)
+        mail = kwargs.get("mail", None)
 
         if mongo_cfg and db_tbl:
             db, tbl = db_tbl.split(":")
@@ -516,6 +517,10 @@ def status(server, args_array, **kwargs):
 
         if ofile:
             gen_libs.write_file(ofile, "w", jdata)
+
+        if mail:
+            mail.add_2_msg(jdata)
+            mail.send_mail()
 
 
 def setup_mail(to_line, subj=None, frm_line=None, **kwargs):

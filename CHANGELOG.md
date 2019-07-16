@@ -20,6 +20,7 @@ Breaking Change
 - detect_dbs:  Fixed problem with mutable default arguments issue.
 
 ### Changed
+- status:  Added capability to mail out JSON formatted data.
 - run_program:  Added setup of mail instance and passing mail instance to functions.
 - main:  Added '-e' and '-s' options to allow for email capability for some options.
 - status:  Removed "mongo_libs.json_prt_ins_2_db" and replaced with own internal code to do the same thing.
