@@ -22,6 +22,7 @@ coverage run -a --source=mysql_db_admin test/unit/mysql_db_admin/run_analyze.py
 coverage run -a --source=mysql_db_admin test/unit/mysql_db_admin/main.py
 coverage run -a --source=mysql_db_admin test/unit/mysql_db_admin/run_program.py
 coverage run -a --source=mysql_db_admin test/unit/mysql_db_admin/status.py
+coverage run -a --source=mysql_db_admin test/unit/mysql_db_admin/setup_mail.py
 
 echo ""
 echo "Producing code coverage report"
