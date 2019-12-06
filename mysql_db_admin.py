@@ -469,6 +469,7 @@ def status(server, args_array, **kwargs):
             ofile -> file name - Name of output file.
             db_tbl database:table_name -> Mongo database and table name.
             class_cfg -> Mongo server configuration.
+            mail -> Mail instance.
 
     """
 
