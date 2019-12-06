@@ -26,9 +26,9 @@ pipeline {
                 sh """
                 virtualenv test_env
                 source test_env/bin/activate
-                pip2 install mock --user
-                pip2 install mysql-connector-python --user
-                pip2 install pymongo --user
+                pip2 install mock==2.0.0 --user
+                pip2 install mysql-connector-python==8.0.16 --user
+                pip2 install pymongo==3.2.0 --user
                 ./test/unit/mysql_db_admin/help_message.py
                 ./test/unit/mysql_db_admin/run_analyze.py
                 ./test/unit/mysql_db_admin/analyze.py
