@@ -5,6 +5,10 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 
 
 ## [3.1.0] - 2019-12-06
+### Fixed
+- run_analyze:  Fixed problem with mutable default arguments issue.
+- run_optimize:  Fixed problem with mutable default arguments issue.
+
 ### Added
 - Added -z option for standard out suppression.
 
