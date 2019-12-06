@@ -147,7 +147,7 @@ def run_analyze(server, db, tbl, **kwargs):
 
     """
 
-    if db not in kwargs.get("sys_dbs", []):
+    if db not in list(kwargs.get("sys_dbs", [])):
 
         for x in mysql_libs.analyze_tbl(server, db, tbl):
             print("DB: {0:20} Table: {1:50}\t".format(db, tbl), end="")
