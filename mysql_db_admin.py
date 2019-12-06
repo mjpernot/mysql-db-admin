@@ -17,7 +17,7 @@
             | -D [db_name [db_name ...] ] | -M {-j
             | -i {db_name: table_name} | -m file} | -o dir_path/file}}
             [-t [table_name [table_name ...]]]
-            [-e ToEmail {ToEmail2 ToEmail3 ...} {-s SubjectLine}] [-v | -h]
+            [-e ToEmail {ToEmail2 ToEmail3 ...} {-s SubjectLine}] -z [-v | -h]
 
     Arguments:
         -c file => Server configuration file.  Required arg.
@@ -41,6 +41,7 @@
             the option allows it.  Sends output to one or more email addresses.
         -s subject_line => Subject line of email.  Optional, will create own
             subject line if one is not provided.
+        -z => Suppress standard out.
         -v => Display version of this program.
         -h => Help and usage message.
 
