@@ -187,7 +187,7 @@ def run_optimize(server, db, tbl, **kwargs):
 
     """
 
-    if db not in kwargs.get("sys_dbs", []):
+    if db not in list(kwargs.get("sys_dbs", [])):
 
         for x in mysql_libs.optimize_tbl(server, db, tbl):
             if x["Msg_type"] == "note" and x["Msg_text"] == \
