@@ -5,6 +5,9 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 
 
 ## [3.1.0] - 2019-12-06
+### Added
+- Added -z option for standard out suppression.
+
 ### Changed
 - Documentation update.
 
