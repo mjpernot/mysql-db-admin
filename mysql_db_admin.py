@@ -60,32 +60,39 @@
             is selected.
 
     Notes:
-        Database configuration file format (mysql_{host}.py):
+        Database configuration file format (mysql_cfg.py):
+        WARNING:  Do not use the loopback IP or 'localhost' for the "host"
+        variable, use the actual IP.
             # Configuration file for {Database Name/Server}
             user = "root"
             passwd = "ROOT_PASSWORD"
-            # DO NOT USE 127.0.0.1 for the master/source, use actual IP.
             host = "IP_ADDRESS"
-            serv_os = "Linux" or "Solaris"
+            serv_os = "Linux"
             name = "HOSTNAME"
             port = PORT_NUMBER (default of mysql is 3306)
             cfg_file = "DIRECTORY_PATH/my.cnf"
             sid = "SERVER_ID"
-            extra_def_file = "DIRECTORY_PATH/myextra.cfg"
+            extra_def_file = "DIRECTORY_PATH/mysql.cfg"
 
-        NOTE:  Include the cfg_file even if running remotely as the file will
+        NOTE 1:  Include the cfg_file even if running remotely as the file will
             be used in future releases.
+        NOTE 2:  In MySQL 5.6 - it now gives warning if password is passed on
+            the command line.  To suppress this warning, will require the use
+            of the --defaults-extra-file option (i.e. extra_def_file) in the
+            database configuration file.  See below for the
+            defaults-extra-file format.
 
         configuration modules -> name is runtime dependent as it can be
             used to connect to different databases with different names.
 
-        Defaults Extra File format (filename.cfg):
-            [client]
+        Defaults Extra File format (mysql.cfg)
             password="ROOT_PASSWORD"
-            socket="DIRECTORY_PATH/mysql.sock"
+            socket=/BASE_PATH/mysqld/mysqld.sock
 
         NOTE:  The socket information can be obtained from the my.cnf
             file under ~/mysql directory.
+
+#  Added Mongo configuration file instructions here.
 
     Example:
         mysql_db_admin.py -c mysql -d config -D test -t users
