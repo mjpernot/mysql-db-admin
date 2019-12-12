@@ -157,7 +157,7 @@ class UnitTest(unittest.TestCase):
 
         self.server = Server()
         self.mail = Mail()
-        self.args_array = {"-j": True}
+        self.args_array = {"-j": True, "-z": True}
         self.args_array2 = {}
 
     @mock.patch("mysql_db_admin.mongo_libs.ins_doc")
