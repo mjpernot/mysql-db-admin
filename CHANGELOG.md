@@ -17,6 +17,9 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - status:  Added print JSON format to standard out, unless standard out is suppressed.
 - Documentation update.
 
+### Removed
+- setup_mail:  No longer required, replaced with call to gen_class.setup_mail.
+
 
 ## [3.0.0] - 2019-07-16
 Breaking Change
