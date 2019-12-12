@@ -43,7 +43,6 @@ pipeline {
                 ./test/unit/mysql_db_admin/status.py
                 ./test/unit/mysql_db_admin/run_program.py
                 ./test/unit/mysql_db_admin/main.py
-                ./test/unit/mysql_db_admin/setup_mail.py
                 deactivate
                 rm -rf test_env
                 """
