@@ -13,6 +13,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - Added -z option for standard out suppression.
 
 ### Changed
+- status:  Added print JSON format to standard out, unless standard out is suppressed.
 - Documentation update.
 
 

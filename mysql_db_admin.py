@@ -531,6 +531,9 @@ def status(server, args_array, **kwargs):
             mail.add_2_msg(jdata)
             mail.send_mail()
 
+        if not args_array.get("-z", False):
+            gen_libs.print_data(jdata)
+
 
 def setup_mail(to_line, subj=None, frm_line=None, **kwargs):
 
