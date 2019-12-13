@@ -197,6 +197,7 @@ test/unit/mysql_db_admin/optimize.py
 test/unit/mysql_db_admin/process_request.py
 test/unit/mysql_db_admin/proc_all_dbs.py
 test/unit/mysql_db_admin/proc_all_tbls.py
+test/unit/mysql_db_admin/proc_some_tbls.py
 test/unit/mysql_db_admin/run_check.py
 test/unit/mysql_db_admin/run_checksum.py
 test/unit/mysql_db_admin/run_optimize.py
