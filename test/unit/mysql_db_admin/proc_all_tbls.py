@@ -83,6 +83,7 @@ class UnitTest(unittest.TestCase):
 
     Methods:
         setUp -> Initialize testing environment.
+        test_no_tbls2 -> Test with processing no tables.
         test_no_tbls -> Test with processing no tables.
         test_some_tbls -> Test with processing some tables.
         test_all_tbls -> Test with processing all tables.
