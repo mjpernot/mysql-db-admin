@@ -631,8 +631,15 @@ def main():
        and not arg_parser.arg_dir_chk_crt(args_array, dir_chk_list) \
        and not arg_parser.arg_file_chk(args_array, file_chk_list,
                                        file_crt_list):
-        run_program(args_array, func_dict, sys_dbs=sys_dbs,
-                    multi_val=opt_multi_list)
+
+        try:
+            proglock = gen_class.ProgramLock(sys.argv)
+            run_program(args_array, func_dict, sys_dbs=sys_dbs,
+                        multi_val=opt_multi_list)
+            del proglock
+
+        except gen_class.SingleInstanceException:
+            print("WARNING:  lock in place for mysql_db_admin")
 
 
 if __name__ == "__main__":

@@ -10,9 +10,11 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - run_optimize:  Fixed problem with mutable default arguments issue.
 
 ### Added
+- Added a program lock mechanism to the program.
 - Added -z option for standard out suppression.
 
 ### Changed
+- main:  Added gen_class.ProgramLock class and code check.
 - run_program:  Replaced setup_mail call with gen_class.setup_mail call.
 - status:  Added print JSON format to standard out, unless standard out is suppressed.
 - Documentation update.
