@@ -311,10 +311,13 @@ class UnitTest(unittest.TestCase):
 
         self.assertFalse(mysql_db_admin.main())
 
-    @mock.patch("mysql_db_admin.run_program")
-    @mock.patch("mysql_db_admin.gen_libs.help_func")
+    @mock.patch("mysql_db_admin.gen_class.ProgramLock",
+                mock.Mock(side_effect=None))
+    @mock.patch("mysql_db_admin.run_program", mock.Mock(return_value=True))
+    @mock.patch("mysql_db_admin.gen_libs.help_func",
+                mock.Mock(return_value=False))
     @mock.patch("mysql_db_admin.arg_parser")
-    def test_arg_file_false(self, mock_arg, mock_help, mock_run):
+    def test_arg_file_false(self, mock_arg):
 
         """Function:  test_arg_file_false
 
@@ -325,13 +328,11 @@ class UnitTest(unittest.TestCase):
         """
 
         mock_arg.arg_parse2.return_value = self.args_array
-        mock_help.return_value = False
         mock_arg.arg_require.return_value = False
         mock_arg.arg_xor_dict.return_value = True
         mock_arg.arg_cond_req.return_value = True
         mock_arg.arg_dir_chk_crt.return_value = False
         mock_arg.arg_file_chk.return_value = False
-        mock_run.return_value = True
 
         self.assertFalse(mysql_db_admin.main())
 
