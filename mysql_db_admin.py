@@ -17,7 +17,7 @@
             | -D [db_name [db_name ...] ] | -M {-j
             | -i {db_name: table_name} | -m file} | -o dir_path/file}}
             [-t [table_name [table_name ...]]]
-            [-e ToEmail {ToEmail2 ToEmail3 ...} {-s SubjectLine}] [-v | -h]
+            [-e ToEmail {ToEmail2 ToEmail3 ...} {-s SubjectLine}] -z [-v | -h]
 
     Arguments:
         -c file => Server configuration file.  Required arg.
@@ -41,6 +41,7 @@
             the option allows it.  Sends output to one or more email addresses.
         -s subject_line => Subject line of email.  Optional, will create own
             subject line if one is not provided.
+        -z => Suppress standard out.
         -v => Display version of this program.
         -h => Help and usage message.
 
@@ -59,32 +60,39 @@
             is selected.
 
     Notes:
-        Database configuration file format (mysql_{host}.py):
+        Database configuration file format (mysql_cfg.py):
+        WARNING:  Do not use the loopback IP or 'localhost' for the "host"
+        variable, use the actual IP.
             # Configuration file for {Database Name/Server}
             user = "root"
             passwd = "ROOT_PASSWORD"
-            # DO NOT USE 127.0.0.1 for the master/source, use actual IP.
             host = "IP_ADDRESS"
-            serv_os = "Linux" or "Solaris"
+            serv_os = "Linux"
             name = "HOSTNAME"
             port = PORT_NUMBER (default of mysql is 3306)
             cfg_file = "DIRECTORY_PATH/my.cnf"
             sid = "SERVER_ID"
-            extra_def_file = "DIRECTORY_PATH/myextra.cfg"
+            extra_def_file = "DIRECTORY_PATH/mysql.cfg"
 
-        NOTE:  Include the cfg_file even if running remotely as the file will
+        NOTE 1:  Include the cfg_file even if running remotely as the file will
             be used in future releases.
+        NOTE 2:  In MySQL 5.6 - it now gives warning if password is passed on
+            the command line.  To suppress this warning, will require the use
+            of the --defaults-extra-file option (i.e. extra_def_file) in the
+            database configuration file.  See below for the
+            defaults-extra-file format.
 
         configuration modules -> name is runtime dependent as it can be
             used to connect to different databases with different names.
 
-        Defaults Extra File format (filename.cfg):
-            [client]
+        Defaults Extra File format (mysql.cfg)
             password="ROOT_PASSWORD"
-            socket="DIRECTORY_PATH/mysql.sock"
+            socket=/BASE_PATH/mysqld/mysqld.sock
 
         NOTE:  The socket information can be obtained from the my.cnf
             file under ~/mysql directory.
+
+#  Added Mongo configuration file instructions here.
 
     Example:
         mysql_db_admin.py -c mysql -d config -D test -t users
@@ -146,7 +154,7 @@ def run_analyze(server, db, tbl, **kwargs):
 
     """
 
-    if db not in kwargs.get("sys_dbs", []):
+    if db not in list(kwargs.get("sys_dbs", [])):
 
         for x in mysql_libs.analyze_tbl(server, db, tbl):
             print("DB: {0:20} Table: {1:50}\t".format(db, tbl), end="")
@@ -186,7 +194,7 @@ def run_optimize(server, db, tbl, **kwargs):
 
     """
 
-    if db not in kwargs.get("sys_dbs", []):
+    if db not in list(kwargs.get("sys_dbs", [])):
 
         for x in mysql_libs.optimize_tbl(server, db, tbl):
             if x["Msg_type"] == "note" and x["Msg_text"] == \
@@ -469,6 +477,7 @@ def status(server, args_array, **kwargs):
             ofile -> file name - Name of output file.
             db_tbl database:table_name -> Mongo database and table name.
             class_cfg -> Mongo server configuration.
+            mail -> Mail instance.
 
     """
 
@@ -522,31 +531,8 @@ def status(server, args_array, **kwargs):
             mail.add_2_msg(jdata)
             mail.send_mail()
 
-
-def setup_mail(to_line, subj=None, frm_line=None, **kwargs):
-
-    """Function:  setup_mail
-
-    Description:  Initialize a mail instance.  Provide 'from line' if one is
-        not passed.
-
-    Arguments:
-        (input) to_line -> Mail to line.
-        (input) subj -> Mail subject line.
-        (input) frm_line -> Mail from line.
-        (output) Mail instance.
-
-    """
-
-    to_line = list(to_line)
-
-    if isinstance(subj, list):
-        subj = list(subj)
-
-    if not frm_line:
-        frm_line = getpass.getuser() + "@" + socket.gethostname()
-
-    return gen_class.Mail(to_line, subj, frm_line)
+        if not args_array.get("-z", False):
+            gen_libs.print_data(jdata)
 
 
 def run_program(args_array, func_dict, **kwargs):
@@ -578,8 +564,8 @@ def run_program(args_array, func_dict, **kwargs):
         mongo = gen_libs.load_module(args_array["-m"], args_array["-d"])
 
     if args_array.get("-e", None):
-        mail = setup_mail(args_array.get("-e"),
-                          subj=args_array.get("-s", None))
+        mail = gen_class.setup_mail(args_array.get("-e"),
+                                    subj=args_array.get("-s", None))
 
     # Intersect args_array and func_dict to determine which functions to call.
     for x in set(args_array.keys()) & set(func_dict.keys()):
@@ -645,8 +631,15 @@ def main():
        and not arg_parser.arg_dir_chk_crt(args_array, dir_chk_list) \
        and not arg_parser.arg_file_chk(args_array, file_chk_list,
                                        file_crt_list):
-        run_program(args_array, func_dict, sys_dbs=sys_dbs,
-                    multi_val=opt_multi_list)
+
+        try:
+            proglock = gen_class.ProgramLock(sys.argv)
+            run_program(args_array, func_dict, sys_dbs=sys_dbs,
+                        multi_val=opt_multi_list)
+            del proglock
+
+        except gen_class.SingleInstanceException:
+            print("WARNING:  lock in place for mysql_db_admin")
 
 
 if __name__ == "__main__":

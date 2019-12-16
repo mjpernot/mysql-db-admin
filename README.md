@@ -109,6 +109,29 @@ vim mysql.cfg
 chmod 600 mysql.cfg
 ```
 
+Create Mongodb configuration file.
+  * If submitting output to Mongo database, then require a Mongodb configuration file.
+
+```
+cp mongo.py.TEMPLATE mongo.py
+```
+
+Make the appropriate change to the environment.
+  * Make the appropriate changes to connect to a Mongo database.
+    - passwd = "ROOT_PASSWORD"
+    - host = "HOST_IP"
+    - name = "HOSTNAME"
+
+  * If connecting to a Mongo replica set, otherwise set to None.
+    - repset = "REPLICA_SET_NAME"
+    - repset_hosts = "HOST_1:PORT, HOST_2:PORT, ..."
+    - db_auth = "AUTHENTICATION_DATABASE"
+
+```
+vim mongo.py
+chmod 600 mongo.py
+```
+
 
 # Program Help Function:
 
@@ -172,6 +195,9 @@ test/unit/mysql_db_admin/checksum.py
 test/unit/mysql_db_admin/detect_dbs.py
 test/unit/mysql_db_admin/optimize.py
 test/unit/mysql_db_admin/process_request.py
+test/unit/mysql_db_admin/proc_all_dbs.py
+test/unit/mysql_db_admin/proc_all_tbls.py
+test/unit/mysql_db_admin/proc_some_tbls.py
 test/unit/mysql_db_admin/run_check.py
 test/unit/mysql_db_admin/run_checksum.py
 test/unit/mysql_db_admin/run_optimize.py
@@ -179,7 +205,6 @@ test/unit/mysql_db_admin/run_analyze.py
 test/unit/mysql_db_admin/status.py
 test/unit/mysql_db_admin/run_program.py
 test/unit/mysql_db_admin/main.py
-test/unit/mysql_db_admin/setup_mail.py
 ```
 
 ### All unit testing
