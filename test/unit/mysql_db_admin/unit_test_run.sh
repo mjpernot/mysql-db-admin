@@ -13,6 +13,9 @@ test/unit/mysql_db_admin/checksum.py
 test/unit/mysql_db_admin/detect_dbs.py
 test/unit/mysql_db_admin/optimize.py
 test/unit/mysql_db_admin/process_request.py
+test/unit/mysql_db_admin/proc_all_dbs.py
+test/unit/mysql_db_admin/proc_all_tbls.py
+test/unit/mysql_db_admin/proc_some_tbls.py
 test/unit/mysql_db_admin/run_check.py
 test/unit/mysql_db_admin/run_checksum.py
 test/unit/mysql_db_admin/run_optimize.py
@@ -20,4 +23,3 @@ test/unit/mysql_db_admin/run_analyze.py
 test/unit/mysql_db_admin/status.py
 test/unit/mysql_db_admin/run_program.py
 test/unit/mysql_db_admin/main.py
-test/unit/mysql_db_admin/setup_mail.py

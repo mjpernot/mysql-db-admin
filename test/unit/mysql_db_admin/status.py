@@ -41,10 +41,6 @@ class Mail(object):
 
     Description:  Class stub holder for gen_class.Mail class.
 
-    Super-Class:
-
-    Sub-Classes:
-
     Methods:
         __init__ -> Class initialization.
         get_time -> Stub method holder for SlaveRep.get_time.
@@ -60,7 +56,6 @@ class Mail(object):
         Description:  Class initialization.
 
         Arguments:
-            None
 
         """
 
@@ -96,10 +91,6 @@ class Server(object):
     """Class:  Server
 
     Description:  Class stub holder for mysql_class.Server class.
-
-    Super-Class:
-
-    Sub-Classes:
 
     Methods:
         __init__ -> Class initialization.
@@ -144,12 +135,10 @@ class UnitTest(unittest.TestCase):
 
     Description:  Class which is a representation of a unit testing.
 
-    Super-Class:  unittest.TestCase
-
-    Sub-Classes:
-
     Methods:
         setUp -> Initialize testing environment.
+        test_stdout -> Test with standard out.
+        test_stdout_suppress -> Test with standard out being suppressed.
         test_mail -> Test with emailing out.
         test_file -> Test with writing to file.
         test_mongo -> Test with mongo connection.
@@ -170,8 +159,35 @@ class UnitTest(unittest.TestCase):
 
         self.server = Server()
         self.mail = Mail()
-        self.args_array = {"-j": True}
+        self.args_array = {"-j": True, "-z": True}
         self.args_array2 = {}
+        self.args_array3 = {"-j": True}
+
+    def test_stdout(self):
+
+        """Function:  test_stdout
+
+        Description:  Test with standard out.
+
+        Arguments:
+
+        """
+
+        with gen_libs.no_std_out():
+            self.assertFalse(mysql_db_admin.status(self.server,
+                                                   self.args_array3))
+
+    def test_stdout_suppress(self):
+
+        """Function:  test_stdout_suppress
+
+        Description:  Test with standard out being suppressed.
+
+        Arguments:
+
+        """
+
+        self.assertFalse(mysql_db_admin.status(self.server, self.args_array))
 
     @mock.patch("mysql_db_admin.mongo_libs.ins_doc")
     @mock.patch("mysql_db_admin.gen_libs.write_file")

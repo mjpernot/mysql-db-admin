@@ -41,12 +41,10 @@ class UnitTest(unittest.TestCase):
 
     Description:  Class which is a representation of a unit testing.
 
-    Super-Class:  unittest.TestCase
-
-    Sub-Classes:
-
     Methods:
         setUp -> Initialize testing environment.
+        test_programlock_false -> Test with ProgramLock returns False.
+        test_programlock_true -> Test with ProgramLock returns True.
         test_help_true -> Test help if returns true.
         test_help_false -> Test help if returns false.
         test_arg_req_true -> Test arg_require if returns true.
@@ -73,6 +71,59 @@ class UnitTest(unittest.TestCase):
         """
 
         self.args_array = {"-c": "CfgFile", "-d": "CfgDir"}
+
+    @mock.patch(
+        "mysql_db_admin.gen_class.ProgramLock",
+        mock.Mock(
+            side_effect=mysql_db_admin.gen_class.SingleInstanceException))
+    @mock.patch("mysql_db_admin.run_program", mock.Mock(return_value=True))
+    @mock.patch("mysql_db_admin.gen_libs.help_func",
+                mock.Mock(return_value=False))
+    @mock.patch("mysql_db_admin.arg_parser")
+    def test_programlock_false(self, mock_arg):
+
+        """Function:  test_programlock_false
+
+        Description:  Test with ProgramLock returns False.
+
+        Arguments:
+
+        """
+
+        mock_arg.arg_parse2.return_value = self.args_array
+        mock_arg.arg_require.return_value = False
+        mock_arg.arg_xor_dict.return_value = True
+        mock_arg.arg_cond_req.return_value = True
+        mock_arg.arg_dir_chk_crt.return_value = False
+        mock_arg.arg_file_chk.return_value = False
+
+        with gen_libs.no_std_out():
+            self.assertFalse(mysql_db_admin.main())
+
+    @mock.patch("mysql_db_admin.gen_class.ProgramLock",
+                mock.Mock(side_effect=None))
+    @mock.patch("mysql_db_admin.run_program", mock.Mock(return_value=True))
+    @mock.patch("mysql_db_admin.gen_libs.help_func",
+                mock.Mock(return_value=False))
+    @mock.patch("mysql_db_admin.arg_parser")
+    def test_programlock_true(self, mock_arg):
+
+        """Function:  test_programlock_true
+
+        Description:  Test with ProgramLock returns True.
+
+        Arguments:
+
+        """
+
+        mock_arg.arg_parse2.return_value = self.args_array
+        mock_arg.arg_require.return_value = False
+        mock_arg.arg_xor_dict.return_value = True
+        mock_arg.arg_cond_req.return_value = True
+        mock_arg.arg_dir_chk_crt.return_value = False
+        mock_arg.arg_file_chk.return_value = False
+
+        self.assertFalse(mysql_db_admin.main())
 
     @mock.patch("mysql_db_admin.gen_libs.help_func")
     @mock.patch("mysql_db_admin.arg_parser.arg_parse2")
@@ -315,10 +366,13 @@ class UnitTest(unittest.TestCase):
 
         self.assertFalse(mysql_db_admin.main())
 
-    @mock.patch("mysql_db_admin.run_program")
-    @mock.patch("mysql_db_admin.gen_libs.help_func")
+    @mock.patch("mysql_db_admin.gen_class.ProgramLock",
+                mock.Mock(side_effect=None))
+    @mock.patch("mysql_db_admin.run_program", mock.Mock(return_value=True))
+    @mock.patch("mysql_db_admin.gen_libs.help_func",
+                mock.Mock(return_value=False))
     @mock.patch("mysql_db_admin.arg_parser")
-    def test_arg_file_false(self, mock_arg, mock_help, mock_run):
+    def test_arg_file_false(self, mock_arg):
 
         """Function:  test_arg_file_false
 
@@ -329,13 +383,11 @@ class UnitTest(unittest.TestCase):
         """
 
         mock_arg.arg_parse2.return_value = self.args_array
-        mock_help.return_value = False
         mock_arg.arg_require.return_value = False
         mock_arg.arg_xor_dict.return_value = True
         mock_arg.arg_cond_req.return_value = True
         mock_arg.arg_dir_chk_crt.return_value = False
         mock_arg.arg_file_chk.return_value = False
-        mock_run.return_value = True
 
         self.assertFalse(mysql_db_admin.main())
 
