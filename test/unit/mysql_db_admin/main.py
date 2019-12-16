@@ -72,8 +72,10 @@ class UnitTest(unittest.TestCase):
 
         self.args_array = {"-c": "CfgFile", "-d": "CfgDir"}
 
-    @mock.patch("mysql_db_admin.gen_class.ProgramLock",
-                mock.Mock(side_effect=mysql_db_admin.gen_class.SingleInstanceException))
+    @mock.patch(
+        "mysql_db_admin.gen_class.ProgramLock",
+        mock.Mock(
+            side_effect=mysql_db_admin.gen_class.SingleInstanceException))
     @mock.patch("mysql_db_admin.run_program", mock.Mock(return_value=True))
     @mock.patch("mysql_db_admin.gen_libs.help_func",
                 mock.Mock(return_value=False))
