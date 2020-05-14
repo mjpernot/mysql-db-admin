@@ -11,6 +11,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - Added -a option to allow for append of data to an existing output file.
 
 ### Changed
+- status: Changed variable name to standard naming convention.
 - \_proc_some_tbls: Changed variable name to standard naming convention.
 - \_proc_all_tbls: Changed variable name to standard naming convention.
 - \_proc_all_dbs: Changed variable name to standard naming convention.
