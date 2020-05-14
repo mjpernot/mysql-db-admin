@@ -18,6 +18,9 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - config/mysql.cfg.TEMPLATE:  Changed to generic setup.
 - config/mysql_cfg.py.TEMPLATE:  Changed to generic setup.
 
+### Removed
+- Removed non-used library modules.
+
 
 ## [3.1.0] - 2019-12-06
 ### Fixed

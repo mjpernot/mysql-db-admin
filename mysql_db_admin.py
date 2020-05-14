@@ -120,8 +120,6 @@
 from __future__ import print_function
 import sys
 import datetime
-import getpass
-import socket
 
 # Third party
 import json
