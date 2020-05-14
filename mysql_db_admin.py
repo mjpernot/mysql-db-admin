@@ -12,12 +12,15 @@
         memory use, and database server status.
 
     Usage:
-        mysql_db_admin.py -c file -d path {-C [db_name [db_name ...]]
-            | -A [db_name [db_name ...] | -S [db_name [db_name ...]]
-            | -D [db_name [db_name ...] ] | -M {-j
-            | -i {db_name: table_name} | -m file} | -o dir_path/file}}
-            [-t [table_name [table_name ...]]]
-            [-e ToEmail {ToEmail2 ToEmail3 ...} {-s SubjectLine}] -z [-v | -h]
+        mysql_db_admin.py -c file -d path
+            {-C [db_name [db_name2 ...]] [-t table_name [table_name2 ...]]} |
+            {-A [db_name [db_name2 ...] [-t table_name [table_name2 ...]]} |
+            {-S [db_name [db_name2 ...]] [-t table_name [table_name2 ...]]} |
+            {-D [db_name [db_name2 ...]] [-t table_name [table_name2 ...]]} |
+            {-M [-j] | [-i [db_name:table_name] -m config_file] |
+                [-e to_email [to_email2 ...] [-s subject_line]] | [-z] |
+                [-o dir_path/file [-a]]}
+            [-v | -h]
 
     Arguments:
         -c file => Server configuration file.  Required arg.
@@ -33,46 +36,53 @@
         -m file => Mongo config file.  Is loaded as a python, do not
             include the .py extension with the name.
         -j => Convert output to JSON format.
+            For use with the -M option.
         -i {database:collection} => Name of database and collection.
-            Delimited by colon (:).  Default: sysmon:mysql_db_status
+            Default: sysmon:mysql_db_status
+            This option requires option:  -m
         -o path/file => Directory path and file name for output.
-        -t [table name(s)] =>  Used with the -C, -A, -S & -D options.
-        -e to_email_addresses => Enables emailing capability for an option if
-            the option allows it.  Sends output to one or more email addresses.
+            Use the -a option to append to an existing file.
+            For use with the -M option.
+        -a => Append output to output file.
+        -t table name(s) => Table names to check.
+            Used with the -C, -A, -S & -D options.
         -s subject_line => Subject line of email.  Optional, will create own
             subject line if one is not provided.
+            This option requires option:  -e
+        -e to_email_address(es) => Enables emailing capability for an option if
+            the option allows it.  Sends output to one or more email addresses.
+            Email addresses are delimited by spaces.
         -z => Suppress standard out.
         -v => Display version of this program.
         -h => Help and usage message.
 
         NOTE 1:  -v or -h overrides the other options.
-
         NOTE 2:  Options -A, -C, -D, and -S: If no name is passed, will
              do all database names, can also pass multiple databases
             names to the option, must be space delimited.
-
         NOTE 3:  Option -t: If not name is passed, will
             do all table names, can also pass multiple table names to
             the option, must be space delimited.  If no -t option is
             used, will do all tables in the database.
-
         NOTE 4:  Default output is in standard output, unless -j option
             is selected.
 
     Notes:
-        Database configuration file format (mysql_cfg.py):
+        Database configuration file format (config/mysql_cfg.py.TEMPLATE):
         WARNING:  Do not use the loopback IP or 'localhost' for the "host"
         variable, use the actual IP.
-            # Configuration file for {Database Name/Server}
-            user = "root"
-            passwd = "ROOT_PASSWORD"
+
+            # Configuration file for MySQL database server.
+            user = "USER"
+            passwd = "PASSWORD"
             host = "IP_ADDRESS"
-            serv_os = "Linux"
             name = "HOSTNAME"
-            port = PORT_NUMBER (default of mysql is 3306)
+            sid = SERVER_ID
+            extra_def_file = "PYTHON_PROJECT/config/mysql.cfg"
+            serv_os = "Linux"
+            # Default port for MySQL is 3306.
+            port = 3306
             cfg_file = "DIRECTORY_PATH/my.cnf"
-            sid = "SERVER_ID"
-            extra_def_file = "DIRECTORY_PATH/mysql.cfg"
 
         NOTE 1:  Include the cfg_file even if running remotely as the file will
             be used in future releases.
@@ -86,8 +96,8 @@
             used to connect to different databases with different names.
 
         Defaults Extra File format (mysql.cfg)
-            password="ROOT_PASSWORD"
-            socket=/BASE_PATH/mysqld/mysqld.sock
+            password="PASSWORD"
+            socket=DIRECTORY_PATH/mysqld.sock
 
         NOTE:  The socket information can be obtained from the my.cnf
             file under ~/mysql directory.

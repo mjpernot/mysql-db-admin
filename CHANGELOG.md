@@ -5,6 +5,9 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 
 
 ## [3.1.1] - 2020-05-14
+### Added
+- Added -a option to allow for append of data to an existing output file.
+
 ### Changed
 - config/mongo.py.TEMPLATE:  Changed to generic setup.
 - config/mysql.cfg.TEMPLATE:  Changed to generic setup.
