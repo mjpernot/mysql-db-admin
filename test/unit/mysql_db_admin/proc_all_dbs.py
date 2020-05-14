@@ -29,13 +29,12 @@ import mock
 # Local
 sys.path.append(os.getcwd())
 import mysql_db_admin
-import lib.gen_libs as gen_libs
 import version
 
 __version__ = version.__version__
 
 
-def func_holder(server, db, tbl, **kwargs):
+def func_holder(server, dbs, tbl, **kwargs):
 
     """Method:  func_holder
 
@@ -43,12 +42,17 @@ def func_holder(server, db, tbl, **kwargs):
 
     Arguments:
         server -> Server class instance.
-        db -> Database name.
+        dbs -> Database name.
         tbl -> Table name.
 
     """
 
-    pass
+    status = True
+
+    if server and dbs and tbl:
+        status = True
+
+    return status
 
 
 class Server(object):
