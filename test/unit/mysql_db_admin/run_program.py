@@ -56,7 +56,7 @@ def check(server, args_array, **kwargs):
     if server and args_array:
         status = True
 
-    return True
+    return status
 
 
 class Server(object):
