@@ -151,7 +151,7 @@ def help_message():
     print(__doc__)
 
 
-def run_analyze(server, db, tbl, **kwargs):
+def run_analyze(server, dbs, tbl, **kwargs):
 
     """Function:  run_analyze
 
@@ -159,18 +159,18 @@ def run_analyze(server, db, tbl, **kwargs):
 
     Arguments:
         (input) server -> Server instance.
-        (input) db -> Database name.
+        (input) dbs -> Database name.
         (input) tbl -> Table name.
         (input) **kwargs:
             sys_dbs -> List of system databases to skip.
 
     """
 
-    if db not in list(kwargs.get("sys_dbs", [])):
+    if dbs not in list(kwargs.get("sys_dbs", [])):
 
-        for x in mysql_libs.analyze_tbl(server, db, tbl):
-            print("DB: {0:20} Table: {1:50}\t".format(db, tbl), end="")
-            gen_libs.prt_msg(x["Msg_type"], x["Msg_text"])
+        for item in mysql_libs.analyze_tbl(server, dbs, tbl):
+            print("DB: {0:20} Table: {1:50}\t".format(dbs, tbl), end="")
+            gen_libs.prt_msg(item["Msg_type"], item["Msg_text"])
 
 
 def run_checksum(server, db, tbl, **kwargs):
