@@ -17,7 +17,7 @@
             {-A [db_name [db_name2 ...] [-t table_name [table_name2 ...]]} |
             {-S [db_name [db_name2 ...]] [-t table_name [table_name2 ...]]} |
             {-D [db_name [db_name2 ...]] [-t table_name [table_name2 ...]]} |
-            {-M [-j] | [-i [db_name:table_name] -m config_file] |
+            {-M [-j [-f]] | [-i [db_name:table_name] -m config_file] |
                 [-e to_email [to_email2 ...] [-s subject_line]] | [-z] |
                 [-o dir_path/file [-a]]}
             [-v | -h]
@@ -37,6 +37,8 @@
             include the .py extension with the name.
         -j => Convert output to JSON format.
             For use with the -M option.
+        -f => Flatten the JSON data structure to file and standard out.
+            For use with the -j option.
         -i {database:collection} => Name of database and collection.
             Default: sysmon:mysql_db_status
             This option requires option:  -m
