@@ -51,6 +51,11 @@ def check(server, args_array, **kwargs):
 
     """
 
+    status = True
+
+    if server and args_array:
+        status = True
+
     return True
 
 
@@ -87,7 +92,7 @@ class Server(object):
 
         """
 
-        pass
+        return True
 
 
 class UnitTest(unittest.TestCase):
