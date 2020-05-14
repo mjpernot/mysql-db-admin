@@ -634,7 +634,7 @@ def main():
     opt_multi_list = ["-A", "-C", "-D", "-S", "-t", "-e", "-s"]
     opt_req_list = ["-c", "-d"]
     opt_val_list = ["-c", "-d", "-t", "-A", "-C", "-D", "-S", "-i", "-m", "-o",
-                    "-e", "-s"]
+                    "-e", "-s", "-y"]
     opt_xor_dict = {"-A": ["-C", "-D", "-M", "-S"],
                     "-C": ["-A", "-D", "-M", "-S"],
                     "-D": ["-A", "-C", "-M", "-S"],
@@ -655,13 +655,15 @@ def main():
                                        file_crt_list):
 
         try:
-            proglock = gen_class.ProgramLock(sys.argv)
+            proglock = gen_class.ProgramLock(sys.argv,
+                                              args_array.get("-y", ""))
             run_program(args_array, func_dict, sys_dbs=sys_dbs,
                         multi_val=opt_multi_list)
             del proglock
 
         except gen_class.SingleInstanceException:
-            print("WARNING:  lock in place for mysql_db_admin")
+            print("WARNING:  lock in place for mysql_db_admin with id of: %s"
+                  % (args_array.get("-y", "")))
 
 
 if __name__ == "__main__":

@@ -11,6 +11,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - Added -a option to allow for append of data to an existing output file.
 
 ### Changed
+- main: Added -y option setting to the ProgramLock setup.
 - status:  Added flattening of JSON structure to standard out and to file.
 - status:  Added file mode option to writing data to a file.  Default is write.
 - config/mongo.py.TEMPLATE:  Changed to generic setup.
