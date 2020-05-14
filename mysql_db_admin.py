@@ -19,7 +19,8 @@
             {-D [db_name [db_name2 ...]] [-t table_name [table_name2 ...]]} |
             {-M [-j [-f]] | [-i [db_name:table_name] -m config_file] |
                 [-e to_email [to_email2 ...] [-s subject_line]] | [-z] |
-                [-o dir_path/file [-a]]}
+                [-o dir_path/file [-a]]} |
+            [-y flavor_id]
             [-v | -h]
 
     Arguments:
@@ -54,6 +55,7 @@
         -e to_email_address(es) => Enables emailing capability for an option if
             the option allows it.  Sends output to one or more email addresses.
             Email addresses are delimited by spaces.
+        -y value => A flavor id for the program lock.  To create unique lock.
         -z => Suppress standard out.
         -v => Display version of this program.
         -h => Help and usage message.
