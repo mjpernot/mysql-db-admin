@@ -494,11 +494,15 @@ def status(server, args_array, **kwargs):
     """
 
     mode = "w"
+    indent = 4
     args_array = dict(args_array)
     server.upd_srv_stat()
 
     if args_array.get("-a", False):
         mode = "a"
+
+    if args_array.get("-f", False):
+        indent = None
 
     if "-j" in args_array:
         outdata = {"application": "MySQL Database",
@@ -530,7 +534,7 @@ def status(server, args_array, **kwargs):
         gen_libs.prt_msg("Percent Used", server.prct_conn, 1)
 
     if "-j" in args_array:
-        jdata = json.dumps(outdata, indent=4)
+        jdata = json.dumps(outdata, indent=indent)
         mongo_cfg = kwargs.get("class_cfg", None)
         db_tbl = kwargs.get("db_tbl", None)
         ofile = kwargs.get("ofile", None)
