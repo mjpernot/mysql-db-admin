@@ -191,7 +191,7 @@ def run_checksum(server, dbs, tbl, **kwargs):
             dbs, tbl, item["Checksum"]))
 
 
-def run_optimize(server, db, tbl, **kwargs):
+def run_optimize(server, dbs, tbl, **kwargs):
 
     """Function:  run_optimize
 
@@ -199,25 +199,25 @@ def run_optimize(server, db, tbl, **kwargs):
 
     Arguments:
         (input) server -> Server instance.
-        (input) db -> Database name.
+        (input) dbs -> Database name.
         (input) tbl -> Table name.
         (input) **kwargs:
             sys_dbs -> List of system databases to skip.
 
     """
 
-    if db not in list(kwargs.get("sys_dbs", [])):
+    if dbs not in list(kwargs.get("sys_dbs", [])):
 
-        for x in mysql_libs.optimize_tbl(server, db, tbl):
-            if x["Msg_type"] == "note" and x["Msg_text"] == \
+        for item in mysql_libs.optimize_tbl(server, dbs, tbl):
+            if item["Msg_type"] == "note" and item["Msg_text"] == \
                "Table does not support optimize, doing recreate + \
 analyze instead":
 
                 continue
 
             else:
-                print("DB: {0:20} Table: {1:50}\t".format(db, tbl), end="")
-                gen_libs.prt_msg(x["Msg_type"], x["Msg_text"])
+                print("DB: {0:20} Table: {1:50}\t".format(dbs, tbl), end="")
+                gen_libs.prt_msg(item["Msg_type"], item["Msg_text"])
 
 
 def run_check(server, db, tbl, **kwargs):
