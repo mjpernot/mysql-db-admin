@@ -173,7 +173,7 @@ def run_analyze(server, dbs, tbl, **kwargs):
             gen_libs.prt_msg(item["Msg_type"], item["Msg_text"])
 
 
-def run_checksum(server, db, tbl, **kwargs):
+def run_checksum(server, dbs, tbl, **kwargs):
 
     """Function:  run_checksum
 
@@ -181,14 +181,14 @@ def run_checksum(server, db, tbl, **kwargs):
 
     Arguments:
         (input) server -> Server instance.
-        (input) db -> Database name.
+        (input) dbs -> Database name.
         (input) tbl -> Table name.
 
     """
 
-    for x in mysql_libs.checksum(server, db, tbl):
-        print("DB: {0:20} Table: {1:50}\tCheckSum: {2}".format(db, tbl,
-                                                               x["Checksum"]))
+    for item in mysql_libs.checksum(server, dbs, tbl):
+        print("DB: {0:20} Table: {1:50}\tCheckSum: {2}".format(
+            dbs, tbl, item["Checksum"]))
 
 
 def run_optimize(server, db, tbl, **kwargs):
