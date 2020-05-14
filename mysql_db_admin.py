@@ -325,10 +325,10 @@ def _proc_all_dbs(server, func_name, db_list, **kwargs):
 
     """
 
-    for db in db_list:
-        for tbl in gen_libs.dict_2_list(mysql_libs.fetch_tbl_dict(server, db),
+    for dbs in db_list:
+        for tbl in gen_libs.dict_2_list(mysql_libs.fetch_tbl_dict(server, dbs),
                                         "table_name"):
-            func_name(server, db, tbl, **kwargs)
+            func_name(server, dbs, tbl, **kwargs)
 
 
 def _proc_all_tbls(server, func_name, db_list, db_name, **kwargs):
