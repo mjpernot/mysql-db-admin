@@ -11,6 +11,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - Added -a option to allow for append of data to an existing output file.
 
 ### Changed
+- run_check: Changed variable name to standard naming convention.
 - run_optimize: Changed variable name to standard naming convention.
 - run_checksum: Changed variable name to standard naming convention.
 - run_analyze: Changed variable name to standard naming convention.

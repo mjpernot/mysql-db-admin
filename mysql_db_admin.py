@@ -220,7 +220,7 @@ analyze instead":
                 gen_libs.prt_msg(item["Msg_type"], item["Msg_text"])
 
 
-def run_check(server, db, tbl, **kwargs):
+def run_check(server, dbs, tbl, **kwargs):
 
     """Function:  run_check
 
@@ -228,14 +228,14 @@ def run_check(server, db, tbl, **kwargs):
 
     Arguments:
         (input) server -> Server instance.
-        (input) db -> Database name.
+        (input) dbs -> Database name.
         (input) tbl -> Table name.
 
     """
 
-    for x in mysql_libs.check_tbl(server, db, tbl):
-        print("DB: {0:20} Table: {1:50}\t".format(db, tbl), end="")
-        gen_libs.prt_msg(x["Msg_type"], x["Msg_text"])
+    for item in mysql_libs.check_tbl(server, dbs, tbl):
+        print("DB: {0:20} Table: {1:50}\t".format(dbs, tbl), end="")
+        gen_libs.prt_msg(item["Msg_type"], item["Msg_text"])
 
 
 def detect_dbs(sub_db_list, full_db_list, **kwargs):
