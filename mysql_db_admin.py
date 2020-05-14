@@ -656,7 +656,7 @@ def main():
 
         try:
             proglock = gen_class.ProgramLock(sys.argv,
-                                              args_array.get("-y", ""))
+                                             args_array.get("-y", ""))
             run_program(args_array, func_dict, sys_dbs=sys_dbs,
                         multi_val=opt_multi_list)
             del proglock
