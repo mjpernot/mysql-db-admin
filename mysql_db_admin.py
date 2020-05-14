@@ -383,17 +383,17 @@ def _proc_some_tbls(server, func_name, db_list, db_name, tbl_name, **kwargs):
     tbl_name = list(tbl_name)
     detect_dbs(db_name, db_list, **kwargs)
 
-    for db in set(db_name) & set(db_list):
-        tbl_list = gen_libs.dict_2_list(mysql_libs.fetch_tbl_dict(server, db),
+    for dbs in set(db_name) & set(db_list):
+        tbl_list = gen_libs.dict_2_list(mysql_libs.fetch_tbl_dict(server, dbs),
                                         "table_name")
         tbls = list(set(tbl_name) - set(tbl_list))
 
         if tbls:
             print("Warning: Database (%s) Tables that do not exist %s."
-                  % (db, tbls))
+                  % (dbs, tbls))
 
         for tbl in set(tbl_name) & set(tbl_list):
-            func_name(server, db, tbl, **kwargs)
+            func_name(server, dbs, tbl, **kwargs)
 
 
 def analyze(server, args_array, **kwargs):
