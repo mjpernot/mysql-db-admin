@@ -491,8 +491,12 @@ def status(server, args_array, **kwargs):
 
     """
 
+    mode = "w"
     args_array = dict(args_array)
     server.upd_srv_stat()
+
+    if args_array.get("-a", False):
+        mode = "a"
 
     if "-j" in args_array:
         outdata = {"application": "MySQL Database",
@@ -535,7 +539,7 @@ def status(server, args_array, **kwargs):
             mongo_libs.ins_doc(mongo_cfg, db, tbl, outdata)
 
         if ofile:
-            gen_libs.write_file(ofile, "w", jdata)
+            gen_libs.write_file(ofile, mode, jdata)
 
         if mail:
             mail.add_2_msg(jdata)
