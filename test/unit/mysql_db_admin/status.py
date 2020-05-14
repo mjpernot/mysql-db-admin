@@ -148,6 +148,7 @@ class UnitTest(unittest.TestCase):
         test_mongo -> Test with mongo connection.
         test_non_json -> Test with in non-JSON format.
         test_json -> Test with in JSON format.
+        test_flatten_json -> Test with flatten option for JSON format.
 
     """
 
@@ -167,6 +168,7 @@ class UnitTest(unittest.TestCase):
         self.args_array2 = {}
         self.args_array3 = {"-j": True}
         self.args_array4 = {"-j": True, "-a": True, "-z": True}
+        self.args_array5 = {"-j": True, "-f": True, "-z": True}
 
     def test_stdout(self):
 
@@ -297,6 +299,23 @@ class UnitTest(unittest.TestCase):
         mock_mongo.return_value = True
 
         self.assertFalse(mysql_db_admin.status(self.server, self.args_array))
+
+    @mock.patch("mysql_db_admin.mongo_libs.ins_doc")
+    @mock.patch("mysql_db_admin.gen_libs.write_file")
+    def test_flatten_json(self, mock_write, mock_mongo):
+
+        """Function:  test_flatten_json
+
+        Description:  Test with flatten option for JSON format.
+
+        Arguments:
+
+        """
+
+        mock_write.return_value = True
+        mock_mongo.return_value = True
+
+        self.assertFalse(mysql_db_admin.status(self.server, self.args_array5))
 
 
 if __name__ == "__main__":
