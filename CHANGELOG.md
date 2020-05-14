@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on "Keep a Changelog".  This project adheres to Semantic Versioning.
 
 
+## [3.1.1] - 2020-05-14
+### Changed
+- config/mongo.py.TEMPLATE:  Changed to generic setup.
+- config/mysql.cfg.TEMPLATE:  Changed to generic setup.
+- config/mysql_cfg.py.TEMPLATE:  Changed to generic setup.
+
+
 ## [3.1.0] - 2019-12-06
 ### Fixed
 - run_analyze:  Fixed problem with mutable default arguments issue.
