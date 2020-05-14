@@ -193,37 +193,17 @@ pip install -r requirements-python-lib.txt --target mongo_lib/lib --trusted-host
 ```
 
 
-# Unit test runs for mysql_db_admin.py:
+### Testing:
   * Replace **{Python_Project}** with the baseline path of the python program.
 
 ```
 cd {Python_Project}/mysql-db-admin
-test/unit/mysql_db_admin/help_message.py
-test/unit/mysql_db_admin/analyze.py
-test/unit/mysql_db_admin/check.py
-test/unit/mysql_db_admin/checksum.py
-test/unit/mysql_db_admin/detect_dbs.py
-test/unit/mysql_db_admin/optimize.py
-test/unit/mysql_db_admin/process_request.py
-test/unit/mysql_db_admin/proc_all_dbs.py
-test/unit/mysql_db_admin/proc_all_tbls.py
-test/unit/mysql_db_admin/proc_some_tbls.py
-test/unit/mysql_db_admin/run_check.py
-test/unit/mysql_db_admin/run_checksum.py
-test/unit/mysql_db_admin/run_optimize.py
-test/unit/mysql_db_admin/run_analyze.py
-test/unit/mysql_db_admin/status.py
-test/unit/mysql_db_admin/run_program.py
-test/unit/mysql_db_admin/main.py
-```
-
-### All unit testing
-```
 test/unit/mysql_db_admin/unit_test_run.sh
 ```
 
-### Code coverage program
+### Code Coverage:
 ```
+cd {Python_Project}/mysql-db-admin
 test/unit/mysql_db_admin/code_coverage.sh
 ```
 
