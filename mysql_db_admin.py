@@ -588,9 +588,9 @@ def run_program(args_array, func_dict, **kwargs):
                                     subj=args_array.get("-s", None))
 
     # Intersect args_array and func_dict to determine which functions to call.
-    for x in set(args_array.keys()) & set(func_dict.keys()):
-        func_dict[x](server, args_array, ofile=outfile, db_tbl=db_tbl,
-                     class_cfg=mongo, mail=mail, **kwargs)
+    for item in set(args_array.keys()) & set(func_dict.keys()):
+        func_dict[item](server, args_array, ofile=outfile, db_tbl=db_tbl,
+                        class_cfg=mongo, mail=mail, **kwargs)
 
     cmds_gen.disconnect([server])
 
