@@ -443,7 +443,6 @@ class UnitTest(unittest.TestCase):
         mock_lock.side_effect = \
             mysql_db_admin.gen_class.SingleInstanceException
 
-
         with gen_libs.no_std_out():
             self.assertFalse(mysql_db_admin.main())
 
