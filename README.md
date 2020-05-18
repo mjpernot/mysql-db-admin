@@ -2,7 +2,7 @@
 # Classification (U)
 
 # Description:
-  This program is used to do database administration in a MySQL database to include compacting/defraging a table, checking a table for errors, analyze a table's key distribution (index check), and get a checksum on a table.
+  Used for database administration of a MySQL database to include compacting/defraging a table, checking a table for errors, analyze a table's key distribution (index check), and get a checksum on a table.
 
 
 ###  This README file is broken down into the following sections:
