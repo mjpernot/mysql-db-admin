@@ -509,11 +509,6 @@ def status(server, args_array, **kwargs):
                    "server": server.name,
                    "asOf": datetime.datetime.strftime(datetime.datetime.now(),
                                                       "%Y-%m-%d %H:%M:%S")}
-
-    else:
-        print("\nDatabase Status Check for Server: %s" % (server.name))
-
-    if "-j" in args_array:
         outdata.update({"memory": {"currentUsage": server.cur_mem_mb,
                                    "maxUsage": server.max_mem_mb,
                                    "percentUsed": server.prct_mem},
@@ -521,19 +516,6 @@ def status(server, args_array, **kwargs):
                         "connections": {"currentConnected": server.cur_conn,
                                         "maxConnections": server.max_conn,
                                         "percentUsed": server.prct_conn}})
-
-    else:
-        gen_libs.prt_msg("Uptime (days)", server.days_up, 0)
-        gen_libs.prt_msg("Memory", "", 0)
-        gen_libs.prt_msg("Max Mem", server.max_mem_mb, 1)
-        gen_libs.prt_msg("Current Mem", server.cur_mem_mb, 1)
-        gen_libs.prt_msg("Percent Used", server.prct_mem, 1)
-        gen_libs.prt_msg("Connections", "", 0)
-        gen_libs.prt_msg("Max Connections", server.max_conn, 1)
-        gen_libs.prt_msg("Current Connections", server.cur_conn, 1)
-        gen_libs.prt_msg("Percent Used", server.prct_conn, 1)
-
-    if "-j" in args_array:
         jdata = json.dumps(outdata, indent=indent)
         mongo_cfg = kwargs.get("class_cfg", None)
         db_tbl = kwargs.get("db_tbl", None)
@@ -553,6 +535,18 @@ def status(server, args_array, **kwargs):
 
         if not args_array.get("-z", False):
             gen_libs.print_data(jdata)
+
+    else:
+        print("\nDatabase Status Check for Server: %s" % (server.name))
+        gen_libs.prt_msg("Uptime (days)", server.days_up, 0)
+        gen_libs.prt_msg("Memory", "", 0)
+        gen_libs.prt_msg("Max Mem", server.max_mem_mb, 1)
+        gen_libs.prt_msg("Current Mem", server.cur_mem_mb, 1)
+        gen_libs.prt_msg("Percent Used", server.prct_mem, 1)
+        gen_libs.prt_msg("Connections", "", 0)
+        gen_libs.prt_msg("Max Connections", server.max_conn, 1)
+        gen_libs.prt_msg("Current Connections", server.cur_conn, 1)
+        gen_libs.prt_msg("Percent Used", server.prct_conn, 1)
 
 
 def run_program(args_array, func_dict, **kwargs):
