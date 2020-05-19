@@ -33,6 +33,7 @@
     - lib/cmds_gen
     - lib/arg_parser
     - lib/gen_libs
+    - lib/gen_class
     - mysql_lib/mysql_libs
     - mysql_lib/mysql_class
     - mongo_lib/mongo_libs
