@@ -169,7 +169,8 @@ def run_analyze(server, dbs, tbl, **kwargs):
     if dbs not in list(kwargs.get("sys_dbs", [])):
 
         for item in mysql_libs.analyze_tbl(server, dbs, tbl):
-            print("DB: {0:20} Table: {1:50}\t".format(dbs, tbl), end="")
+            print("DB: {0:20} Table: {1:35}  Analyzed:\t".format(dbs, tbl),
+                  end="")
             gen_libs.prt_msg(item["Msg_type"], item["Msg_text"])
 
 
