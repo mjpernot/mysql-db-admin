@@ -106,7 +106,29 @@
         NOTE:  The socket information can be obtained from the my.cnf
             file under ~/mysql directory.
 
-#  Added Mongo configuration file instructions here.
+        Mongo configuration file format (config/mongo.py.TEMPLATE).  The
+            configuration file format for the Mongo connection used for
+            inserting data into a database.
+            There are two ways to connect:  single or replica set.
+
+            1.)  Single database connection:
+
+            # Single Configuration file for Mongo Database Server.
+            user = "USER"
+            passwd = "PASSWORD"
+            host = "IP_ADDRESS"
+            name = "HOSTNAME"
+            # Default port for Mongo is 27017
+            port = 27017
+            conf_file = None
+            auth = True
+
+            2.)  Replica Set connection:  Same format as above, but with these
+                additional entries at the end of the configuration file:
+
+            repset = "REPLICA_SET_NAME"
+            repset_hosts = "HOST1:PORT, HOST2:PORT, HOST3:PORT, [...]"
+            db_auth = "AUTHENTICATION_DATABASE"
 
     Example:
         mysql_db_admin.py -c mysql -d config -D test -t users

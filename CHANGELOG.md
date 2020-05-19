@@ -34,6 +34,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - config/mongo.py.TEMPLATE:  Changed to generic setup.
 - config/mysql.cfg.TEMPLATE:  Changed to generic setup.
 - config/mysql_cfg.py.TEMPLATE:  Changed to generic setup.
+- Documentation updates.
 
 ### Removed
 - Removed non-used library modules.
