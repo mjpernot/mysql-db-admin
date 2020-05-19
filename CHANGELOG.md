@@ -14,6 +14,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - main:  Fixed handling command line arguments from SonarQube scan finding.
 
 ### Changed
+- status:  Converted JSON output to CamelCase.
 - run_check:  Reformatted output.
 - run_optimize:  Reformatted output.
 - run_checksum:  Reformatted output.
