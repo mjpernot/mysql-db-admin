@@ -188,7 +188,7 @@ def run_checksum(server, dbs, tbl, **kwargs):
     """
 
     for item in mysql_libs.checksum(server, dbs, tbl):
-        print("DB: {0:20} Table: {1:50}\tCheckSum: {2}".format(
+        print("DB: {0:20} Table: {1:35}  CheckSum:\t{2}".format(
             dbs, tbl, item["Checksum"]))
 
 
