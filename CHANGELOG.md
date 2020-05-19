@@ -10,6 +10,9 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - Added -f option to Flatten the JSON data structure to file and standard out.
 - Added -a option to allow for append of data to an existing output file.
 
+### Fixed:
+- main:  Fixed handling command line arguments from SonarQube scan finding.
+
 ### Changed
 - run_check:  Reformatted output.
 - run_optimize:  Reformatted output.
