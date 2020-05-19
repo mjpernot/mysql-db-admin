@@ -11,6 +11,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - Added -a option to allow for append of data to an existing output file.
 
 ### Changed
+- run_check:  Reformatted output.
 - run_optimize:  Reformatted output.
 - run_checksum:  Reformatted output.
 - run_analyze:  Reformatted output.

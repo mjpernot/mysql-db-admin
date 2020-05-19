@@ -236,7 +236,7 @@ def run_check(server, dbs, tbl, **kwargs):
     """
 
     for item in mysql_libs.check_tbl(server, dbs, tbl):
-        print("DB: {0:20} Table: {1:50}\t".format(dbs, tbl), end="")
+        print("DB: {0:20} Table: {1:35}  Check:\t".format(dbs, tbl), end="")
         gen_libs.prt_msg(item["Msg_type"], item["Msg_text"])
 
 
