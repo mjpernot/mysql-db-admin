@@ -35,7 +35,7 @@ import version
 __version__ = version.__version__
 
 
-def func_holder(server, dbs, tbl, **kwargs):
+def func_holder(server, dbs, tbl):
 
     """Method:  func_holder
 
