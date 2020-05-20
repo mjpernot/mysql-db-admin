@@ -3,13 +3,12 @@
 
 """Program:  mysql_db_admin.py
 
-    Description:  A MySQL Database Administration program that can run a number
-        of different administration functions such as compacting/defraging a
-        table, checking a table for errors, analyze a table's key distribution
-        (index check), or get a checksum on a table.  The options will allow
-        for for a single object, multiple objects, or all objects.  Also can
-        return the database's status to include uptime, connection usage,
-        memory use, and database server status.
+    Description:  Can run a number of different administration functions such
+        as compacting/defraging a table, checking a table for errors, analyze a
+        table's key distribution (index check), or get a checksum on a table.
+        The options will allow for for a single object, multiple objects, or
+        all objects.  Also can return the database's status to include uptime,
+        connection usage, memory use, and database server status.
 
     Usage:
         mysql_db_admin.py -c file -d path
@@ -99,12 +98,16 @@
         configuration modules -> name is runtime dependent as it can be
             used to connect to different databases with different names.
 
-        Defaults Extra File format (mysql.cfg)
+        Defaults Extra File format (config/mysql.cfg.TEMPLATE)
             password="PASSWORD"
             socket=DIRECTORY_PATH/mysqld.sock
 
-        NOTE:  The socket information can be obtained from the my.cnf
+        NOTE 1:  The socket information can be obtained from the my.cnf
             file under ~/mysql directory.
+        NOTE 2:  The --defaults-extra-file option will be overridden if there
+            is a ~/.my.cnf or ~/.mylogin.cnf file located in the home directory
+            of the user running this program.  The extras file will in effect
+            be ignored.
 
         Mongo configuration file format (config/mongo.py.TEMPLATE).  The
             configuration file format for the Mongo connection used for
