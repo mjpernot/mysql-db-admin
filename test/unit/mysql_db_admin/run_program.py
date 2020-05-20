@@ -50,9 +50,10 @@ def check(server, args_array, **kwargs):
 
     """
 
+    ofile = kwargs.get("ofile", "file")
     status = True
 
-    if server and args_array:
+    if server and args_array and ofile:
         status = True
 
     return status
