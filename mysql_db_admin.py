@@ -63,10 +63,10 @@
         NOTE 2:  Options -A, -C, -D, and -S: If no name is passed, will
              do all database names, can also pass multiple databases
             names to the option, must be space delimited.
-        NOTE 3:  Option -t: If not name is passed, will
-            do all table names, can also pass multiple table names to
-            the option, must be space delimited.  If no -t option is
-            used, will do all tables in the database.
+        NOTE 3:  Option -t: If no name is passed, will do all table names, can
+            also pass multiple table names to the option, must be space
+            delimited.  If no -t option is used, will do all tables in the
+            database.
         NOTE 4:  Default output is in standard output, unless -j option
             is selected.
 
