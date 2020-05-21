@@ -159,8 +159,6 @@ chmod 600 mongo.py
 
 # Unit Testing:
 
-### Description: Testing consists of unit testing for the functions in the mysql_db_admin.py program.
-
 ### Installation:
 
 Install the project using git.
