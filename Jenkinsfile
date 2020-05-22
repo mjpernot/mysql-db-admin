@@ -77,25 +77,25 @@ pipeline {
                                 "pattern": "./*.py",
                                 "recursive": false,
                                 "excludePatterns": [],
-                                "target": "generic-local/highpoint/mysql-db-admin/"
+                                "target": "pypi-proj-local/highpoint/mysql-db-admin/"
                             },
                             {
                                 "pattern": "./*.txt",
                                 "recursive": false,
                                 "excludePatterns": [],
-                                "target": "generic-local/highpoint/mysql-db-admin/"
+                                "target": "pypi-proj-local/highpoint/mysql-db-admin/"
                             },
                             {
                                 "pattern": "./*.md",
                                 "recursive": false,
                                 "excludePatterns": [],
-                                "target": "generic-local/highpoint/mysql-db-admin/"
+                                "target": "pypi-proj-local/highpoint/mysql-db-admin/"
                             },
                             {
                                 "pattern": "*.TEMPLATE",
                                 "recursive": true,
                                 "excludePatterns": [],
-                                "target": "generic-local/highpoint/mysql-db-admin/config/"
+                                "target": "pypi-proj-local/highpoint/mysql-db-admin/config/"
                             }
                         ]
                     }"""

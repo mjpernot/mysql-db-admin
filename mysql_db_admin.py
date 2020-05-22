@@ -3,21 +3,24 @@
 
 """Program:  mysql_db_admin.py
 
-    Description:  A MySQL Database Administration program that can run a number
-        of different administration functions such as compacting/defraging a
-        table, checking a table for errors, analyze a table's key distribution
-        (index check), or get a checksum on a table.  The options will allow
-        for for a single object, multiple objects, or all objects.  Also can
-        return the database's status to include uptime, connection usage,
-        memory use, and database server status.
+    Description:  Can run a number of different administration functions such
+        as compacting/defraging a table, checking a table for errors, analyze a
+        table's key distribution (index check), or get a checksum on a table.
+        The options will allow for for a single object, multiple objects, or
+        all objects.  Also can return the database's status to include uptime,
+        connection usage, memory use, and database server status.
 
     Usage:
-        mysql_db_admin.py -c file -d path {-C [db_name [db_name ...]]
-            | -A [db_name [db_name ...] | -S [db_name [db_name ...]]
-            | -D [db_name [db_name ...] ] | -M {-j
-            | -i {db_name: table_name} | -m file} | -o dir_path/file}}
-            [-t [table_name [table_name ...]]]
-            [-e ToEmail {ToEmail2 ToEmail3 ...} {-s SubjectLine}] -z [-v | -h]
+        mysql_db_admin.py -c file -d path
+            {-C [db_name [db_name2 ...]] [-t table_name [table_name2 ...]]} |
+            {-A [db_name [db_name2 ...] [-t table_name [table_name2 ...]]} |
+            {-S [db_name [db_name2 ...]] [-t table_name [table_name2 ...]]} |
+            {-D [db_name [db_name2 ...]] [-t table_name [table_name2 ...]]} |
+            {-M [-j [-f]] | [-i [db_name:table_name] -m config_file] |
+                [-e to_email [to_email2 ...] [-s subject_line]] | [-z] |
+                [-o dir_path/file [-a]]} |
+            [-y flavor_id]
+            [-v | -h]
 
     Arguments:
         -c file => Server configuration file.  Required arg.
@@ -33,46 +36,56 @@
         -m file => Mongo config file.  Is loaded as a python, do not
             include the .py extension with the name.
         -j => Convert output to JSON format.
+            For use with the -M option.
+        -f => Flatten the JSON data structure to file and standard out.
+            For use with the -j option.
         -i {database:collection} => Name of database and collection.
-            Delimited by colon (:).  Default: sysmon:mysql_db_status
+            Default: sysmon:mysql_db_status
+            This option requires option:  -m
         -o path/file => Directory path and file name for output.
-        -t [table name(s)] =>  Used with the -C, -A, -S & -D options.
-        -e to_email_addresses => Enables emailing capability for an option if
-            the option allows it.  Sends output to one or more email addresses.
+            Use the -a option to append to an existing file.
+            For use with the -M option.
+        -a => Append output to output file.
+        -t table name(s) => Table names to check.
+            Used with the -C, -A, -S & -D options.
         -s subject_line => Subject line of email.  Optional, will create own
             subject line if one is not provided.
+            This option requires option:  -e
+        -e to_email_address(es) => Enables emailing capability for an option if
+            the option allows it.  Sends output to one or more email addresses.
+            Email addresses are delimited by spaces.
+        -y value => A flavor id for the program lock.  To create unique lock.
         -z => Suppress standard out.
         -v => Display version of this program.
         -h => Help and usage message.
 
         NOTE 1:  -v or -h overrides the other options.
-
         NOTE 2:  Options -A, -C, -D, and -S: If no name is passed, will
              do all database names, can also pass multiple databases
             names to the option, must be space delimited.
-
-        NOTE 3:  Option -t: If not name is passed, will
-            do all table names, can also pass multiple table names to
-            the option, must be space delimited.  If no -t option is
-            used, will do all tables in the database.
-
+        NOTE 3:  Option -t: If no name is passed, will do all table names, can
+            also pass multiple table names to the option, must be space
+            delimited.  If no -t option is used, will do all tables in the
+            database.
         NOTE 4:  Default output is in standard output, unless -j option
             is selected.
 
     Notes:
-        Database configuration file format (mysql_cfg.py):
+        Database configuration file format (config/mysql_cfg.py.TEMPLATE):
         WARNING:  Do not use the loopback IP or 'localhost' for the "host"
         variable, use the actual IP.
-            # Configuration file for {Database Name/Server}
-            user = "root"
-            passwd = "ROOT_PASSWORD"
+
+            # Configuration file for MySQL database server.
+            user = "USER"
+            passwd = "PASSWORD"
             host = "IP_ADDRESS"
-            serv_os = "Linux"
             name = "HOSTNAME"
-            port = PORT_NUMBER (default of mysql is 3306)
+            sid = SERVER_ID
+            extra_def_file = "PYTHON_PROJECT/config/mysql.cfg"
+            serv_os = "Linux"
+            # Default port for MySQL is 3306.
+            port = 3306
             cfg_file = "DIRECTORY_PATH/my.cnf"
-            sid = "SERVER_ID"
-            extra_def_file = "DIRECTORY_PATH/mysql.cfg"
 
         NOTE 1:  Include the cfg_file even if running remotely as the file will
             be used in future releases.
@@ -85,14 +98,40 @@
         configuration modules -> name is runtime dependent as it can be
             used to connect to different databases with different names.
 
-        Defaults Extra File format (mysql.cfg)
-            password="ROOT_PASSWORD"
-            socket=/BASE_PATH/mysqld/mysqld.sock
+        Defaults Extra File format (config/mysql.cfg.TEMPLATE)
+            password="PASSWORD"
+            socket=DIRECTORY_PATH/mysqld.sock
 
-        NOTE:  The socket information can be obtained from the my.cnf
+        NOTE 1:  The socket information can be obtained from the my.cnf
             file under ~/mysql directory.
+        NOTE 2:  The --defaults-extra-file option will be overridden if there
+            is a ~/.my.cnf or ~/.mylogin.cnf file located in the home directory
+            of the user running this program.  The extras file will in effect
+            be ignored.
 
-#  Added Mongo configuration file instructions here.
+        Mongo configuration file format (config/mongo.py.TEMPLATE).  The
+            configuration file format for the Mongo connection used for
+            inserting data into a database.
+            There are two ways to connect:  single or replica set.
+
+            1.)  Single database connection:
+
+            # Single Configuration file for Mongo Database Server.
+            user = "USER"
+            passwd = "PASSWORD"
+            host = "IP_ADDRESS"
+            name = "HOSTNAME"
+            # Default port for Mongo is 27017
+            port = 27017
+            conf_file = None
+            auth = True
+
+            2.)  Replica Set connection:  Same format as above, but with these
+                additional entries at the end of the configuration file:
+
+            repset = "REPLICA_SET_NAME"
+            repset_hosts = "HOST1:PORT, HOST2:PORT, HOST3:PORT, [...]"
+            db_auth = "AUTHENTICATION_DATABASE"
 
     Example:
         mysql_db_admin.py -c mysql -d config -D test -t users
@@ -106,8 +145,6 @@
 from __future__ import print_function
 import sys
 import datetime
-import getpass
-import socket
 
 # Third party
 import json
@@ -139,7 +176,7 @@ def help_message():
     print(__doc__)
 
 
-def run_analyze(server, db, tbl, **kwargs):
+def run_analyze(server, dbs, tbl, **kwargs):
 
     """Function:  run_analyze
 
@@ -147,21 +184,22 @@ def run_analyze(server, db, tbl, **kwargs):
 
     Arguments:
         (input) server -> Server instance.
-        (input) db -> Database name.
+        (input) dbs -> Database name.
         (input) tbl -> Table name.
         (input) **kwargs:
             sys_dbs -> List of system databases to skip.
 
     """
 
-    if db not in list(kwargs.get("sys_dbs", [])):
+    if dbs not in list(kwargs.get("sys_dbs", [])):
 
-        for x in mysql_libs.analyze_tbl(server, db, tbl):
-            print("DB: {0:20} Table: {1:50}\t".format(db, tbl), end="")
-            gen_libs.prt_msg(x["Msg_type"], x["Msg_text"])
+        for item in mysql_libs.analyze_tbl(server, dbs, tbl):
+            print("DB: {0:20} Table: {1:35}  Analyzed:\t".format(dbs, tbl),
+                  end="")
+            gen_libs.prt_msg(item["Msg_type"], item["Msg_text"])
 
 
-def run_checksum(server, db, tbl, **kwargs):
+def run_checksum(server, dbs, tbl, **kwargs):
 
     """Function:  run_checksum
 
@@ -169,17 +207,17 @@ def run_checksum(server, db, tbl, **kwargs):
 
     Arguments:
         (input) server -> Server instance.
-        (input) db -> Database name.
+        (input) dbs -> Database name.
         (input) tbl -> Table name.
 
     """
 
-    for x in mysql_libs.checksum(server, db, tbl):
-        print("DB: {0:20} Table: {1:50}\tCheckSum: {2}".format(db, tbl,
-                                                               x["Checksum"]))
+    for item in mysql_libs.checksum(server, dbs, tbl):
+        print("DB: {0:20} Table: {1:35}  CheckSum:\t{2}".format(
+            dbs, tbl, item["Checksum"]))
 
 
-def run_optimize(server, db, tbl, **kwargs):
+def run_optimize(server, dbs, tbl, **kwargs):
 
     """Function:  run_optimize
 
@@ -187,28 +225,29 @@ def run_optimize(server, db, tbl, **kwargs):
 
     Arguments:
         (input) server -> Server instance.
-        (input) db -> Database name.
+        (input) dbs -> Database name.
         (input) tbl -> Table name.
         (input) **kwargs:
             sys_dbs -> List of system databases to skip.
 
     """
 
-    if db not in list(kwargs.get("sys_dbs", [])):
+    if dbs not in list(kwargs.get("sys_dbs", [])):
 
-        for x in mysql_libs.optimize_tbl(server, db, tbl):
-            if x["Msg_type"] == "note" and x["Msg_text"] == \
+        for item in mysql_libs.optimize_tbl(server, dbs, tbl):
+            if item["Msg_type"] == "note" and item["Msg_text"] == \
                "Table does not support optimize, doing recreate + \
 analyze instead":
 
                 continue
 
             else:
-                print("DB: {0:20} Table: {1:50}\t".format(db, tbl), end="")
-                gen_libs.prt_msg(x["Msg_type"], x["Msg_text"])
+                print("DB: {0:20} Table: {1:35}  Optimized:\t".format(
+                    dbs, tbl), end="")
+                gen_libs.prt_msg(item["Msg_type"], item["Msg_text"])
 
 
-def run_check(server, db, tbl, **kwargs):
+def run_check(server, dbs, tbl, **kwargs):
 
     """Function:  run_check
 
@@ -216,14 +255,14 @@ def run_check(server, db, tbl, **kwargs):
 
     Arguments:
         (input) server -> Server instance.
-        (input) db -> Database name.
+        (input) dbs -> Database name.
         (input) tbl -> Table name.
 
     """
 
-    for x in mysql_libs.check_tbl(server, db, tbl):
-        print("DB: {0:20} Table: {1:50}\t".format(db, tbl), end="")
-        gen_libs.prt_msg(x["Msg_type"], x["Msg_text"])
+    for item in mysql_libs.check_tbl(server, dbs, tbl):
+        print("DB: {0:20} Table: {1:35}  Check:\t".format(dbs, tbl), end="")
+        gen_libs.prt_msg(item["Msg_type"], item["Msg_text"])
 
 
 def detect_dbs(sub_db_list, full_db_list, **kwargs):
@@ -313,10 +352,10 @@ def _proc_all_dbs(server, func_name, db_list, **kwargs):
 
     """
 
-    for db in db_list:
-        for tbl in gen_libs.dict_2_list(mysql_libs.fetch_tbl_dict(server, db),
+    for dbs in db_list:
+        for tbl in gen_libs.dict_2_list(mysql_libs.fetch_tbl_dict(server, dbs),
                                         "table_name"):
-            func_name(server, db, tbl, **kwargs)
+            func_name(server, dbs, tbl, **kwargs)
 
 
 def _proc_all_tbls(server, func_name, db_list, db_name, **kwargs):
@@ -341,10 +380,10 @@ def _proc_all_tbls(server, func_name, db_list, db_name, **kwargs):
     db_list = list(db_list)
     detect_dbs(db_name, db_list, **kwargs)
 
-    for db in set(db_name) & set(db_list):
-        for tbl in gen_libs.dict_2_list(mysql_libs.fetch_tbl_dict(server, db),
+    for dbs in set(db_name) & set(db_list):
+        for tbl in gen_libs.dict_2_list(mysql_libs.fetch_tbl_dict(server, dbs),
                                         "table_name"):
-            func_name(server, db, tbl, **kwargs)
+            func_name(server, dbs, tbl, **kwargs)
 
 
 def _proc_some_tbls(server, func_name, db_list, db_name, tbl_name, **kwargs):
@@ -371,17 +410,17 @@ def _proc_some_tbls(server, func_name, db_list, db_name, tbl_name, **kwargs):
     tbl_name = list(tbl_name)
     detect_dbs(db_name, db_list, **kwargs)
 
-    for db in set(db_name) & set(db_list):
-        tbl_list = gen_libs.dict_2_list(mysql_libs.fetch_tbl_dict(server, db),
+    for dbs in set(db_name) & set(db_list):
+        tbl_list = gen_libs.dict_2_list(mysql_libs.fetch_tbl_dict(server, dbs),
                                         "table_name")
         tbls = list(set(tbl_name) - set(tbl_list))
 
         if tbls:
             print("Warning: Database (%s) Tables that do not exist %s."
-                  % (db, tbls))
+                  % (dbs, tbls))
 
         for tbl in set(tbl_name) & set(tbl_list):
-            func_name(server, db, tbl, **kwargs)
+            func_name(server, dbs, tbl, **kwargs)
 
 
 def analyze(server, args_array, **kwargs):
@@ -481,28 +520,51 @@ def status(server, args_array, **kwargs):
 
     """
 
+    mode = "w"
+    indent = 4
     args_array = dict(args_array)
     server.upd_srv_stat()
 
+    if args_array.get("-a", False):
+        mode = "a"
+
+    if args_array.get("-f", False):
+        indent = None
+
     if "-j" in args_array:
-        outdata = {"application": "MySQL Database",
-                   "server": server.name,
-                   "asOf": datetime.datetime.strftime(datetime.datetime.now(),
+        outdata = {"Application": "MySQL Database",
+                   "Server": server.name,
+                   "AsOf": datetime.datetime.strftime(datetime.datetime.now(),
                                                       "%Y-%m-%d %H:%M:%S")}
+        outdata.update({"Memory": {"CurrentUsage": server.cur_mem_mb,
+                                   "MaxUsage": server.max_mem_mb,
+                                   "PercentUsed": server.prct_mem},
+                        "UpTime": server.days_up,
+                        "Connections": {"CurrentConnected": server.cur_conn,
+                                        "MaxConnections": server.max_conn,
+                                        "PercentUsed": server.prct_conn}})
+        jdata = json.dumps(outdata, indent=indent)
+        mongo_cfg = kwargs.get("class_cfg", None)
+        db_tbl = kwargs.get("db_tbl", None)
+        ofile = kwargs.get("ofile", None)
+        mail = kwargs.get("mail", None)
+
+        if mongo_cfg and db_tbl:
+            dbs, tbl = db_tbl.split(":")
+            mongo_libs.ins_doc(mongo_cfg, dbs, tbl, outdata)
+
+        if ofile:
+            gen_libs.write_file(ofile, mode, jdata)
+
+        if mail:
+            mail.add_2_msg(jdata)
+            mail.send_mail()
+
+        if not args_array.get("-z", False):
+            gen_libs.print_data(jdata)
 
     else:
         print("\nDatabase Status Check for Server: %s" % (server.name))
-
-    if "-j" in args_array:
-        outdata.update({"memory": {"currentUsage": server.cur_mem_mb,
-                                   "maxUsage": server.max_mem_mb,
-                                   "percentUsed": server.prct_mem},
-                        "upTime": server.days_up,
-                        "connections": {"currentConnected": server.cur_conn,
-                                        "maxConnections": server.max_conn,
-                                        "percentUsed": server.prct_conn}})
-
-    else:
         gen_libs.prt_msg("Uptime (days)", server.days_up, 0)
         gen_libs.prt_msg("Memory", "", 0)
         gen_libs.prt_msg("Max Mem", server.max_mem_mb, 1)
@@ -512,27 +574,6 @@ def status(server, args_array, **kwargs):
         gen_libs.prt_msg("Max Connections", server.max_conn, 1)
         gen_libs.prt_msg("Current Connections", server.cur_conn, 1)
         gen_libs.prt_msg("Percent Used", server.prct_conn, 1)
-
-    if "-j" in args_array:
-        jdata = json.dumps(outdata, indent=4)
-        mongo_cfg = kwargs.get("class_cfg", None)
-        db_tbl = kwargs.get("db_tbl", None)
-        ofile = kwargs.get("ofile", None)
-        mail = kwargs.get("mail", None)
-
-        if mongo_cfg and db_tbl:
-            db, tbl = db_tbl.split(":")
-            mongo_libs.ins_doc(mongo_cfg, db, tbl, outdata)
-
-        if ofile:
-            gen_libs.write_file(ofile, "w", jdata)
-
-        if mail:
-            mail.add_2_msg(jdata)
-            mail.send_mail()
-
-        if not args_array.get("-z", False):
-            gen_libs.print_data(jdata)
 
 
 def run_program(args_array, func_dict, **kwargs):
@@ -568,9 +609,9 @@ def run_program(args_array, func_dict, **kwargs):
                                     subj=args_array.get("-s", None))
 
     # Intersect args_array and func_dict to determine which functions to call.
-    for x in set(args_array.keys()) & set(func_dict.keys()):
-        func_dict[x](server, args_array, ofile=outfile, db_tbl=db_tbl,
-                     class_cfg=mongo, mail=mail, **kwargs)
+    for item in set(args_array.keys()) & set(func_dict.keys()):
+        func_dict[item](server, args_array, ofile=outfile, db_tbl=db_tbl,
+                        class_cfg=mongo, mail=mail, **kwargs)
 
     cmds_gen.disconnect([server])
 
@@ -601,6 +642,7 @@ def main():
 
     """
 
+    cmdline = gen_libs.get_inst(sys)
     dir_chk_list = ["-d"]
     file_chk_list = ["-o"]
     file_crt_list = ["-o"]
@@ -612,7 +654,7 @@ def main():
     opt_multi_list = ["-A", "-C", "-D", "-S", "-t", "-e", "-s"]
     opt_req_list = ["-c", "-d"]
     opt_val_list = ["-c", "-d", "-t", "-A", "-C", "-D", "-S", "-i", "-m", "-o",
-                    "-e", "-s"]
+                    "-e", "-s", "-y"]
     opt_xor_dict = {"-A": ["-C", "-D", "-M", "-S"],
                     "-C": ["-A", "-D", "-M", "-S"],
                     "-D": ["-A", "-C", "-M", "-S"],
@@ -621,8 +663,8 @@ def main():
     sys_dbs = ["performance_schema", "information_schema", "mysql"]
 
     # Process argument list from command line.
-    args_array = arg_parser.arg_parse2(sys.argv, opt_val_list, opt_def_dict,
-                                       multi_val=opt_multi_list)
+    args_array = arg_parser.arg_parse2(cmdline.argv, opt_val_list,
+                                       opt_def_dict, multi_val=opt_multi_list)
 
     if not gen_libs.help_func(args_array, __version__, help_message) \
        and not arg_parser.arg_require(args_array, opt_req_list) \
@@ -633,13 +675,15 @@ def main():
                                        file_crt_list):
 
         try:
-            proglock = gen_class.ProgramLock(sys.argv)
+            proglock = gen_class.ProgramLock(cmdline.argv,
+                                             args_array.get("-y", ""))
             run_program(args_array, func_dict, sys_dbs=sys_dbs,
                         multi_val=opt_multi_list)
             del proglock
 
         except gen_class.SingleInstanceException:
-            print("WARNING:  lock in place for mysql_db_admin")
+            print("WARNING:  lock in place for mysql_db_admin with id of: %s"
+                  % (args_array.get("-y", "")))
 
 
 if __name__ == "__main__":

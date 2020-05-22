@@ -2,7 +2,7 @@
 # Classification (U)
 
 # Description:
-  This program is used to do database administration in a MySQL database to include compacting/defraging a table, checking a table for errors, analyze a table's key distribution (index check), and get a checksum on a table.
+  Used for database administration of a MySQL database to include compacting/defraging a table, checking a table for errors, analyze a table's key distribution (index check), and get a checksum on a table.
 
 
 ###  This README file is broken down into the following sections:
@@ -26,8 +26,6 @@
 # Prerequisites:
 
   * List of Linux packages that need to be installed on the server.
-    - python-libs
-    - python-devel
     - git
     - python-pip
 
@@ -35,6 +33,7 @@
     - lib/cmds_gen
     - lib/arg_parser
     - lib/gen_libs
+    - lib/gen_class
     - mysql_lib/mysql_libs
     - mysql_lib/mysql_class
     - mongo_lib/mongo_libs
@@ -71,7 +70,7 @@ pip install -r requirements-python-lib.txt --target mongo_lib/lib --trusted-host
 ```
 
 # Configuration:
-  * Replace **{Python_Project}** with the baseline path of the python program.
+  * Replace **PYTHON_PROJECT** with the baseline path of the python program.
 
 Create MySQL configuration file.
 
@@ -82,11 +81,17 @@ cp mysql_cfg.py.TEMPLATE mysql_cfg.py
 
 Make the appropriate change to the environment.
   * Change these entries in the MySQL setup:
-    - passwd = "ROOT_PASSWORD"
+    - user = "USER"
+    - passwd = "PASSWORD"
     - host = "SERVER_IP"
     - name = "HOST_NAME"
     - sid = SERVER_ID
-    - extra_def_file = "{Python_Project}/config/mysql.cfg"
+    - extra_def_file = "PYTHON_PROJECT/config/mysql.cfg"
+    - cfg_file = "DIRECTORY_PATH/my.cnf"
+
+  * Change these entries only if required:
+    - serv_os = "Linux"
+    - port = 3306
 
 ```
 vim mysql_cfg.py
@@ -101,8 +106,8 @@ cp mysql.cfg.TEMPLATE mysql.cfg
 
 Make the appropriate change to the environment.
   * Change these entries in the MySQL definition file:
-    - password="ROOT_PASSWORD"
-    - socket={BASE_DIR}/mysql/tmp/mysql.sock
+    - password="PASSWORD"
+    - socket=DIRECTORY_PATH/mysql.sock
 
 ```
 vim mysql.cfg
@@ -118,11 +123,17 @@ cp mongo.py.TEMPLATE mongo.py
 
 Make the appropriate change to the environment.
   * Make the appropriate changes to connect to a Mongo database.
-    - passwd = "ROOT_PASSWORD"
+    - user = "USER"
+    - passwd = "PASSWORD"
     - host = "HOST_IP"
     - name = "HOSTNAME"
 
-  * If connecting to a Mongo replica set, otherwise set to None.
+  * Change these entries only if required:
+    - port = 27017
+    - conf_file = None
+    - auth = True
+
+  * If connecting to a Mongo replica set:
     - repset = "REPLICA_SET_NAME"
     - repset_hosts = "HOST_1:PORT, HOST_2:PORT, ..."
     - db_auth = "AUTHENTICATION_DATABASE"
@@ -147,8 +158,6 @@ chmod 600 mongo.py
 
 
 # Unit Testing:
-
-### Description: Testing consists of unit testing for the functions in the mysql_db_admin.py program.
 
 ### Installation:
 
@@ -183,37 +192,17 @@ pip install -r requirements-python-lib.txt --target mongo_lib/lib --trusted-host
 ```
 
 
-# Unit test runs for mysql_db_admin.py:
+### Testing:
   * Replace **{Python_Project}** with the baseline path of the python program.
 
 ```
 cd {Python_Project}/mysql-db-admin
-test/unit/mysql_db_admin/help_message.py
-test/unit/mysql_db_admin/analyze.py
-test/unit/mysql_db_admin/check.py
-test/unit/mysql_db_admin/checksum.py
-test/unit/mysql_db_admin/detect_dbs.py
-test/unit/mysql_db_admin/optimize.py
-test/unit/mysql_db_admin/process_request.py
-test/unit/mysql_db_admin/proc_all_dbs.py
-test/unit/mysql_db_admin/proc_all_tbls.py
-test/unit/mysql_db_admin/proc_some_tbls.py
-test/unit/mysql_db_admin/run_check.py
-test/unit/mysql_db_admin/run_checksum.py
-test/unit/mysql_db_admin/run_optimize.py
-test/unit/mysql_db_admin/run_analyze.py
-test/unit/mysql_db_admin/status.py
-test/unit/mysql_db_admin/run_program.py
-test/unit/mysql_db_admin/main.py
-```
-
-### All unit testing
-```
 test/unit/mysql_db_admin/unit_test_run.sh
 ```
 
-### Code coverage program
+### Code Coverage:
 ```
+cd {Python_Project}/mysql-db-admin
 test/unit/mysql_db_admin/code_coverage.sh
 ```
 

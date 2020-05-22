@@ -29,7 +29,6 @@ import mock
 # Local
 sys.path.append(os.getcwd())
 import mysql_db_admin
-import lib.gen_libs as gen_libs
 import version
 
 __version__ = version.__version__
@@ -51,7 +50,13 @@ def check(server, args_array, **kwargs):
 
     """
 
-    return True
+    ofile = kwargs.get("ofile", "file")
+    status = True
+
+    if server and args_array and ofile:
+        status = True
+
+    return status
 
 
 class Server(object):
@@ -87,7 +92,7 @@ class Server(object):
 
         """
 
-        pass
+        return True
 
 
 class UnitTest(unittest.TestCase):

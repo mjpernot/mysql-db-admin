@@ -4,6 +4,43 @@ All notable changes to this project will be documented in this file.
 The format is based on "Keep a Changelog".  This project adheres to Semantic Versioning.
 
 
+## [3.1.1] - 2020-05-14
+### Added
+- Added -y option to allow for unique Program Lock flavor IDs.
+- Added -f option to Flatten the JSON data structure to file and standard out.
+- Added -a option to allow for append of data to an existing output file.
+
+### Fixed:
+- main:  Fixed handling command line arguments from SonarQube scan finding.
+
+### Changed
+- status:  Converted JSON output to CamelCase.
+- run_check:  Reformatted output.
+- run_optimize:  Reformatted output.
+- run_checksum:  Reformatted output.
+- run_analyze:  Reformatted output.
+- status:  Refactored function to reduce program complexity.
+- run_program: Changed variable name to standard naming convention.
+- status: Changed variable name to standard naming convention.
+- \_proc_some_tbls: Changed variable name to standard naming convention.
+- \_proc_all_tbls: Changed variable name to standard naming convention.
+- \_proc_all_dbs: Changed variable name to standard naming convention.
+- run_check: Changed variable name to standard naming convention.
+- run_optimize: Changed variable name to standard naming convention.
+- run_checksum: Changed variable name to standard naming convention.
+- run_analyze: Changed variable name to standard naming convention.
+- main: Added -y option setting to the ProgramLock setup.
+- status:  Added flattening of JSON structure to standard out and to file.
+- status:  Added file mode option to writing data to a file.  Default is write.
+- config/mongo.py.TEMPLATE:  Changed to generic setup.
+- config/mysql.cfg.TEMPLATE:  Changed to generic setup.
+- config/mysql_cfg.py.TEMPLATE:  Changed to generic setup.
+- Documentation updates.
+
+### Removed
+- Removed non-used library modules.
+
+
 ## [3.1.0] - 2019-12-06
 ### Fixed
 - run_analyze:  Fixed problem with mutable default arguments issue.
