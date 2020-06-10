@@ -140,7 +140,8 @@ class UnitTest(unittest.TestCase):
 
     Methods:
         setUp -> Initialize testing environment.
-        test_file_std_format -> Test with writing to file for standard format.
+        test_mail_non_json -> Test with emailing out for non-json format.
+        test_file_non_json -> Test with writing to file for non-json format.
         test_stdout_suppress_non_json -> Test with std out being suppressed.
         test_stdout -> Test with standard out.
         test_stdout_suppress_json -> Test with standard out being suppressed.
@@ -173,10 +174,23 @@ class UnitTest(unittest.TestCase):
         self.args_array5 = {"-j": True, "-f": True, "-z": True}
         self.args_array6 = {"-z": True}
 
-    @mock.patch("mysql_db_admin.gen_libs.write_file")
-    def test_file_std_format(self, mock_write):
+    def test_mail_non_json(self):
 
-        """Function:  test_file_std_format
+        """Function:  test_mail_non_json
+
+        Description:  Test with emailing out.
+
+        Arguments:
+
+        """
+
+        self.assertFalse(mysql_db_admin.status(self.server, self.args_array6,
+                                               mail=self.mail))
+
+    @mock.patch("mysql_db_admin.gen_libs.write_file")
+    def test_file_non_json(self, mock_write):
+
+        """Function:  test_file_non_json
 
         Description:  Test with writing to file for standard format.
 
