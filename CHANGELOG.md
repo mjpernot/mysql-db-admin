@@ -6,6 +6,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 
 ## [3.1.2] - 2020-06-10
 ### Changed
+- run_analyze:  Using global variable for template printing.
 
 ### Added
 - Added global variable for template printing.
