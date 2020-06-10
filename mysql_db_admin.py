@@ -161,6 +161,9 @@ import version
 
 __version__ = version.__version__
 
+# Global
+PRT_TEMPLATE = "DB: {0:20} Table: {1:50}\t"
+
 
 def help_message():
 

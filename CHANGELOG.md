@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on "Keep a Changelog".  This project adheres to Semantic Versioning.
 
 
+## [3.1.2] - 2020-06-10
+### Changed
+
+### Added
+- Added global variable for template printing.
+
+
 ## [3.1.1] - 2020-05-14
 ### Added
 - Added -y option to allow for unique Program Lock flavor IDs.
