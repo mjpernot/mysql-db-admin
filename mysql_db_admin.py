@@ -573,6 +573,11 @@ def status(server, args_array, **kwargs):
 
     else:
         ofile = kwargs.get("ofile", None)
+        mail = kwargs.get("mail", None)
+        pdata = ""
+
+        for key, value in outdata.items():
+            pdata += "{}: {}".format(key, value) + "\n"
 
         if not args_array.get("-z", False):
             print("\nDatabase Status Check for Server: %s" % (server.name))
@@ -587,13 +592,12 @@ def status(server, args_array, **kwargs):
             gen_libs.prt_msg("Percent Used", server.prct_conn, 1)
 
         if ofile:
-            pdata = ""
-
-            for key, value in outdata.items():
-                pdata += "{}: {}".format(key, value) + "\n"
-
             gen_libs.write_file(ofile, mode, pdata)
             
+        if mail:
+            mail.add_2_msg(pdata)
+            mail.send_mail()
+
 
 
 def run_program(args_array, func_dict, **kwargs):
