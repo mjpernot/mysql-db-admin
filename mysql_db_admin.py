@@ -616,7 +616,7 @@ def _process_non_json(server, args_array, outdata, mode, **kwargs):
 
     if ofile:
         gen_libs.write_file(ofile, mode, pdata)
-        
+
     if mail:
         mail.add_2_msg(pdata)
         mail.send_mail()
