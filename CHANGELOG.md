@@ -6,6 +6,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 
 ## [3.1.2] - 2020-06-10
 ### Changed
+- status:  Added standard out suppression for standard format.
 - status:  Moved the initialization of the dictionary structure to outside of the if statement.
 - run_check:  Using global variable for template printing.
 - run_optimize:  Using global variable for template printing.
