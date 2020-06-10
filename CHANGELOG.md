@@ -5,6 +5,9 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 
 
 ## [3.1.2] - 2020-06-10
+### Fixed
+- status:  Added write to file capability for standard format.
+
 ### Changed
 - status:  Added standard out suppression for standard format.
 - status:  Moved the initialization of the dictionary structure to outside of the if statement.
