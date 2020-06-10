@@ -10,6 +10,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - status:  Added write to file capability for non-json format.
 
 ### Changed
+- status:  Replaced section code with call to \_process_non_json function.
 - status:  Added standard out suppression for non-json format.
 - status:  Moved the initialization of the dictionary structure to outside of the if statement.
 - run_check:  Using global variable for template printing.
@@ -17,6 +18,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - run_analyze:  Using global variable for template printing.
 
 ### Added
+- \_process_non_json:  Private function for status to process non-json format data.
 - Added global variable for template printing.
 
 
