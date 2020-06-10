@@ -538,18 +538,19 @@ def status(server, args_array, **kwargs):
     if args_array.get("-f", False):
         indent = None
 
+    outdata = {"Application": "MySQL Database",
+               "Server": server.name,
+               "AsOf": datetime.datetime.strftime(datetime.datetime.now(),
+                                                  "%Y-%m-%d %H:%M:%S")}
+    outdata.update({"Memory": {"CurrentUsage": server.cur_mem_mb,
+                               "MaxUsage": server.max_mem_mb,
+                               "PercentUsed": server.prct_mem},
+                    "UpTime": server.days_up,
+                    "Connections": {"CurrentConnected": server.cur_conn,
+                                    "MaxConnections": server.max_conn,
+                                    "PercentUsed": server.prct_conn}})
+
     if "-j" in args_array:
-        outdata = {"Application": "MySQL Database",
-                   "Server": server.name,
-                   "AsOf": datetime.datetime.strftime(datetime.datetime.now(),
-                                                      "%Y-%m-%d %H:%M:%S")}
-        outdata.update({"Memory": {"CurrentUsage": server.cur_mem_mb,
-                                   "MaxUsage": server.max_mem_mb,
-                                   "PercentUsed": server.prct_mem},
-                        "UpTime": server.days_up,
-                        "Connections": {"CurrentConnected": server.cur_conn,
-                                        "MaxConnections": server.max_conn,
-                                        "PercentUsed": server.prct_conn}})
         jdata = json.dumps(outdata, indent=indent)
         mongo_cfg = kwargs.get("class_cfg", None)
         db_tbl = kwargs.get("db_tbl", None)
