@@ -236,6 +236,8 @@ def run_optimize(server, dbs, tbl, **kwargs):
 
     """
 
+    global PRT_TEMPLATE
+
     if dbs not in list(kwargs.get("sys_dbs", [])):
 
         for item in mysql_libs.optimize_tbl(server, dbs, tbl):
@@ -246,8 +248,7 @@ analyze instead":
                 continue
 
             else:
-                print("DB: {0:20} Table: {1:35}  Optimized:\t".format(
-                    dbs, tbl), end="")
+                print(PRT_TEMPLATE.format(dbs, tbl), end="")
                 gen_libs.prt_msg(item["Msg_type"], item["Msg_text"])
 
 
