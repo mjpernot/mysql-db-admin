@@ -21,7 +21,6 @@ auth = True
 #    Example:  repset = "REPLICA_SET_NAME"
 repset = None
 # Replica host listing.
-#    None means the Mongo database is not part of a replica set.
 #    Example:  repset_hosts = "HOST1:PORT, HOST2:PORT, [...]"
 repset_hosts = None
 # Database to authentication to.
