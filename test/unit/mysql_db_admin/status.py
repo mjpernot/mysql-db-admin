@@ -140,8 +140,11 @@ class UnitTest(unittest.TestCase):
 
     Methods:
         setUp -> Initialize testing environment.
+        test_mail_non_json -> Test with emailing out for non-json format.
+        test_file_non_json -> Test with writing to file for non-json format.
+        test_stdout_suppress_non_json -> Test with std out being suppressed.
         test_stdout -> Test with standard out.
-        test_stdout_suppress -> Test with standard out being suppressed.
+        test_stdout_suppress_json -> Test with standard out being suppressed.
         test_mail -> Test with emailing out.
         test_file -> Test with writing to file.
         test_append_to_file -> Test with appending to file.
@@ -169,6 +172,48 @@ class UnitTest(unittest.TestCase):
         self.args_array3 = {"-j": True}
         self.args_array4 = {"-j": True, "-a": True, "-z": True}
         self.args_array5 = {"-j": True, "-f": True, "-z": True}
+        self.args_array6 = {"-z": True}
+
+    def test_mail_non_json(self):
+
+        """Function:  test_mail_non_json
+
+        Description:  Test with emailing out.
+
+        Arguments:
+
+        """
+
+        self.assertFalse(mysql_db_admin.status(self.server, self.args_array6,
+                                               mail=self.mail))
+
+    @mock.patch("mysql_db_admin.gen_libs.write_file")
+    def test_file_non_json(self, mock_write):
+
+        """Function:  test_file_non_json
+
+        Description:  Test with writing to file for standard format.
+
+        Arguments:
+
+        """
+
+        mock_write.return_value = True
+
+        self.assertFalse(mysql_db_admin.status(self.server, self.args_array6,
+                                               ofile="FileName"))
+
+    def test_stdout_suppress_non_json(self):
+
+        """Function:  test_stdout_suppress_non_json
+
+        Description:  Test with standard out being suppressed.
+
+        Arguments:
+
+        """
+
+        self.assertFalse(mysql_db_admin.status(self.server, self.args_array6))
 
     def test_stdout(self):
 
@@ -184,9 +229,9 @@ class UnitTest(unittest.TestCase):
             self.assertFalse(mysql_db_admin.status(self.server,
                                                    self.args_array3))
 
-    def test_stdout_suppress(self):
+    def test_stdout_suppress_json(self):
 
-        """Function:  test_stdout_suppress
+        """Function:  test_stdout_suppress_json
 
         Description:  Test with standard out being suppressed.
 

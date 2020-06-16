@@ -161,6 +161,9 @@ import version
 
 __version__ = version.__version__
 
+# Global
+PRT_TEMPLATE = "DB: {0:20} Table: {1:50}\t"
+
 
 def help_message():
 
@@ -191,11 +194,12 @@ def run_analyze(server, dbs, tbl, **kwargs):
 
     """
 
+    global PRT_TEMPLATE
+
     if dbs not in list(kwargs.get("sys_dbs", [])):
 
         for item in mysql_libs.analyze_tbl(server, dbs, tbl):
-            print("DB: {0:20} Table: {1:35}  Analyzed:\t".format(dbs, tbl),
-                  end="")
+            print(PRT_TEMPLATE.format(dbs, tbl), end="")
             gen_libs.prt_msg(item["Msg_type"], item["Msg_text"])
 
 
@@ -232,6 +236,8 @@ def run_optimize(server, dbs, tbl, **kwargs):
 
     """
 
+    global PRT_TEMPLATE
+
     if dbs not in list(kwargs.get("sys_dbs", [])):
 
         for item in mysql_libs.optimize_tbl(server, dbs, tbl):
@@ -242,8 +248,7 @@ analyze instead":
                 continue
 
             else:
-                print("DB: {0:20} Table: {1:35}  Optimized:\t".format(
-                    dbs, tbl), end="")
+                print(PRT_TEMPLATE.format(dbs, tbl), end="")
                 gen_libs.prt_msg(item["Msg_type"], item["Msg_text"])
 
 
@@ -260,8 +265,10 @@ def run_check(server, dbs, tbl, **kwargs):
 
     """
 
+    global PRT_TEMPLATE
+
     for item in mysql_libs.check_tbl(server, dbs, tbl):
-        print("DB: {0:20} Table: {1:35}  Check:\t".format(dbs, tbl), end="")
+        print(PRT_TEMPLATE.format(dbs, tbl), end="")
         gen_libs.prt_msg(item["Msg_type"], item["Msg_text"])
 
 
@@ -531,18 +538,19 @@ def status(server, args_array, **kwargs):
     if args_array.get("-f", False):
         indent = None
 
+    outdata = {"Application": "MySQL Database",
+               "Server": server.name,
+               "AsOf": datetime.datetime.strftime(datetime.datetime.now(),
+                                                  "%Y-%m-%d %H:%M:%S")}
+    outdata.update({"Memory": {"CurrentUsage": server.cur_mem_mb,
+                               "MaxUsage": server.max_mem_mb,
+                               "PercentUsed": server.prct_mem},
+                    "UpTime": server.days_up,
+                    "Connections": {"CurrentConnected": server.cur_conn,
+                                    "MaxConnections": server.max_conn,
+                                    "PercentUsed": server.prct_conn}})
+
     if "-j" in args_array:
-        outdata = {"Application": "MySQL Database",
-                   "Server": server.name,
-                   "AsOf": datetime.datetime.strftime(datetime.datetime.now(),
-                                                      "%Y-%m-%d %H:%M:%S")}
-        outdata.update({"Memory": {"CurrentUsage": server.cur_mem_mb,
-                                   "MaxUsage": server.max_mem_mb,
-                                   "PercentUsed": server.prct_mem},
-                        "UpTime": server.days_up,
-                        "Connections": {"CurrentConnected": server.cur_conn,
-                                        "MaxConnections": server.max_conn,
-                                        "PercentUsed": server.prct_conn}})
         jdata = json.dumps(outdata, indent=indent)
         mongo_cfg = kwargs.get("class_cfg", None)
         db_tbl = kwargs.get("db_tbl", None)
@@ -564,6 +572,37 @@ def status(server, args_array, **kwargs):
             gen_libs.print_data(jdata)
 
     else:
+        _process_non_json(server, args_array, outdata, mode, **kwargs)
+
+
+def _process_non_json(server, args_array, outdata, mode, **kwargs):
+
+    """Function:  _process_non_json
+
+    Description:  Private function for status to process non-json format
+        data.
+
+    Arguments:
+        (input) server -> Server instance.
+        (input) args_array -> Dictionary of command line options.
+        (input) outdata -> Dictionary of performance data.
+        (input) mode -> File write mode.
+        (input) **kwargs:
+            ofile -> file name - Name of output file.
+            mail -> Mail instance.
+
+    """
+
+    args_array = dict(args_array)
+    outdata = dict(outdata)
+    ofile = kwargs.get("ofile", None)
+    mail = kwargs.get("mail", None)
+    pdata = ""
+
+    for key, value in outdata.items():
+        pdata += "{}: {}".format(key, value) + "\n"
+
+    if not args_array.get("-z", False):
         print("\nDatabase Status Check for Server: %s" % (server.name))
         gen_libs.prt_msg("Uptime (days)", server.days_up, 0)
         gen_libs.prt_msg("Memory", "", 0)
@@ -574,6 +613,13 @@ def status(server, args_array, **kwargs):
         gen_libs.prt_msg("Max Connections", server.max_conn, 1)
         gen_libs.prt_msg("Current Connections", server.cur_conn, 1)
         gen_libs.prt_msg("Percent Used", server.prct_conn, 1)
+
+    if ofile:
+        gen_libs.write_file(ofile, mode, pdata)
+
+    if mail:
+        mail.add_2_msg(pdata)
+        mail.send_mail()
 
 
 def run_program(args_array, func_dict, **kwargs):
