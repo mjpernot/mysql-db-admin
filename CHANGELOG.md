@@ -4,6 +4,24 @@ All notable changes to this project will be documented in this file.
 The format is based on "Keep a Changelog".  This project adheres to Semantic Versioning.
 
 
+## [3.1.2] - 2020-06-10
+### Fixed
+- status:  Added email capability for non-json format.
+- status:  Added write to file capability for non-json format.
+
+### Changed
+- status:  Replaced section code with call to \_process_non_json function.
+- status:  Added standard out suppression for non-json format.
+- status:  Moved the initialization of the dictionary structure to outside of the if statement.
+- run_check:  Using global variable for template printing.
+- run_optimize:  Using global variable for template printing.
+- run_analyze:  Using global variable for template printing.
+
+### Added
+- \_process_non_json:  Private function for status to process non-json format data.
+- Added global variable for template printing.
+
+
 ## [3.1.1] - 2020-05-14
 ### Added
 - Added -y option to allow for unique Program Lock flavor IDs.
