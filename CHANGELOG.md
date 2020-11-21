@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on "Keep a Changelog".  This project adheres to Semantic Versioning.
 
 
+## [3.1.3] - 2020-11-21
+### Fixed
+- config/mysql.cfg.TEMPLATE:  Point to correct socket file.
+
+
 ## [3.1.2] - 2020-06-10
 ### Fixed
 - status:  Added email capability for non-json format.
