@@ -123,6 +123,9 @@
             port = 27017
             conf_file = None
             auth = True
+            auth_db = "admin"
+            use_arg = True
+            use_uri = False
 
             2.)  Replica Set connection:  Same format as above, but with these
                 additional entries at the end of the configuration file:
