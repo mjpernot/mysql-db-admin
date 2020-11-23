@@ -4,7 +4,7 @@
 
 # All Mongo configuration settings.
 user = "USER"
-passwd = "PASSWORD"
+japd = "PSWORD"
 # Mongo DB host information
 host = "HOST_IP"
 name = "HOSTNAME"
