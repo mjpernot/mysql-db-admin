@@ -6,11 +6,12 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 
 ## [3.1.3] - 2020-11-21
 
-### Changed
-- config/mysql_cfg.py.TEMPLATE:  Changed configuration entry.
-
 ### Fixed
 - config/mysql.cfg.TEMPLATE:  Point to correct socket file.
+
+### Changed
+- config/mysql_cfg.py.TEMPLATE:  Changed configuration entry.
+- Documentation updates.
 
 
 ## [3.1.2] - 2020-06-10

@@ -3,8 +3,8 @@
 
 """Program:  mysql_db_admin.py
 
-    Description:  Can run a number of different administration functions such
-        as compacting/defraging a table, checking a table for errors, analyze a
+    Description:  Run a number of different administration functions such as
+        compacting/defraging a table, checking a table for errors, analyze a
         table's key distribution (index check), or get a checksum on a table.
         The options will allow for for a single object, multiple objects, or
         all objects.  Also can return the database's status to include uptime,
@@ -12,13 +12,13 @@
 
     Usage:
         mysql_db_admin.py -c file -d path
-            {-C [db_name [db_name2 ...]] [-t table_name [table_name2 ...]]} |
-            {-A [db_name [db_name2 ...] [-t table_name [table_name2 ...]]} |
-            {-S [db_name [db_name2 ...]] [-t table_name [table_name2 ...]]} |
-            {-D [db_name [db_name2 ...]] [-t table_name [table_name2 ...]]} |
+            {-C [db_name [db_name2 ...]] [-t table_name [table_name2 ...]] |
+            {-A [db_name [db_name2 ...] [-t table_name [table_name2 ...]] |
+            {-S [db_name [db_name2 ...]] [-t table_name [table_name2 ...]] |
+            {-D [db_name [db_name2 ...]] [-t table_name [table_name2 ...]] |
             {-M [-j [-f]] | [-i [db_name:table_name] -m config_file] |
                 [-e to_email [to_email2 ...] [-s subject_line]] | [-z] |
-                [-o dir_path/file [-a]]} |
+                [-o dir_path/file [-a]]}
             [-y flavor_id]
             [-v | -h]
 
@@ -77,13 +77,12 @@
 
             # Configuration file for MySQL database server.
             user = "USER"
-            passwd = "PASSWORD"
+            japd = "PSWORD"
             host = "IP_ADDRESS"
             name = "HOSTNAME"
             sid = SERVER_ID
             extra_def_file = "PYTHON_PROJECT/config/mysql.cfg"
             serv_os = "Linux"
-            # Default port for MySQL is 3306.
             port = 3306
             cfg_file = "DIRECTORY_PATH/my.cnf"
 
@@ -118,10 +117,9 @@
 
             # Single Configuration file for Mongo Database Server.
             user = "USER"
-            passwd = "PASSWORD"
+            japd = "PSWORD"
             host = "IP_ADDRESS"
             name = "HOSTNAME"
-            # Default port for Mongo is 27017
             port = 27017
             conf_file = None
             auth = True
