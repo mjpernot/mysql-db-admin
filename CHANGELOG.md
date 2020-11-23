@@ -11,7 +11,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - config/mysql.cfg.TEMPLATE:  Point to correct socket file.
 
 ### Changed
-- config/mongo.py.TEMPLATE:  Changed configuration entry.
+- config/mongo.py.TEMPLATE:  Changed configuration entry and added a number of configuration entries.
 - config/mysql_cfg.py.TEMPLATE:  Changed configuration entry.
 - Documentation updates.
 
