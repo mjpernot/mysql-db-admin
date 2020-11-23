@@ -72,17 +72,10 @@ pip install -r requirements-python-lib.txt --target mongo_lib/lib --trusted-host
 # Configuration:
   * Replace **PYTHON_PROJECT** with the baseline path of the python program.
 
-Create MySQL configuration file.
-
-```
-cd config
-cp mysql_cfg.py.TEMPLATE mysql_cfg.py
-```
-
-Make the appropriate change to the environment.
+Create MySQL configuration file and make the appropriate change to the environment.
   * Change these entries in the MySQL setup:
     - user = "USER"
-    - passwd = "PASSWORD"
+    - japd = "PSWORD"
     - host = "SERVER_IP"
     - name = "HOST_NAME"
     - sid = SERVER_ID
@@ -94,37 +87,28 @@ Make the appropriate change to the environment.
     - port = 3306
 
 ```
+cd config
+cp mysql_cfg.py.TEMPLATE mysql_cfg.py
 vim mysql_cfg.py
 chmod 600 mysql_cfg.py
 ```
 
-Create MySQL definition file.
-
-```
-cp mysql.cfg.TEMPLATE mysql.cfg
-```
-
-Make the appropriate change to the environment.
+Create MySQL definition file and make the appropriate change to the environment.
   * Change these entries in the MySQL definition file:
     - password="PASSWORD"
     - socket=DIRECTORY_PATH/mysql.sock
 
 ```
+cp mysql.cfg.TEMPLATE mysql.cfg
 vim mysql.cfg
 chmod 600 mysql.cfg
 ```
 
-Create Mongodb configuration file.
+Create Mongodb configuration file and make the appropriate change to the environment.
   * If submitting output to Mongo database, then require a Mongodb configuration file.
-
-```
-cp mongo.py.TEMPLATE mongo.py
-```
-
-Make the appropriate change to the environment.
   * Make the appropriate changes to connect to a Mongo database.
     - user = "USER"
-    - passwd = "PASSWORD"
+    - japd = "PSWORD"
     - host = "HOST_IP"
     - name = "HOSTNAME"
 
@@ -132,6 +116,9 @@ Make the appropriate change to the environment.
     - port = 27017
     - conf_file = None
     - auth = True
+    - auth_db = "admin"
+    - use_arg = True
+    - use_uri = False
 
   * If connecting to a Mongo replica set:
     - repset = "REPLICA_SET_NAME"
@@ -139,6 +126,7 @@ Make the appropriate change to the environment.
     - db_auth = "AUTHENTICATION_DATABASE"
 
 ```
+cp mongo.py.TEMPLATE mongo.py
 vim mongo.py
 chmod 600 mongo.py
 ```
