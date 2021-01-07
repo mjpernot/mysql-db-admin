@@ -13,10 +13,10 @@
     Usage:
         mysql_db_admin.py -c file -d path
             {-C [db_name [db_name2 ...]] [-t table_name [table_name2 ...]] |
-            {-A [db_name [db_name2 ...] [-t table_name [table_name2 ...]] |
-            {-S [db_name [db_name2 ...]] [-t table_name [table_name2 ...]] |
-            {-D [db_name [db_name2 ...]] [-t table_name [table_name2 ...]] |
-            {-M [-j [-f]] | [-i [db_name:table_name] -m config_file] |
+             -A [db_name [db_name2 ...] [-t table_name [table_name2 ...]] |
+             -S [db_name [db_name2 ...]] [-t table_name [table_name2 ...]] |
+             -D [db_name [db_name2 ...]] [-t table_name [table_name2 ...]] |
+             -M [-j [-f]] | [-i [db_name:table_name] -m config_file] |
                 [-e to_email [to_email2 ...] [-s subject_line]] | [-z] |
                 [-o dir_path/file [-a]]}
             [-y flavor_id]
