@@ -552,20 +552,19 @@ def status(server, args_array, **kwargs):
                                "PercentUsed": server.prct_conn}}
 
     if "-j" in args_array:
-        _process_json(server, args_array, outdata, mode, **kwargs)
+        _process_json(args_array, outdata, mode, **kwargs)
 
     else:
         _process_non_json(server, args_array, outdata, mode, **kwargs)
 
 
-def _process_json(server, args_array, outdata, mode, **kwargs):
+def _process_json(args_array, outdata, mode, **kwargs):
 
     """Function:  _process_json
 
     Description:  Private function for status to process json format data.
 
     Arguments:
-        (input) server -> Server instance.
         (input) args_array -> Dictionary of command line options.
         (input) outdata -> Dictionary of performance data.
         (input) mode -> File write mode.
