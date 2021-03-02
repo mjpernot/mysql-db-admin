@@ -208,7 +208,7 @@ def run_analyze(server, dbs, tbl, **kwargs):
             gen_libs.prt_msg(item["Msg_type"], item["Msg_text"])
 
 
-def run_checksum(server, dbs, tbl, **kwargs):
+def run_checksum(server, dbs, tbl):
 
     """Function:  run_checksum
 
@@ -257,7 +257,7 @@ analyze instead":
                 gen_libs.prt_msg(item["Msg_type"], item["Msg_text"])
 
 
-def run_check(server, dbs, tbl, **kwargs):
+def run_check(server, dbs, tbl):
 
     """Function:  run_check
 
@@ -277,7 +277,7 @@ def run_check(server, dbs, tbl, **kwargs):
         gen_libs.prt_msg(item["Msg_type"], item["Msg_text"])
 
 
-def detect_dbs(sub_db_list, full_db_list, **kwargs):
+def detect_dbs(sub_db_list, full_db_list):
 
     """Function:  detect_dbs
 
