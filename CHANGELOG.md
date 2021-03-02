@@ -25,7 +25,6 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - run_program:  Process status connection on MySQL connection call.
 - status:  Processed status return from mongo_libs.ins_doc call.
 - run_program:  Replaced cmds_gen.disconnect with mysql_libs.disconnect call.
-- Removed unnesscary \*\*kwargs arguments.
 - config/mongo.py.TEMPLATE:  Changed configuration entry and added a number of configuration entries.
 - config/mysql_cfg.py.TEMPLATE:  Changed configuration entry.
 - Documentation updates.
