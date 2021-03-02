@@ -126,7 +126,7 @@ class UnitTest(unittest.TestCase):
                             "-e": "ToEmail", "-s": "SubjectLine"}
         self.args_array3 = {"-d": True, "-c": True, "-C": True}
 
-    @mock.patch("mysql_db_admin.cmds_gen.disconnect")
+    @mock.patch("mysql_db_admin.mysql_libs.disconnect")
     @mock.patch("mysql_db_admin.gen_libs.load_module")
     @mock.patch("mysql_db_admin.mysql_libs.create_instance")
     def test_email(self, mock_inst, mock_mongo, mock_disconn):
@@ -146,7 +146,7 @@ class UnitTest(unittest.TestCase):
         self.assertFalse(mysql_db_admin.run_program(self.args_array2,
                                                     self.func_dict))
 
-    @mock.patch("mysql_db_admin.cmds_gen.disconnect")
+    @mock.patch("mysql_db_admin.mysql_libs.disconnect")
     @mock.patch("mysql_db_admin.gen_libs.load_module")
     @mock.patch("mysql_db_admin.mysql_libs.create_instance")
     def test_mongo(self, mock_inst, mock_mongo, mock_disconn):
@@ -166,7 +166,7 @@ class UnitTest(unittest.TestCase):
         self.assertFalse(mysql_db_admin.run_program(self.args_array,
                                                     self.func_dict))
 
-    @mock.patch("mysql_db_admin.cmds_gen.disconnect")
+    @mock.patch("mysql_db_admin.mysql_libs.disconnect")
     @mock.patch("mysql_db_admin.mysql_libs.create_instance")
     def test_run_program(self, mock_inst, mock_disconn):
 
