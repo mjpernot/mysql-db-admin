@@ -94,50 +94,6 @@ class Mail(object):
         return _process_json
 
 
-class Server(object):
-
-    """Class:  Server
-
-    Description:  Class stub holder for mysql_class.Server class.
-
-    Methods:
-        __init__ -> Class initialization.
-        upd_srv_stat -> upd_srv_stat method.
-
-    """
-
-    def __init__(self):
-
-        """Method:  __init__
-
-        Description:  Class initialization.
-
-        Arguments:
-
-        """
-
-        self.name = "ServerName"
-        self.cur_mem_mb = "cur_mem_mb"
-        self.max_mem_mb = "max_mem_mb"
-        self.prct_mem = "prct_mem"
-        self.days_up = "days_up"
-        self.cur_conn = "cur_conn"
-        self.max_conn = "max_conn"
-        self.prct_conn = "prct_conn"
-
-    def upd_srv_stat(self):
-
-        """Method:  upd_srv_stat
-
-        Description:  Stub method holder for mysql_class.Server.upd_srv_stat.
-
-        Arguments:
-
-        """
-
-        return True
-
-
 class UnitTest(unittest.TestCase):
 
     """Class:  UnitTest
@@ -170,7 +126,6 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        self.server = Server()
         self.mail = Mail()
         self.args_array = {"-j": True, "-z": True}
         self.args_arraya = {"-j": True, "-z": True, "-u": True}
@@ -196,7 +151,7 @@ class UnitTest(unittest.TestCase):
         with gen_libs.no_std_out():
             self.assertFalse(
                 mysql_db_admin._process_json(
-                    self.server, self.args_array3, self.outdata, self.mode))
+                    self.args_array3, self.outdata, self.mode))
 
     def test_stdout_suppress_json(self):
 
@@ -210,7 +165,7 @@ class UnitTest(unittest.TestCase):
 
         self.assertFalse(
             mysql_db_admin._process_json(
-                self.server, self.args_array, self.outdata, self.mode))
+                self.args_array, self.outdata, self.mode))
 
     @mock.patch("mysql_db_admin.mongo_libs.ins_doc")
     @mock.patch("mysql_db_admin.gen_libs.write_file")
@@ -229,8 +184,7 @@ class UnitTest(unittest.TestCase):
 
         self.assertFalse(
             mysql_db_admin._process_json(
-                self.server, self.args_arraya, self.outdata, self.mode,
-                mail=self.mail))
+                self.args_arraya, self.outdata, self.mode, mail=self.mail))
 
     @mock.patch("mysql_db_admin.mongo_libs.ins_doc")
     @mock.patch("mysql_db_admin.gen_libs.write_file")
@@ -249,8 +203,7 @@ class UnitTest(unittest.TestCase):
 
         self.assertFalse(
             mysql_db_admin._process_json(
-                self.server, self.args_array, self.outdata, self.mode,
-                mail=self.mail))
+                self.args_array, self.outdata, self.mode, mail=self.mail))
 
     @mock.patch("mysql_db_admin.mongo_libs.ins_doc")
     @mock.patch("mysql_db_admin.gen_libs.write_file")
@@ -269,8 +222,7 @@ class UnitTest(unittest.TestCase):
 
         self.assertFalse(
             mysql_db_admin._process_json(
-                self.server, self.args_array, self.outdata, self.mode,
-                ofile="FileName"))
+                self.args_array, self.outdata, self.mode, ofile="FileName"))
 
     @mock.patch("mysql_db_admin.mongo_libs.ins_doc")
     @mock.patch("mysql_db_admin.gen_libs.write_file")
@@ -289,8 +241,7 @@ class UnitTest(unittest.TestCase):
 
         self.assertFalse(
             mysql_db_admin._process_json(
-                self.server, self.args_array4, self.outdata, self.mode,
-                ofile="FileName"))
+                self.args_array4, self.outdata, self.mode, ofile="FileName"))
 
     @mock.patch("mysql_db_admin.mongo_libs.ins_doc")
     @mock.patch("mysql_db_admin.gen_libs.write_file")
@@ -310,8 +261,8 @@ class UnitTest(unittest.TestCase):
         with gen_libs.no_std_out():
             self.assertFalse(
                 mysql_db_admin._process_json(
-                    self.server, self.args_array, self.outdata, self.mode,
-                    class_cfg="Cfg", db_tbl="db:tbl"))
+                    self.args_array, self.outdata, self.mode, class_cfg="Cfg",
+                    db_tbl="db:tbl"))
 
     @mock.patch("mysql_db_admin.mongo_libs.ins_doc")
     @mock.patch("mysql_db_admin.gen_libs.write_file")
@@ -330,8 +281,8 @@ class UnitTest(unittest.TestCase):
 
         self.assertFalse(
             mysql_db_admin._process_json(
-                self.server, self.args_array, self.outdata, self.mode,
-                class_cfg="Cfg", db_tbl="db:tbl"))
+                self.args_array, self.outdata, self.mode, class_cfg="Cfg",
+                db_tbl="db:tbl"))
 
     def test_non_json(self):
 
@@ -346,7 +297,7 @@ class UnitTest(unittest.TestCase):
         with gen_libs.no_std_out():
             self.assertFalse(
                 mysql_db_admin._process_json(
-                    self.server, self.args_array2, self.outdata, self.mode))
+                    self.args_array2, self.outdata, self.mode))
 
     @mock.patch("mysql_db_admin.mongo_libs.ins_doc")
     @mock.patch("mysql_db_admin.gen_libs.write_file")
@@ -365,7 +316,7 @@ class UnitTest(unittest.TestCase):
 
         self.assertFalse(
             mysql_db_admin._process_json(
-                self.server, self.args_array, self.outdata, self.mode))
+                self.args_array, self.outdata, self.mode))
 
     @mock.patch("mysql_db_admin.mongo_libs.ins_doc")
     @mock.patch("mysql_db_admin.gen_libs.write_file")
@@ -384,7 +335,7 @@ class UnitTest(unittest.TestCase):
 
         self.assertFalse(
             mysql_db_admin._process_json(
-                self.server, self.args_array5, self.outdata, self.mode))
+                self.args_array5, self.outdata, self.mode))
 
 
 if __name__ == "__main__":
