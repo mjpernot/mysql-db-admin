@@ -6,6 +6,7 @@
 
 echo ""
 echo "Unit testing..."
+test/unit/mysql_db_admin/_process_json.py
 test/unit/mysql_db_admin/_process_non_json.py
 test/unit/mysql_db_admin/help_message.py
 test/unit/mysql_db_admin/analyze.py
