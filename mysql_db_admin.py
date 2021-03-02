@@ -629,7 +629,7 @@ def _process_non_json(server, args_array, outdata, mode, **kwargs):
 
     if mail:
         mail.add_2_msg(pdata)
-        mail.send_mail()
+        mail.send_mail(use_mailx=args_array.get("-u", False))
 
 
 def run_program(args_array, func_dict, **kwargs):
