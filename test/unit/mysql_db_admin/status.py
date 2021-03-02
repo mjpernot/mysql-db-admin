@@ -75,17 +75,23 @@ class Mail(object):
 
         return True
 
-    def send_mail(self):
+    def send_mail(self, use_mailx=False):
 
         """Method:  get_name
 
         Description:  Stub method holder for Mail.send_mail.
 
         Arguments:
+            (input) use_mailx -> True|False - To use mailx command.
 
         """
 
-        return True
+        status = True
+
+        if use_mailx:
+            status = True
+
+        return status
 
 
 class Server(object):
@@ -140,11 +146,13 @@ class UnitTest(unittest.TestCase):
 
     Methods:
         setUp -> Initialize testing environment.
+        test_mailx_non_json -> Test with using mailx out for non-json format.
         test_mail_non_json -> Test with emailing out for non-json format.
         test_file_non_json -> Test with writing to file for non-json format.
         test_stdout_suppress_non_json -> Test with std out being suppressed.
         test_stdout -> Test with standard out.
         test_stdout_suppress_json -> Test with standard out being suppressed.
+        test_mailx -> Test with using mailx.
         test_mail -> Test with emailing out.
         test_file -> Test with writing to file.
         test_append_to_file -> Test with appending to file.
@@ -169,17 +177,32 @@ class UnitTest(unittest.TestCase):
         self.server = Server()
         self.mail = Mail()
         self.args_array = {"-j": True, "-z": True}
+        self.args_arraya = {"-j": True, "-z": True, "-u": True}
         self.args_array2 = {}
         self.args_array3 = {"-j": True}
         self.args_array4 = {"-j": True, "-a": True, "-z": True}
         self.args_array5 = {"-j": True, "-f": True, "-z": True}
         self.args_array6 = {"-z": True}
+        self.args_array6a = {"-z": True, "-u": True}
+
+    def test_mailx_non_json(self):
+
+        """Function:  test_mailx_non_json
+
+        Description:  Test with using mailx out for non-json format.
+
+        Arguments:
+
+        """
+
+        self.assertFalse(mysql_db_admin.status(self.server, self.args_array6a,
+                                               mail=self.mail))
 
     def test_mail_non_json(self):
 
         """Function:  test_mail_non_json
 
-        Description:  Test with emailing out.
+        Description:  Test with emailing out for non-json format.
 
         Arguments:
 
@@ -241,6 +264,24 @@ class UnitTest(unittest.TestCase):
         """
 
         self.assertFalse(mysql_db_admin.status(self.server, self.args_array))
+
+    @mock.patch("mysql_db_admin.mongo_libs.ins_doc")
+    @mock.patch("mysql_db_admin.gen_libs.write_file")
+    def test_mailx(self, mock_write, mock_mongo):
+
+        """Function:  test_mailx
+
+        Description:  Test with using mailx.
+
+        Arguments:
+
+        """
+
+        mock_write.return_value = True
+        mock_mongo.return_value = (True, None)
+
+        self.assertFalse(mysql_db_admin.status(self.server, self.args_arraya,
+                                               mail=self.mail))
 
     @mock.patch("mysql_db_admin.mongo_libs.ins_doc")
     @mock.patch("mysql_db_admin.gen_libs.write_file")
