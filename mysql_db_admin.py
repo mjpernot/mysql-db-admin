@@ -17,7 +17,7 @@
              -S [db_name [db_name2 ...]] [-t table_name [table_name2 ...]] |
              -D [db_name [db_name2 ...]] [-t table_name [table_name2 ...]] |
              -M [-j [-f]] | [-i [db_name:table_name] -m config_file] |
-                [-e to_email [to_email2 ...] [-s subject_line]] | [-z] |
+                [-e to_email [to_email2 ...] [-s subject_line] [-u]] | [-z] |
                 [-o dir_path/file [-a]]}
             [-y flavor_id]
             [-v | -h]
@@ -53,8 +53,10 @@
             -s subject_line => Subject line of email.  Optional, will create
                 own subject line if one is not provided.
             -e to_email_address(es) => Enables emailing capability for an
-                option if the option allows it.  Sends output to one or more
-                email addresses.  Email addresses are delimited by spaces.
+                    option if the option allows it.  Sends output to one or
+                    more email addresses.  Email addresses are delimited by
+                    spaces.
+                -u => Override the default mail command and use mailx.
             -z => Suppress standard out.
 
         -y value => A flavor id for the program lock.  To create unique lock.
@@ -708,7 +710,7 @@ def main():
     file_crt_list = ["-o"]
     func_dict = {"-A": analyze, "-C": check, "-D": optimize, "-S": checksum,
                  "-M": status}
-    opt_con_req_list = {"-i": ["-m"], "-s": ["-e"]}
+    opt_con_req_list = {"-i": ["-m"], "-s": ["-e"], "-u": ["-e"]}
     opt_def_dict = {"-t": None, "-A": [], "-C": [], "-D": [], "-S": [],
                     "-i": "sysmon:mysql_db_status"}
     opt_multi_list = ["-A", "-C", "-D", "-S", "-t", "-e", "-s"]

@@ -11,9 +11,11 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - Updated to use python_lib v2.8.3 to use mailx capability.
 
 ### Fixed
+- Allow to override the default sendmail (postfix) and use mailx command.
 - config/mysql.cfg.TEMPLATE:  Point to correct socket file.
 
 ### Changed
+- main:  Added -u option to allow override of sendmail and use mailx.
 - run_program:  Process status connection on MySQL connection call.
 - status:  Processed status return from mongo_libs.ins_doc call.
 - run_program:  Replaced cmds_gen.disconnect with mysql_libs.disconnect call.
