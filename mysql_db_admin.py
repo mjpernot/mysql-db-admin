@@ -159,7 +159,6 @@ import json
 # Local
 import lib.arg_parser as arg_parser
 import lib.gen_libs as gen_libs
-import lib.cmds_gen as cmds_gen
 import lib.gen_class as gen_class
 import mysql_lib.mysql_libs as mysql_libs
 import mysql_lib.mysql_class as mysql_class

@@ -29,6 +29,9 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - config/mysql_cfg.py.TEMPLATE:  Changed configuration entry.
 - Documentation updates.
 
+### Removed
+- mysql_libs.cmds_gen module.
+
 
 ## [3.1.2] - 2020-06-10
 ### Fixed
