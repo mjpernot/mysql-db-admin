@@ -649,25 +649,31 @@ def run_program(args_array, func_dict, **kwargs):
     func_dict = dict(func_dict)
     server = mysql_libs.create_instance(args_array["-c"], args_array["-d"],
                                         mysql_class.Server)
-    server.connect()
-    outfile = args_array.get("-o", None)
-    db_tbl = args_array.get("-i", None)
-    mongo = None
-    mail = None
+    server.connect(silent=True)
 
-    if args_array.get("-m", None):
-        mongo = gen_libs.load_module(args_array["-m"], args_array["-d"])
+    if server.conn_msg:
+        print("run_program:  Error encountered on server(%s):  %s" %
+              (server.name, server.conn_msg))
 
-    if args_array.get("-e", None):
-        mail = gen_class.setup_mail(args_array.get("-e"),
-                                    subj=args_array.get("-s", None))
+    else:
+        outfile = args_array.get("-o", None)
+        db_tbl = args_array.get("-i", None)
+        mongo = None
+        mail = None
 
-    # Intersect args_array and func_dict to determine which functions to call.
-    for item in set(args_array.keys()) & set(func_dict.keys()):
-        func_dict[item](server, args_array, ofile=outfile, db_tbl=db_tbl,
-                        class_cfg=mongo, mail=mail, **kwargs)
+        if args_array.get("-m", None):
+            mongo = gen_libs.load_module(args_array["-m"], args_array["-d"])
 
-    mysql_libs.disconnect(server)
+        if args_array.get("-e", None):
+            mail = gen_class.setup_mail(args_array.get("-e"),
+                                        subj=args_array.get("-s", None))
+
+        # Intersect args_array & func_dict to determine which functions to call
+        for item in set(args_array.keys()) & set(func_dict.keys()):
+            func_dict[item](server, args_array, ofile=outfile, db_tbl=db_tbl,
+                            class_cfg=mongo, mail=mail, **kwargs)
+
+        mysql_libs.disconnect(server)
 
 
 def main():
