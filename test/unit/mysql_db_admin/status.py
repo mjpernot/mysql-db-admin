@@ -148,6 +148,7 @@ class UnitTest(unittest.TestCase):
         test_mail -> Test with emailing out.
         test_file -> Test with writing to file.
         test_append_to_file -> Test with appending to file.
+        test_mongo_fail -> Test with failed mongo connection.
         test_mongo -> Test with mongo connection.
         test_non_json -> Test with in non-JSON format.
         test_json -> Test with in JSON format.
@@ -254,7 +255,7 @@ class UnitTest(unittest.TestCase):
         """
 
         mock_write.return_value = True
-        mock_mongo.return_value = True
+        mock_mongo.return_value = (True, None)
 
         self.assertFalse(mysql_db_admin.status(self.server, self.args_array,
                                                mail=self.mail))
@@ -272,7 +273,7 @@ class UnitTest(unittest.TestCase):
         """
 
         mock_write.return_value = True
-        mock_mongo.return_value = True
+        mock_mongo.return_value = (True, None)
 
         self.assertFalse(mysql_db_admin.status(self.server, self.args_array,
                                                ofile="FileName"))
@@ -290,10 +291,31 @@ class UnitTest(unittest.TestCase):
         """
 
         mock_write.return_value = True
-        mock_mongo.return_value = True
+        mock_mongo.return_value = (True, None)
 
         self.assertFalse(mysql_db_admin.status(self.server, self.args_array4,
                                                ofile="FileName"))
+
+    @mock.patch("mysql_db_admin.mongo_libs.ins_doc")
+    @mock.patch("mysql_db_admin.gen_libs.write_file")
+    def test_mongo_fail(self, mock_write, mock_mongo):
+
+        """Function:  test_mongo_fail
+
+        Description:  Test with mongo connection.
+
+        Arguments:
+
+        """
+
+        mock_write.return_value = True
+        mock_mongo.return_value = (False, "Error Message")
+
+        with gen_libs.no_std_out():
+            self.assertFalse(
+                mysql_db_admin.status(
+                    self.server, self.args_array, class_cfg="Cfg",
+                    db_tbl="db:tbl"))
 
     @mock.patch("mysql_db_admin.mongo_libs.ins_doc")
     @mock.patch("mysql_db_admin.gen_libs.write_file")
@@ -308,11 +330,12 @@ class UnitTest(unittest.TestCase):
         """
 
         mock_write.return_value = True
-        mock_mongo.return_value = True
+        mock_mongo.return_value = (True, None)
 
-        self.assertFalse(mysql_db_admin.status(self.server, self.args_array,
-                                               class_cfg="Cfg",
-                                               db_tbl="db:tbl"))
+        self.assertFalse(
+            mysql_db_admin.status(
+                self.server, self.args_array, class_cfg="Cfg",
+                db_tbl="db:tbl"))
 
     def test_non_json(self):
 
@@ -341,7 +364,7 @@ class UnitTest(unittest.TestCase):
         """
 
         mock_write.return_value = True
-        mock_mongo.return_value = True
+        mock_mongo.return_value = (True, None)
 
         self.assertFalse(mysql_db_admin.status(self.server, self.args_array))
 
@@ -358,7 +381,7 @@ class UnitTest(unittest.TestCase):
         """
 
         mock_write.return_value = True
-        mock_mongo.return_value = True
+        mock_mongo.return_value = (True, None)
 
         self.assertFalse(mysql_db_admin.status(self.server, self.args_array5))
 
