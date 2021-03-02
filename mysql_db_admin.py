@@ -564,7 +564,10 @@ def status(server, args_array, **kwargs):
 
         if mongo_cfg and db_tbl:
             dbs, tbl = db_tbl.split(":")
-            mongo_libs.ins_doc(mongo_cfg, dbs, tbl, outdata)
+            status = mongo_libs.ins_doc(mongo_cfg, dbs, tbl, outdata)
+
+            if not status[0]:
+                print("Error: status.mongo_insert: %s" % (status[1]))
 
         if ofile:
             gen_libs.write_file(ofile, mode, jdata)
