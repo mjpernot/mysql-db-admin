@@ -210,7 +210,7 @@ def run_analyze(server, dbs, tbl, **kwargs):
             gen_libs.prt_msg(item["Msg_type"], item["Msg_text"])
 
 
-def run_checksum(server, dbs, tbl):
+def run_checksum(server, dbs, tbl, **kwargs):
 
     """Function:  run_checksum
 
@@ -259,7 +259,7 @@ analyze instead":
                 gen_libs.prt_msg(item["Msg_type"], item["Msg_text"])
 
 
-def run_check(server, dbs, tbl):
+def run_check(server, dbs, tbl, **kwargs):
 
     """Function:  run_check
 
@@ -279,7 +279,7 @@ def run_check(server, dbs, tbl):
         gen_libs.prt_msg(item["Msg_type"], item["Msg_text"])
 
 
-def detect_dbs(sub_db_list, full_db_list):
+def detect_dbs(sub_db_list, full_db_list, **kwargs):
 
     """Function:  detect_dbs
 
@@ -586,10 +586,10 @@ def _process_json(args_array, outdata, mode, **kwargs):
 
     if mongo_cfg and db_tbl:
         dbs, tbl = db_tbl.split(":")
-        status = mongo_libs.ins_doc(mongo_cfg, dbs, tbl, outdata)
+        conn_stats = mongo_libs.ins_doc(mongo_cfg, dbs, tbl, outdata)
 
-        if not status[0]:
-            print("Error: status.mongo_insert: %s" % (status[1]))
+        if not conn_stats[0]:
+            print("Error: status.mongo_insert: %s" % (conn_stats[1]))
 
     if ofile:
         gen_libs.write_file(ofile, mode, jdata)
