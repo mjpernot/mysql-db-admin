@@ -664,7 +664,7 @@ def run_program(args_array, func_dict, **kwargs):
         func_dict[item](server, args_array, ofile=outfile, db_tbl=db_tbl,
                         class_cfg=mongo, mail=mail, **kwargs)
 
-    cmds_gen.disconnect([server])
+    mysql_libs.disconnect(server)
 
 
 def main():
