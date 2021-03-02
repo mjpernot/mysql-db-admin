@@ -544,14 +544,14 @@ def status(server, args_array, **kwargs):
     outdata = {"Application": "MySQL Database",
                "Server": server.name,
                "AsOf": datetime.datetime.strftime(datetime.datetime.now(),
-                                                  "%Y-%m-%d %H:%M:%S")}
-    outdata.update({"Memory": {"CurrentUsage": server.cur_mem_mb,
-                               "MaxUsage": server.max_mem_mb,
-                               "PercentUsed": server.prct_mem},
-                    "UpTime": server.days_up,
-                    "Connections": {"CurrentConnected": server.cur_conn,
-                                    "MaxConnections": server.max_conn,
-                                    "PercentUsed": server.prct_conn}})
+                                                  "%Y-%m-%d %H:%M:%S"),
+               "Memory": {"CurrentUsage": server.cur_mem_mb,
+                          "MaxUsage": server.max_mem_mb,
+                          "PercentUsed": server.prct_mem},
+               "UpTime": server.days_up,
+               "Connections": {"CurrentConnected": server.cur_conn,
+                               "MaxConnections": server.max_conn,
+                               "PercentUsed": server.prct_conn}}
 
     if "-j" in args_array:
         jdata = json.dumps(outdata, indent=indent)
