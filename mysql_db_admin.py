@@ -25,37 +25,39 @@
     Arguments:
         -c file => Server configuration file.  Required arg.
         -d dir path => Directory path to config file (-c). Required arg.
+
         -C [database name(s)] => Check a table for errors.
-        -A [database name(s)] => Analyze a table's key distribution
-            (checks the table's indexes).
+            -t table name(s) => Table names to check.
+
+        -A [database name(s)] => Analyze a table's key distribution, checks the
+                table's indexes.
+            -t table name(s) => Table names to check.
+
         -S [database name(s)] => Return a checksum on a table.
-        -D [database name(s)] => Optimize/defragment a table (command
-            runs an Alter Table and Analyze command on the table).
+            -t table name(s) => Table names to check.
+
+        -D [database name(s)] => Optimize/defragment a table, the command
+                runs an Alter Table and Analyze command on the table.
+            -t table name(s) => Table names to check.
+
         -M Display the current database status, such as uptime, memory
-            use, connection usage, and status.
-        -m file => Mongo config file.  Is loaded as a python, do not
-            include the .py extension with the name.
-        -j => Convert output to JSON format.
-            For use with the -M option.
-        -f => Flatten the JSON data structure to file and standard out.
-            For use with the -j option.
-        -i {database:collection} => Name of database and collection.
-            Default: sysmon:mysql_db_status
-            This option requires option:  -m
-        -o path/file => Directory path and file name for output.
-            Use the -a option to append to an existing file.
-            For use with the -M option.
-        -a => Append output to output file.
-        -t table name(s) => Table names to check.
-            Used with the -C, -A, -S & -D options.
-        -s subject_line => Subject line of email.  Optional, will create own
-            subject line if one is not provided.
-            This option requires option:  -e
-        -e to_email_address(es) => Enables emailing capability for an option if
-            the option allows it.  Sends output to one or more email addresses.
-            Email addresses are delimited by spaces.
+                use, connection usage, and status.
+            -m file => Mongo config file.  Is loaded as a python, do not
+                include the .py extension with the name.
+            -j => Convert output to JSON format.
+                -f => Flatten the JSON data structure to file and standard out.
+            -i {database:collection} => Name of database and collection.
+                Default: sysmon:mysql_db_status
+            -o path/file => Directory path and file name for output.
+                -a => Append output to output file.
+            -s subject_line => Subject line of email.  Optional, will create
+                own subject line if one is not provided.
+            -e to_email_address(es) => Enables emailing capability for an
+                option if the option allows it.  Sends output to one or more
+                email addresses.  Email addresses are delimited by spaces.
+            -z => Suppress standard out.
+
         -y value => A flavor id for the program lock.  To create unique lock.
-        -z => Suppress standard out.
         -v => Display version of this program.
         -h => Help and usage message.
 
@@ -78,13 +80,13 @@
             # Configuration file for MySQL database server.
             user = "USER"
             japd = "PSWORD"
-            host = "IP_ADDRESS"
-            name = "HOSTNAME"
+            host = "HOST_IP"
+            name = "HOST_NAME"
             sid = SERVER_ID
             extra_def_file = "PYTHON_PROJECT/config/mysql.cfg"
             serv_os = "Linux"
             port = 3306
-            cfg_file = "DIRECTORY_PATH/my.cnf"
+            cfg_file = "MYSQL_DIRECTORY/mysqld.cnf"
 
         NOTE 1:  Include the cfg_file even if running remotely as the file will
             be used in future releases.
@@ -93,6 +95,7 @@
             of the --defaults-extra-file option (i.e. extra_def_file) in the
             database configuration file.  See below for the
             defaults-extra-file format.
+        NOTE 3:  Ignore the rep_user and rep_japd entries.  Not required.
 
         configuration modules -> name is runtime dependent as it can be
             used to connect to different databases with different names.
@@ -118,7 +121,7 @@
             # Single Configuration file for Mongo Database Server.
             user = "USER"
             japd = "PSWORD"
-            host = "IP_ADDRESS"
+            host = "HOST_IP"
             name = "HOSTNAME"
             port = 27017
             conf_file = None
