@@ -576,7 +576,7 @@ def status(server, args_array, **kwargs):
 
         if mail:
             mail.add_2_msg(jdata)
-            mail.send_mail()
+            mail.send_mail(use_mailx=args_array.get("-u", False))
 
         if not args_array.get("-z", False):
             gen_libs.print_data(jdata)

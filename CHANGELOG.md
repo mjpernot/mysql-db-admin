@@ -15,6 +15,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - config/mysql.cfg.TEMPLATE:  Point to correct socket file.
 
 ### Changed
+- status:  Determine whether to use sendmail or mailx when using the mail option.
 - main:  Added -u option to allow override of sendmail and use mailx.
 - run_program:  Process status connection on MySQL connection call.
 - status:  Processed status return from mongo_libs.ins_doc call.
