@@ -14,6 +14,9 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - Allow to override the default sendmail (postfix) and use mailx command.
 - config/mysql.cfg.TEMPLATE:  Point to correct socket file.
 
+### Added
+- \_process_json:  Private function for status to process json format data.
+
 ### Changed
 - status: Refactored the function.
 - main:  Set "-j" option to args_array if "-i" and "-m" options are present.

@@ -539,8 +539,6 @@ def status(server, args_array, **kwargs):
 
     mode = "a" if args_array.get("-a", False) else "w"
 
-    indent = None if args_array.get("-f", False) else 4
-
     outdata = {"Application": "MySQL Database",
                "Server": server.name,
                "AsOf": datetime.datetime.strftime(datetime.datetime.now(),
@@ -554,31 +552,55 @@ def status(server, args_array, **kwargs):
                                "PercentUsed": server.prct_conn}}
 
     if "-j" in args_array:
-        jdata = json.dumps(outdata, indent=indent)
-        mongo_cfg = kwargs.get("class_cfg", None)
-        db_tbl = kwargs.get("db_tbl", None)
-        ofile = kwargs.get("ofile", None)
-        mail = kwargs.get("mail", None)
-
-        if mongo_cfg and db_tbl:
-            dbs, tbl = db_tbl.split(":")
-            status = mongo_libs.ins_doc(mongo_cfg, dbs, tbl, outdata)
-
-            if not status[0]:
-                print("Error: status.mongo_insert: %s" % (status[1]))
-
-        if ofile:
-            gen_libs.write_file(ofile, mode, jdata)
-
-        if mail:
-            mail.add_2_msg(jdata)
-            mail.send_mail(use_mailx=args_array.get("-u", False))
-
-        if not args_array.get("-z", False):
-            gen_libs.print_data(jdata)
+        _process_json(server, args_array, outdata, mode, **kwargs)
 
     else:
         _process_non_json(server, args_array, outdata, mode, **kwargs)
+
+
+def _process_json(server, args_array, outdata, mode, **kwargs):
+
+    """Function:  _process_json
+
+    Description:  Private function for status to process json format data.
+
+    Arguments:
+        (input) server -> Server instance.
+        (input) args_array -> Dictionary of command line options.
+        (input) outdata -> Dictionary of performance data.
+        (input) mode -> File write mode.
+        (input) **kwargs:
+            ofile -> file name - Name of output file.
+            db_tbl database:table_name -> Mongo database and table name.
+            class_cfg -> Mongo server configuration.
+            mail -> Mail instance.
+
+    """
+
+    indent = None if args_array.get("-f", False) else 4
+
+    jdata = json.dumps(outdata, indent=indent)
+    mongo_cfg = kwargs.get("class_cfg", None)
+    db_tbl = kwargs.get("db_tbl", None)
+    ofile = kwargs.get("ofile", None)
+    mail = kwargs.get("mail", None)
+
+    if mongo_cfg and db_tbl:
+        dbs, tbl = db_tbl.split(":")
+        status = mongo_libs.ins_doc(mongo_cfg, dbs, tbl, outdata)
+
+        if not status[0]:
+            print("Error: status.mongo_insert: %s" % (status[1]))
+
+    if ofile:
+        gen_libs.write_file(ofile, mode, jdata)
+
+    if mail:
+        mail.add_2_msg(jdata)
+        mail.send_mail(use_mailx=args_array.get("-u", False))
+
+    if not args_array.get("-z", False):
+        gen_libs.print_data(jdata)
 
 
 def _process_non_json(server, args_array, outdata, mode, **kwargs):
