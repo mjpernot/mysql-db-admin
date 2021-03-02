@@ -5,7 +5,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 
 
 ## [3.1.3] - 2020-11-21
-- Updated to use the mysql_libs v5.0.2 library.
+- Updated to use the mysql_libs v5.0.4 library.
 
 ### Fixed
 - config/mysql.cfg.TEMPLATE:  Point to correct socket file.
