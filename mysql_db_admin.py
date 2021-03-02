@@ -534,13 +534,20 @@ def status(server, args_array, **kwargs):
 
     """
 
+    """
     mode = "w"
+    """
+
     indent = 4
     args_array = dict(args_array)
     server.upd_srv_stat()
 
+    """
     if args_array.get("-a", False):
         mode = "a"
+    """
+
+    mode = "a" if args_array.get("-a", False) else "w"
 
     if args_array.get("-f", False):
         indent = None
