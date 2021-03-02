@@ -728,6 +728,11 @@ def main():
     args_array = arg_parser.arg_parse2(cmdline.argv, opt_val_list,
                                        opt_def_dict, multi_val=opt_multi_list)
 
+    # Set JSON format for certain option settings
+    if "-i" in args_array.keys() and "-m" in args_array.keys() \
+       and "-j" not in args_array.keys():
+        args_array["-j"] = True
+
     if not gen_libs.help_func(args_array, __version__, help_message) \
        and not arg_parser.arg_require(args_array, opt_req_list) \
        and arg_parser.arg_xor_dict(args_array, opt_xor_dict) \
