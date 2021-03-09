@@ -59,7 +59,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - main:  Fixed handling command line arguments from SonarQube scan finding.
 
 ### Changed
-- status:  Converted JSON output to CamelCase.
+- status:  Converted JSON output to PascalCase.
 - run_optimize, run_checksum, run_analyze, run_check:  Reformatted output.
 - status:  Refactored function to reduce program complexity.
 - Changed variable name to standard naming convention in multiple functions.
