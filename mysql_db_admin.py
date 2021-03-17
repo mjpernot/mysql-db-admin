@@ -775,7 +775,7 @@ def main():
                     "-S": ["-A", "-C", "-D", "-M", "-L"],
                     "-M": ["-A", "-C", "-D", "-S", "-L"],
                     "-L": ["-A", "-C", "-D", "-S", "-M"]}
-    sys_dbs = ["performance_schema", "information_schema", "mysql"]
+    sys_dbs = ["performance_schema", "information_schema", "mysql", "sys"]
 
     # Process argument list from command line.
     args_array = arg_parser.arg_parse2(cmdline.argv, opt_val_list,
