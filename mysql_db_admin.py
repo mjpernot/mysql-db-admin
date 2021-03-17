@@ -61,7 +61,7 @@
             -z => Suppress standard out.
 
         -L => Display list of user databases.
-            -a => Include system databases in the list.
+            -k => Include system databases in the list.
 
         -y value => A flavor id for the program lock.  To create unique lock.
         -v => Display version of this program.
@@ -671,7 +671,7 @@ def listdbs(server, args_array, **kwargs):
     db_list = gen_libs.dict_2_list(mysql_libs.fetch_db_dict(server),
                                    "Database")
 
-    if "-a" in args_array:
+    if "-k" in args_array:
         print("List of user and system databases:")
 
         for item in db_list:
