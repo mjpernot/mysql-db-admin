@@ -18,7 +18,8 @@
              -D [db_name [db_name2 ...]] [-t table_name [table_name2 ...]] |
              -M [-j [-f]] | [-i [db_name:table_name] -m config_file] |
                 [-e to_email [to_email2 ...] [-s subject_line] [-u]] | [-z] |
-                [-o dir_path/file [-a]]}
+                [-o dir_path/file [-a]] |
+             -L [-a]}
             [-y flavor_id]
             [-v | -h]
 
@@ -40,7 +41,7 @@
                 runs an Alter Table and Analyze command on the table.
             -t table name(s) => Table names to check.
 
-        -M Display the current database status, such as uptime, memory
+        -M => Display the current database status, such as uptime, memory
                 use, connection usage, and status.
             -m file => Mongo config file.  Is loaded as a python, do not
                 include the .py extension with the name.
@@ -58,6 +59,9 @@
                     spaces.
                 -u => Override the default mail command and use mailx.
             -z => Suppress standard out.
+
+        -L => Display list of user databases.
+            -a => Include system databases in the list.
 
         -y value => A flavor id for the program lock.  To create unique lock.
         -v => Display version of this program.

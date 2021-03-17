@@ -15,6 +15,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - config/mysql.cfg.TEMPLATE:  Point to correct socket file.
 
 ### Added
+- Added -L option to list databases in the database instance.
 - \_process_json:  Private function for status to process json format data.
 
 ### Changed
