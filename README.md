@@ -61,6 +61,7 @@ Install/upgrade system modules.
 
 ```
 cd mysql-db-admin
+sudo bash
 umask 022
 pip install -r requirements.txt --upgrade --trusted-host pypi.appdev.proj.coe.ic.gov
 exit
@@ -156,35 +157,7 @@ chmod 600 mongo.py
 
 ### Installation:
 
-Install the project using git.
-  * Replace **{Python_Project}** with the baseline path of the python program.
-  * Replace **{Branch_Name}** with the name of the Git branch being tested.  See Git Merge Request.
-
-```
-umask 022
-cd {Python_Project}
-git clone --branch {Branch_Name} git@sc.appdev.proj.coe.ic.gov:JAC-DSXD/mysql-db-admin.git
-```
-
-Install/upgrade system modules.
-
-```
-cd mysql-db-admin
-sudo bash
-umask 022
-pip install -r requirements.txt --upgrade --trusted-host pypi.appdev.proj.coe.ic.gov
-exit
-```
-
-Install supporting classes and libraries.
-
-```
-pip install -r requirements-python-lib.txt --target lib --trusted-host pypi.appdev.proj.coe.ic.gov
-pip install -r requirements-mysql-lib.txt --target mysql_lib --trusted-host pypi.appdev.proj.coe.ic.gov
-pip install -r requirements-python-lib.txt --target mysql_lib/lib --trusted-host pypi.appdev.proj.coe.ic.gov
-pip install -r requirements-mongo-lib.txt --target mongo_lib --trusted-host pypi.appdev.proj.coe.ic.gov
-pip install -r requirements-python-lib.txt --target mongo_lib/lib --trusted-host pypi.appdev.proj.coe.ic.gov
-```
+Install the project using the procedures in the Installation section.
 
 ### Testing:
   * Replace **{Python_Project}** with the baseline path of the python program.
