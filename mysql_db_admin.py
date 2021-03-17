@@ -652,6 +652,38 @@ def _process_non_json(server, args_array, outdata, mode, **kwargs):
         mail.send_mail(use_mailx=args_array.get("-u", False))
 
 
+def listdbs(server, args_array, **kwargs):
+
+    """Function:  listdbs
+
+    Description:  List user or user/system databases in the database instance.
+
+    Arguments:
+        (input) server -> Server instance.
+        (input) args_array -> Dictionary of command line options.
+        (input) **kwargs:
+            sys_dbs -> List of system databases.
+
+    """
+
+    args_array = dict(args_array)
+    sys_dbs = list(kwargs.get("sys_dbs", []))
+    db_list = gen_libs.dict_2_list(mysql_libs.fetch_db_dict(server),
+                                   "Database")
+
+    if "-a" in args_array:
+        print("List of user and system databases:")
+
+        for item in db_list:
+            print("    %s" % (item))
+
+    else:
+        print("List of user databases:")
+
+        for item in gen_libs.del_not_and_list(db_list, sys_dbs):
+            print("    %s" % (item))
+
+
 def run_program(args_array, func_dict, **kwargs):
 
     """Function:  run_program

@@ -16,6 +16,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 
 ### Added
 - Added -L option to list databases in the database instance.
+- listdbs:  List user or user/system databases in the database instance.
 - \_process_json:  Private function for status to process json format data.
 
 ### Changed
