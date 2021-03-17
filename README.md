@@ -49,7 +49,7 @@
 # Installation:
 
 Install the project using git.
-  * Replace **{Python_Project}** with the baseline path of the python program.
+  * From here on out, any reference to **{Python_Project}** or **PYTHON_PROJECT** replace with the baseline path of the python program.
 
 ```
 umask 022
@@ -78,7 +78,6 @@ pip install -r requirements-python-lib.txt --target mongo_lib/lib --trusted-host
 ```
 
 # Configuration:
-  * Replace **PYTHON_PROJECT** with the baseline path of the python program.
 
 Create MySQL configuration file and make the appropriate change to the environment.
   * Change these entries in the MySQL setup:
@@ -144,7 +143,6 @@ chmod 600 mongo.py
 # Program Help Function:
 
   The program has a -h (Help option) that will show display an usage message.  The help message will usually consist of a description, usage, arugments to the program, example, notes about the program, and any known bugs not yet fixed.  To run the help command:
-  * Replace **{Python_Project}** with the baseline path of the python program.
 
 ```
 {Python_Project}/mysql-db-admin/mysql_db_admin.py -h
@@ -160,7 +158,6 @@ chmod 600 mongo.py
 Install the project using the procedures in the Installation section.
 
 ### Testing:
-  * Replace **{Python_Project}** with the baseline path of the python program.
 
 ```
 cd {Python_Project}/mysql-db-admin
