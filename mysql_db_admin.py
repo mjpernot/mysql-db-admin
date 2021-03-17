@@ -729,7 +729,7 @@ def main():
     file_chk_list = ["-o"]
     file_crt_list = ["-o"]
     func_dict = {"-A": analyze, "-C": check, "-D": optimize, "-S": checksum,
-                 "-M": status}
+                 "-M": status, "-L": listdbs}
     opt_con_req_list = {"-i": ["-m"], "-s": ["-e"], "-u": ["-e"]}
     opt_def_dict = {"-t": None, "-A": [], "-C": [], "-D": [], "-S": [],
                     "-i": "sysmon:mysql_db_status"}
@@ -737,11 +737,12 @@ def main():
     opt_req_list = ["-c", "-d"]
     opt_val_list = ["-c", "-d", "-t", "-A", "-C", "-D", "-S", "-i", "-m", "-o",
                     "-e", "-s", "-y"]
-    opt_xor_dict = {"-A": ["-C", "-D", "-M", "-S"],
-                    "-C": ["-A", "-D", "-M", "-S"],
-                    "-D": ["-A", "-C", "-M", "-S"],
-                    "-S": ["-A", "-C", "-D", "-M"],
-                    "-M": ["-A", "-C", "-D", "-S"]}
+    opt_xor_dict = {"-A": ["-C", "-D", "-M", "-S", "-L"],
+                    "-C": ["-A", "-D", "-M", "-S", "-L"],
+                    "-D": ["-A", "-C", "-M", "-S", "-L"],
+                    "-S": ["-A", "-C", "-D", "-M", "-L"],
+                    "-M": ["-A", "-C", "-D", "-S", "-L"],
+                    "-L": ["-A", "-C", "-D", "-S", "-M"]}
     sys_dbs = ["performance_schema", "information_schema", "mysql"]
 
     # Process argument list from command line.

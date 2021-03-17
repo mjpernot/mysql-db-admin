@@ -19,6 +19,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - \_process_json:  Private function for status to process json format data.
 
 ### Changed
+- main:  Added -L option to the argument checks.
 - status: Refactored the function.
 - main:  Set "-j" option to args_array if "-i" and "-m" options are present.
 - \_process_non_json, status:  Determine whether to use sendmail or mailx when using the mail option.
