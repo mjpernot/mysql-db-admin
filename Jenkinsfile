@@ -38,6 +38,7 @@ pipeline {
                 ./test/unit/mysql_db_admin/check.py
                 ./test/unit/mysql_db_admin/checksum.py
                 ./test/unit/mysql_db_admin/detect_dbs.py
+                ./test/unit/mysql_db_admin/listdbs.py
                 ./test/unit/mysql_db_admin/optimize.py
                 ./test/unit/mysql_db_admin/process_request.py
                 ./test/unit/mysql_db_admin/proc_all_dbs.py
