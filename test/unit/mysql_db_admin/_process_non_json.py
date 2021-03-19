@@ -75,17 +75,23 @@ class Mail(object):
 
         return True
 
-    def send_mail(self):
+    def send_mail(self, use_mailx=False):
 
         """Method:  get_name
 
         Description:  Stub method holder for Mail.send_mail.
 
         Arguments:
+            (input) use_mailx -> True|False - To use mailx command.
 
         """
 
-        return True
+        status = True
+
+        if use_mailx:
+            status = True
+
+        return status
 
 
 class Server(object):
@@ -140,6 +146,7 @@ class UnitTest(unittest.TestCase):
 
     Methods:
         setUp -> Initialize testing environment.
+        test_mailx_non_json -> Test with using mailx.
         test_mail_non_json -> Test with emailing out for non-json format.
         test_file_non_json -> Test with writing to file for non-json format.
         test_stdout_suppress_non_json -> Test with std out being suppressed.
@@ -160,9 +167,24 @@ class UnitTest(unittest.TestCase):
         self.server = Server()
         self.mail = Mail()
         self.args_array = {"-z": True}
+        self.args_arraya = {"-z": True, "-u": True}
         self.args_array2 = {}
         self.mode = "w"
         self.outdata = {"Application": "MySQL Database"}
+
+    def test_mailx_non_json(self):
+
+        """Function:  test_mailx_non_json
+
+        Description:  Test with using mailx.
+
+        Arguments:
+
+        """
+
+        self.assertFalse(mysql_db_admin._process_non_json(
+            self.server, self.args_arraya, self.outdata, self.mode,
+            mail=self.mail))
 
     def test_mail_non_json(self):
 

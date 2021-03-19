@@ -3,8 +3,8 @@
 
 """Program:  mysql_db_admin.py
 
-    Description:  Can run a number of different administration functions such
-        as compacting/defraging a table, checking a table for errors, analyze a
+    Description:  Run a number of different administration functions such as
+        compacting/defraging a table, checking a table for errors, analyze a
         table's key distribution (index check), or get a checksum on a table.
         The options will allow for for a single object, multiple objects, or
         all objects.  Also can return the database's status to include uptime,
@@ -12,50 +12,58 @@
 
     Usage:
         mysql_db_admin.py -c file -d path
-            {-C [db_name [db_name2 ...]] [-t table_name [table_name2 ...]]} |
-            {-A [db_name [db_name2 ...] [-t table_name [table_name2 ...]]} |
-            {-S [db_name [db_name2 ...]] [-t table_name [table_name2 ...]]} |
-            {-D [db_name [db_name2 ...]] [-t table_name [table_name2 ...]]} |
-            {-M [-j [-f]] | [-i [db_name:table_name] -m config_file] |
-                [-e to_email [to_email2 ...] [-s subject_line]] | [-z] |
-                [-o dir_path/file [-a]]} |
+            {-C [db_name [db_name2 ...]] [-t table_name [table_name2 ...]] |
+             -A [db_name [db_name2 ...] [-t table_name [table_name2 ...]] |
+             -S [db_name [db_name2 ...]] [-t table_name [table_name2 ...]] |
+             -D [db_name [db_name2 ...]] [-t table_name [table_name2 ...]] |
+             -M [-j [-f]] | [-i [db_name:table_name] -m config_file] |
+                [-e to_email [to_email2 ...] [-s subject_line] [-u]] | [-z] |
+                [-o dir_path/file [-a]] |
+             -L [-a]}
             [-y flavor_id]
             [-v | -h]
 
     Arguments:
         -c file => Server configuration file.  Required arg.
         -d dir path => Directory path to config file (-c). Required arg.
+
         -C [database name(s)] => Check a table for errors.
-        -A [database name(s)] => Analyze a table's key distribution
-            (checks the table's indexes).
+            -t table name(s) => Table names to check.
+
+        -A [database name(s)] => Analyze a table's key distribution, checks the
+                table's indexes.
+            -t table name(s) => Table names to check.
+
         -S [database name(s)] => Return a checksum on a table.
-        -D [database name(s)] => Optimize/defragment a table (command
-            runs an Alter Table and Analyze command on the table).
-        -M Display the current database status, such as uptime, memory
-            use, connection usage, and status.
-        -m file => Mongo config file.  Is loaded as a python, do not
-            include the .py extension with the name.
-        -j => Convert output to JSON format.
-            For use with the -M option.
-        -f => Flatten the JSON data structure to file and standard out.
-            For use with the -j option.
-        -i {database:collection} => Name of database and collection.
-            Default: sysmon:mysql_db_status
-            This option requires option:  -m
-        -o path/file => Directory path and file name for output.
-            Use the -a option to append to an existing file.
-            For use with the -M option.
-        -a => Append output to output file.
-        -t table name(s) => Table names to check.
-            Used with the -C, -A, -S & -D options.
-        -s subject_line => Subject line of email.  Optional, will create own
-            subject line if one is not provided.
-            This option requires option:  -e
-        -e to_email_address(es) => Enables emailing capability for an option if
-            the option allows it.  Sends output to one or more email addresses.
-            Email addresses are delimited by spaces.
+            -t table name(s) => Table names to check.
+
+        -D [database name(s)] => Optimize/defragment a table, the command
+                runs an Alter Table and Analyze command on the table.
+            -t table name(s) => Table names to check.
+
+        -M => Display the current database status, such as uptime, memory
+                use, connection usage, and status.
+            -m file => Mongo config file.  Is loaded as a python, do not
+                include the .py extension with the name.
+            -j => Convert output to JSON format.
+                -f => Flatten the JSON data structure to file and standard out.
+            -i {database:collection} => Name of database and collection.
+                Default: sysmon:mysql_db_status
+            -o path/file => Directory path and file name for output.
+                -a => Append output to output file.
+            -s subject_line => Subject line of email.  Optional, will create
+                own subject line if one is not provided.
+            -e to_email_address(es) => Enables emailing capability for an
+                    option if the option allows it.  Sends output to one or
+                    more email addresses.  Email addresses are delimited by
+                    spaces.
+                -u => Override the default mail command and use mailx.
+            -z => Suppress standard out.
+
+        -L => Display list of user databases.
+            -k => Include system databases in the list.
+
         -y value => A flavor id for the program lock.  To create unique lock.
-        -z => Suppress standard out.
         -v => Display version of this program.
         -h => Help and usage message.
 
@@ -77,15 +85,14 @@
 
             # Configuration file for MySQL database server.
             user = "USER"
-            passwd = "PASSWORD"
-            host = "IP_ADDRESS"
-            name = "HOSTNAME"
+            japd = "PSWORD"
+            host = "HOST_IP"
+            name = "HOST_NAME"
             sid = SERVER_ID
             extra_def_file = "PYTHON_PROJECT/config/mysql.cfg"
             serv_os = "Linux"
-            # Default port for MySQL is 3306.
             port = 3306
-            cfg_file = "DIRECTORY_PATH/my.cnf"
+            cfg_file = "MYSQL_DIRECTORY/mysqld.cnf"
 
         NOTE 1:  Include the cfg_file even if running remotely as the file will
             be used in future releases.
@@ -94,6 +101,7 @@
             of the --defaults-extra-file option (i.e. extra_def_file) in the
             database configuration file.  See below for the
             defaults-extra-file format.
+        NOTE 3:  Ignore the rep_user and rep_japd entries.  Not required.
 
         configuration modules -> name is runtime dependent as it can be
             used to connect to different databases with different names.
@@ -118,13 +126,16 @@
 
             # Single Configuration file for Mongo Database Server.
             user = "USER"
-            passwd = "PASSWORD"
-            host = "IP_ADDRESS"
+            japd = "PSWORD"
+            host = "HOST_IP"
             name = "HOSTNAME"
-            # Default port for Mongo is 27017
             port = 27017
             conf_file = None
             auth = True
+            auth_db = "admin"
+            auth_mech = "SCRAM-SHA-1"
+            use_arg = True
+            use_uri = False
 
             2.)  Replica Set connection:  Same format as above, but with these
                 additional entries at the end of the configuration file:
@@ -152,7 +163,6 @@ import json
 # Local
 import lib.arg_parser as arg_parser
 import lib.gen_libs as gen_libs
-import lib.cmds_gen as cmds_gen
 import lib.gen_class as gen_class
 import mysql_lib.mysql_libs as mysql_libs
 import mysql_lib.mysql_class as mysql_class
@@ -527,52 +537,72 @@ def status(server, args_array, **kwargs):
 
     """
 
-    mode = "w"
-    indent = 4
     args_array = dict(args_array)
     server.upd_srv_stat()
 
-    if args_array.get("-a", False):
-        mode = "a"
-
-    if args_array.get("-f", False):
-        indent = None
+    mode = "a" if args_array.get("-a", False) else "w"
 
     outdata = {"Application": "MySQL Database",
                "Server": server.name,
                "AsOf": datetime.datetime.strftime(datetime.datetime.now(),
-                                                  "%Y-%m-%d %H:%M:%S")}
-    outdata.update({"Memory": {"CurrentUsage": server.cur_mem_mb,
-                               "MaxUsage": server.max_mem_mb,
-                               "PercentUsed": server.prct_mem},
-                    "UpTime": server.days_up,
-                    "Connections": {"CurrentConnected": server.cur_conn,
-                                    "MaxConnections": server.max_conn,
-                                    "PercentUsed": server.prct_conn}})
+                                                  "%Y-%m-%d %H:%M:%S"),
+               "Memory": {"CurrentUsage": server.cur_mem_mb,
+                          "MaxUsage": server.max_mem_mb,
+                          "PercentUsed": server.prct_mem},
+               "UpTime": server.days_up,
+               "Connections": {"CurrentConnected": server.cur_conn,
+                               "MaxConnections": server.max_conn,
+                               "PercentUsed": server.prct_conn}}
 
     if "-j" in args_array:
-        jdata = json.dumps(outdata, indent=indent)
-        mongo_cfg = kwargs.get("class_cfg", None)
-        db_tbl = kwargs.get("db_tbl", None)
-        ofile = kwargs.get("ofile", None)
-        mail = kwargs.get("mail", None)
-
-        if mongo_cfg and db_tbl:
-            dbs, tbl = db_tbl.split(":")
-            mongo_libs.ins_doc(mongo_cfg, dbs, tbl, outdata)
-
-        if ofile:
-            gen_libs.write_file(ofile, mode, jdata)
-
-        if mail:
-            mail.add_2_msg(jdata)
-            mail.send_mail()
-
-        if not args_array.get("-z", False):
-            gen_libs.print_data(jdata)
+        _process_json(args_array, outdata, mode, **kwargs)
 
     else:
         _process_non_json(server, args_array, outdata, mode, **kwargs)
+
+
+def _process_json(args_array, outdata, mode, **kwargs):
+
+    """Function:  _process_json
+
+    Description:  Private function for status to process json format data.
+
+    Arguments:
+        (input) args_array -> Dictionary of command line options.
+        (input) outdata -> Dictionary of performance data.
+        (input) mode -> File write mode.
+        (input) **kwargs:
+            ofile -> file name - Name of output file.
+            db_tbl database:table_name -> Mongo database and table name.
+            class_cfg -> Mongo server configuration.
+            mail -> Mail instance.
+
+    """
+
+    indent = None if args_array.get("-f", False) else 4
+
+    jdata = json.dumps(outdata, indent=indent)
+    mongo_cfg = kwargs.get("class_cfg", None)
+    db_tbl = kwargs.get("db_tbl", None)
+    ofile = kwargs.get("ofile", None)
+    mail = kwargs.get("mail", None)
+
+    if mongo_cfg and db_tbl:
+        dbs, tbl = db_tbl.split(":")
+        conn_stats = mongo_libs.ins_doc(mongo_cfg, dbs, tbl, outdata)
+
+        if not conn_stats[0]:
+            print("Error: status.mongo_insert: %s" % (conn_stats[1]))
+
+    if ofile:
+        gen_libs.write_file(ofile, mode, jdata)
+
+    if mail:
+        mail.add_2_msg(jdata)
+        mail.send_mail(use_mailx=args_array.get("-u", False))
+
+    if not args_array.get("-z", False):
+        gen_libs.print_data(jdata)
 
 
 def _process_non_json(server, args_array, outdata, mode, **kwargs):
@@ -619,7 +649,39 @@ def _process_non_json(server, args_array, outdata, mode, **kwargs):
 
     if mail:
         mail.add_2_msg(pdata)
-        mail.send_mail()
+        mail.send_mail(use_mailx=args_array.get("-u", False))
+
+
+def listdbs(server, args_array, **kwargs):
+
+    """Function:  listdbs
+
+    Description:  List user or user/system databases in the database instance.
+
+    Arguments:
+        (input) server -> Server instance.
+        (input) args_array -> Dictionary of command line options.
+        (input) **kwargs:
+            sys_dbs -> List of system databases.
+
+    """
+
+    args_array = dict(args_array)
+    sys_dbs = list(kwargs.get("sys_dbs", []))
+    db_list = gen_libs.dict_2_list(mysql_libs.fetch_db_dict(server),
+                                   "Database")
+
+    if "-k" in args_array:
+        print("List of user and system databases:")
+
+        for item in db_list:
+            print("    %s" % (item))
+
+    else:
+        print("List of user databases:")
+
+        for item in gen_libs.del_not_and_list(db_list, sys_dbs):
+            print("    %s" % (item))
 
 
 def run_program(args_array, func_dict, **kwargs):
@@ -641,25 +703,31 @@ def run_program(args_array, func_dict, **kwargs):
     func_dict = dict(func_dict)
     server = mysql_libs.create_instance(args_array["-c"], args_array["-d"],
                                         mysql_class.Server)
-    server.connect()
-    outfile = args_array.get("-o", None)
-    db_tbl = args_array.get("-i", None)
-    mongo = None
-    mail = None
+    server.connect(silent=True)
 
-    if args_array.get("-m", None):
-        mongo = gen_libs.load_module(args_array["-m"], args_array["-d"])
+    if server.conn_msg:
+        print("run_program:  Error encountered on server(%s):  %s" %
+              (server.name, server.conn_msg))
 
-    if args_array.get("-e", None):
-        mail = gen_class.setup_mail(args_array.get("-e"),
-                                    subj=args_array.get("-s", None))
+    else:
+        outfile = args_array.get("-o", None)
+        db_tbl = args_array.get("-i", None)
+        mongo = None
+        mail = None
 
-    # Intersect args_array and func_dict to determine which functions to call.
-    for item in set(args_array.keys()) & set(func_dict.keys()):
-        func_dict[item](server, args_array, ofile=outfile, db_tbl=db_tbl,
-                        class_cfg=mongo, mail=mail, **kwargs)
+        if args_array.get("-m", None):
+            mongo = gen_libs.load_module(args_array["-m"], args_array["-d"])
 
-    cmds_gen.disconnect([server])
+        if args_array.get("-e", None):
+            mail = gen_class.setup_mail(args_array.get("-e"),
+                                        subj=args_array.get("-s", None))
+
+        # Intersect args_array & func_dict to determine which functions to call
+        for item in set(args_array.keys()) & set(func_dict.keys()):
+            func_dict[item](server, args_array, ofile=outfile, db_tbl=db_tbl,
+                            class_cfg=mongo, mail=mail, **kwargs)
+
+        mysql_libs.disconnect(server)
 
 
 def main():
@@ -693,24 +761,30 @@ def main():
     file_chk_list = ["-o"]
     file_crt_list = ["-o"]
     func_dict = {"-A": analyze, "-C": check, "-D": optimize, "-S": checksum,
-                 "-M": status}
-    opt_con_req_list = {"-i": ["-m"], "-s": ["-e"]}
+                 "-M": status, "-L": listdbs}
+    opt_con_req_list = {"-i": ["-m"], "-s": ["-e"], "-u": ["-e"]}
     opt_def_dict = {"-t": None, "-A": [], "-C": [], "-D": [], "-S": [],
                     "-i": "sysmon:mysql_db_status"}
     opt_multi_list = ["-A", "-C", "-D", "-S", "-t", "-e", "-s"]
     opt_req_list = ["-c", "-d"]
     opt_val_list = ["-c", "-d", "-t", "-A", "-C", "-D", "-S", "-i", "-m", "-o",
                     "-e", "-s", "-y"]
-    opt_xor_dict = {"-A": ["-C", "-D", "-M", "-S"],
-                    "-C": ["-A", "-D", "-M", "-S"],
-                    "-D": ["-A", "-C", "-M", "-S"],
-                    "-S": ["-A", "-C", "-D", "-M"],
-                    "-M": ["-A", "-C", "-D", "-S"]}
-    sys_dbs = ["performance_schema", "information_schema", "mysql"]
+    opt_xor_dict = {"-A": ["-C", "-D", "-M", "-S", "-L"],
+                    "-C": ["-A", "-D", "-M", "-S", "-L"],
+                    "-D": ["-A", "-C", "-M", "-S", "-L"],
+                    "-S": ["-A", "-C", "-D", "-M", "-L"],
+                    "-M": ["-A", "-C", "-D", "-S", "-L"],
+                    "-L": ["-A", "-C", "-D", "-S", "-M"]}
+    sys_dbs = ["performance_schema", "information_schema", "mysql", "sys"]
 
     # Process argument list from command line.
     args_array = arg_parser.arg_parse2(cmdline.argv, opt_val_list,
                                        opt_def_dict, multi_val=opt_multi_list)
+
+    # Set JSON format for certain option settings
+    if "-i" in args_array.keys() and "-m" in args_array.keys() \
+       and "-j" not in args_array.keys():
+        args_array["-j"] = True
 
     if not gen_libs.help_func(args_array, __version__, help_message) \
        and not arg_parser.arg_require(args_array, opt_req_list) \

@@ -4,6 +4,39 @@ All notable changes to this project will be documented in this file.
 The format is based on "Keep a Changelog".  This project adheres to Semantic Versioning.
 
 
+## [3.1.3] - 2020-11-21
+- Updated to use the mysql_libs v5.0.4 library.
+- Updated to use pymongo v3.8.0.
+- Updated to be used in FIPS 140-2 environment.
+- Updated to use python_lib v2.8.3 to use mailx capability.
+
+### Fixed
+- Allow to override the default sendmail (postfix) and use mailx command.
+- config/mysql.cfg.TEMPLATE:  Point to correct socket file.
+
+### Added
+- Added -L option to list databases in the database instance.
+- listdbs:  List user or user/system databases in the database instance.
+- \_process_json:  Private function for status to process json format data.
+
+### Changed
+- main:  Added system database "sys" to sys_dbs setting.
+- main:  Added -L option to the argument checks.
+- status: Refactored the function.
+- main:  Set "-j" option to args_array if "-i" and "-m" options are present.
+- \_process_non_json, status:  Determine whether to use sendmail or mailx when using the mail option.
+- main:  Added -u option to allow override of sendmail and use mailx.
+- run_program:  Process status connection on MySQL connection call.
+- status:  Processed status return from mongo_libs.ins_doc call.
+- run_program:  Replaced cmds_gen.disconnect with mysql_libs.disconnect call.
+- config/mongo.py.TEMPLATE:  Changed configuration entry and added a number of configuration entries.
+- config/mysql_cfg.py.TEMPLATE:  Changed configuration entry.
+- Documentation updates.
+
+### Removed
+- mysql_libs.cmds_gen module.
+
+
 ## [3.1.2] - 2020-06-10
 ### Fixed
 - status:  Added email capability for non-json format.
@@ -13,9 +46,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - status:  Replaced section code with call to \_process_non_json function.
 - status:  Added standard out suppression for non-json format.
 - status:  Moved the initialization of the dictionary structure to outside of the if statement.
-- run_check:  Using global variable for template printing.
-- run_optimize:  Using global variable for template printing.
-- run_analyze:  Using global variable for template printing.
+- run_optimize, run_analyze, run_check:  Using global variable for template printing.
 
 ### Added
 - \_process_non_json:  Private function for status to process non-json format data.
@@ -32,21 +63,10 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - main:  Fixed handling command line arguments from SonarQube scan finding.
 
 ### Changed
-- status:  Converted JSON output to CamelCase.
-- run_check:  Reformatted output.
-- run_optimize:  Reformatted output.
-- run_checksum:  Reformatted output.
-- run_analyze:  Reformatted output.
+- status:  Converted JSON output to PascalCase.
+- run_optimize, run_checksum, run_analyze, run_check:  Reformatted output.
 - status:  Refactored function to reduce program complexity.
-- run_program: Changed variable name to standard naming convention.
-- status: Changed variable name to standard naming convention.
-- \_proc_some_tbls: Changed variable name to standard naming convention.
-- \_proc_all_tbls: Changed variable name to standard naming convention.
-- \_proc_all_dbs: Changed variable name to standard naming convention.
-- run_check: Changed variable name to standard naming convention.
-- run_optimize: Changed variable name to standard naming convention.
-- run_checksum: Changed variable name to standard naming convention.
-- run_analyze: Changed variable name to standard naming convention.
+- Changed variable name to standard naming convention in multiple functions.
 - main: Added -y option setting to the ProgramLock setup.
 - status:  Added flattening of JSON structure to standard out and to file.
 - status:  Added file mode option to writing data to a file.  Default is write.
@@ -61,8 +81,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 
 ## [3.1.0] - 2019-12-06
 ### Fixed
-- run_analyze:  Fixed problem with mutable default arguments issue.
-- run_optimize:  Fixed problem with mutable default arguments issue.
+- run_optimize, run_analyze:  Fixed problem with mutable default arguments issue.
 
 ### Added
 - Added a program lock mechanism to the program.
@@ -84,14 +103,7 @@ Breaking Change
 - Modified program to use the mysql_class v4.0.0 version.  The v4.0.0 replaces the MySQLdb support library with the mysql.connector support library.
 
 ### Fixed
-- run_program:  Fixed problem with mutable default arguments issue.
-- status:  Fixed problem with mutable default arguments issue.
-- check:  Fixed problem with mutable default arguments issue.
-- optimize:  Fixed problem with mutable default arguments issue.
-- checksum:  Fixed problem with mutable default arguments issue.
-- analyze:  Fixed problem with mutable default arguments issue.
-- process_request:  Fixed problem with mutable default arguments issue.
-- detect_dbs:  Fixed problem with mutable default arguments issue.
+- Fixed problem with mutable default arguments issue in multiple functions.
 
 ### Changed
 - status:  Added capability to mail out JSON formatted data.
@@ -117,11 +129,7 @@ Breaking Change
 Breaking Change
 
 ### Changed
-- Changed "mongo_libs" calls to new naming schema.
-- Changed "mysql_libs" calls to new naming schema.
-- Changed "cmds_gen" calls to new naming schema.
-- Changed "gen_libs" calls to new naming schema.
-- Changed "arg_parser" calls to new naming schema.
+- Changed "mongo_libs", "mysql_libs", "cmds_gen", "gen_libs", and "arg_parser" calls to new naming schema.
 - Changed function names from uppercase to lowercase.
 - Setup single-source version control.
 
@@ -152,16 +160,12 @@ Breaking Change
 
 ## [1.4.0] - 2016-12-15
 ### Changed
-- Run_Check:  Changed print to use format option.
-- Run_Optimize:  Changed print to use format option.
-- Run_Checksum:  Changed print to use format option.
-- Run_Analyze:  Changed print to use format option.
+- Run_Optimize, Run_Checksum, Run_Analyze, Run_Check:  Changed print to use format option.
 
 
 ## [1.3.0] - 2016-09-15
 ### Changed
-- Run_Analyze:  Changed the way the system databases validated and skipped for the function.
-- Run_Optimize:  Changed the way the system databases validated and skipped for the function.
+- Run_Optimize, Run_Analyze:  Changed the way the system databases validated and skipped for the function.
 - main:  Create list of system databases and pass to other functions.
 
 
@@ -169,10 +173,7 @@ Breaking Change
 ### Changed
 - Run_Program:  Processing for some of the new options and passing to the functions.  Setup a Mongo instance.
 - main:  Added options "-M", "-m", "-f", "-i", and "-o" options to a number of variables and added a number of new function call checks.
-- Optimize:  Pass \*\*kwargs to Process_Request function call.
-- Checksum:  Pass \*\*kwargs to Process_Request function call.
-- Analyze:  Pass \*\*kwargs to Process_Request function call.
-- Check:  Pass \*\*kwargs to Process_Request function call.
+- Checksum, Analyze, Check, Optimize:  Pass \*\*kwargs to Process_Request function call.
 - Process_Request:  Receive \*\*kwargs into function and passed \*\*kwargs to Run_Check, Run_Analyze, Run_Checksum, and Run_Optimize functions.
 
 ### Added
@@ -181,8 +182,7 @@ Breaking Change
 
 ## [1.1.0] - 2016-04-04
 ### Changed
-- Run_Analyze:  Per MySQL Reference documentation, no system database should be analyzed or optimized.  Removing "mysql", "information_schema", and "performance_schema" from the check.
-- Run_Optimize:  Per MySQL Reference documentation, no system database should be analyzed or optimized.  Removing "mysql", "information_schema", and "performance_schema" from the check.
+- Run_Optimize, Run_Analyze:  Per MySQL Reference documentation, no system database should be analyzed or optimized.  Removing "mysql", "information_schema", and "performance_schema" from the check.
 
 
 ## [1.0.0] - 2016-04-01

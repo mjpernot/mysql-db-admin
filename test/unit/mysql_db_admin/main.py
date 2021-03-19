@@ -70,6 +70,8 @@ class UnitTest(unittest.TestCase):
 
     Methods:
         setUp -> Initialize testing environment.
+        test_add_j_option -> Test with -j option already present.
+        test_miss_j_option -> Test with adding missing -j option.
         test_help_true -> Test help if returns true.
         test_help_false -> Test help if returns false.
         test_arg_req_true -> Test arg_require if returns true.
@@ -101,7 +103,61 @@ class UnitTest(unittest.TestCase):
 
         self.args_array = {"-c": "CfgFile", "-d": "CfgDir"}
         self.args_array2 = {"-c": "CfgFile", "-d": "CfgDir", "-y": "Flavor"}
+        self.args_array3 = {"-c": "CfgFile", "-d": "CfgDir", "-i": "db:tbl",
+                            "-m": "mongo"}
+        self.args_array4 = {"-c": "CfgFile", "-d": "CfgDir", "-i": "db:tbl",
+                            "-m": "mongo", "-j": True}
         self.proglock = ProgramLock(["cmdline"], "FlavorID")
+
+    @mock.patch("mysql_db_admin.run_program", mock.Mock(return_value=True))
+    @mock.patch("mysql_db_admin.gen_libs.help_func",
+                mock.Mock(return_value=False))
+    @mock.patch("mysql_db_admin.gen_class.ProgramLock")
+    @mock.patch("mysql_db_admin.arg_parser")
+    def test_add_j_option(self, mock_arg, mock_lock):
+
+        """Function:  test_add_j_option
+
+        Description:  Test with -j option already present.
+
+        Arguments:
+
+        """
+
+        mock_arg.arg_parse2.return_value = self.args_array4
+        mock_arg.arg_require.return_value = False
+        mock_arg.arg_xor_dict.return_value = True
+        mock_arg.arg_cond_req.return_value = True
+        mock_arg.arg_dir_chk_crt.return_value = False
+        mock_arg.arg_file_chk.return_value = False
+        mock_lock.return_value = self.proglock
+
+        self.assertFalse(mysql_db_admin.main())
+
+    @mock.patch("mysql_db_admin.run_program", mock.Mock(return_value=True))
+    @mock.patch("mysql_db_admin.gen_libs.help_func",
+                mock.Mock(return_value=False))
+    @mock.patch("mysql_db_admin.gen_class.ProgramLock")
+    @mock.patch("mysql_db_admin.arg_parser")
+    def test_miss_j_option(self, mock_arg, mock_lock):
+
+        """Function:  test_miss_j_option
+
+        Description:  Test with adding missing -j option.
+
+        Arguments:
+
+        """
+
+        mock_arg.arg_parse2.return_value = self.args_array3
+        mock_arg.arg_require.return_value = False
+        mock_arg.arg_xor_dict.return_value = True
+        mock_arg.arg_cond_req.return_value = True
+        mock_arg.arg_dir_chk_crt.return_value = False
+        mock_arg.arg_file_chk.return_value = False
+        mock_lock.return_value = self.proglock
+
+        self.assertFalse(mysql_db_admin.main())
 
     @mock.patch("mysql_db_admin.gen_libs.help_func")
     @mock.patch("mysql_db_admin.arg_parser.arg_parse2")

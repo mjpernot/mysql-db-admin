@@ -1,12 +1,12 @@
 #!/usr/bin/python
 # Classification (U)
 
-"""Program:  status.py
+"""Program:  _process_json.py
 
-    Description:  Unit testing of status in mysql_db_admin.py.
+    Description:  Unit testing of _process_json in mysql_db_admin.py.
 
     Usage:
-        test/unit/mysql_db_admin/status.py
+        test/unit/mysql_db_admin/_process_json.py
 
     Arguments:
 
@@ -86,56 +86,12 @@ class Mail(object):
 
         """
 
-        status = True
+        _process_json = True
 
         if use_mailx:
-            status = True
+            _process_json = True
 
-        return status
-
-
-class Server(object):
-
-    """Class:  Server
-
-    Description:  Class stub holder for mysql_class.Server class.
-
-    Methods:
-        __init__ -> Class initialization.
-        upd_srv_stat -> upd_srv_stat method.
-
-    """
-
-    def __init__(self):
-
-        """Method:  __init__
-
-        Description:  Class initialization.
-
-        Arguments:
-
-        """
-
-        self.name = "ServerName"
-        self.cur_mem_mb = "cur_mem_mb"
-        self.max_mem_mb = "max_mem_mb"
-        self.prct_mem = "prct_mem"
-        self.days_up = "days_up"
-        self.cur_conn = "cur_conn"
-        self.max_conn = "max_conn"
-        self.prct_conn = "prct_conn"
-
-    def upd_srv_stat(self):
-
-        """Method:  upd_srv_stat
-
-        Description:  Stub method holder for mysql_class.Server.upd_srv_stat.
-
-        Arguments:
-
-        """
-
-        return True
+        return _process_json
 
 
 class UnitTest(unittest.TestCase):
@@ -146,10 +102,6 @@ class UnitTest(unittest.TestCase):
 
     Methods:
         setUp -> Initialize testing environment.
-        test_mailx_non_json -> Test with using mailx out for non-json format.
-        test_mail_non_json -> Test with emailing out for non-json format.
-        test_file_non_json -> Test with writing to file for non-json format.
-        test_stdout_suppress_non_json -> Test with std out being suppressed.
         test_stdout -> Test with standard out.
         test_stdout_suppress_json -> Test with standard out being suppressed.
         test_mailx -> Test with using mailx.
@@ -174,7 +126,6 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        self.server = Server()
         self.mail = Mail()
         self.args_array = {"-j": True, "-z": True}
         self.args_arraya = {"-j": True, "-z": True, "-u": True}
@@ -184,60 +135,8 @@ class UnitTest(unittest.TestCase):
         self.args_array5 = {"-j": True, "-f": True, "-z": True}
         self.args_array6 = {"-z": True}
         self.args_array6a = {"-z": True, "-u": True}
-
-    def test_mailx_non_json(self):
-
-        """Function:  test_mailx_non_json
-
-        Description:  Test with using mailx out for non-json format.
-
-        Arguments:
-
-        """
-
-        self.assertFalse(mysql_db_admin.status(self.server, self.args_array6a,
-                                               mail=self.mail))
-
-    def test_mail_non_json(self):
-
-        """Function:  test_mail_non_json
-
-        Description:  Test with emailing out for non-json format.
-
-        Arguments:
-
-        """
-
-        self.assertFalse(mysql_db_admin.status(self.server, self.args_array6,
-                                               mail=self.mail))
-
-    @mock.patch("mysql_db_admin.gen_libs.write_file")
-    def test_file_non_json(self, mock_write):
-
-        """Function:  test_file_non_json
-
-        Description:  Test with writing to file for standard format.
-
-        Arguments:
-
-        """
-
-        mock_write.return_value = True
-
-        self.assertFalse(mysql_db_admin.status(self.server, self.args_array6,
-                                               ofile="FileName"))
-
-    def test_stdout_suppress_non_json(self):
-
-        """Function:  test_stdout_suppress_non_json
-
-        Description:  Test with standard out being suppressed.
-
-        Arguments:
-
-        """
-
-        self.assertFalse(mysql_db_admin.status(self.server, self.args_array6))
+        self.mode = "w"
+        self.outdata = {"Application": "MySQL Database"}
 
     def test_stdout(self):
 
@@ -250,8 +149,9 @@ class UnitTest(unittest.TestCase):
         """
 
         with gen_libs.no_std_out():
-            self.assertFalse(mysql_db_admin.status(self.server,
-                                                   self.args_array3))
+            self.assertFalse(
+                mysql_db_admin._process_json(
+                    self.args_array3, self.outdata, self.mode))
 
     def test_stdout_suppress_json(self):
 
@@ -263,7 +163,9 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        self.assertFalse(mysql_db_admin.status(self.server, self.args_array))
+        self.assertFalse(
+            mysql_db_admin._process_json(
+                self.args_array, self.outdata, self.mode))
 
     @mock.patch("mysql_db_admin.mongo_libs.ins_doc")
     @mock.patch("mysql_db_admin.gen_libs.write_file")
@@ -280,8 +182,9 @@ class UnitTest(unittest.TestCase):
         mock_write.return_value = True
         mock_mongo.return_value = (True, None)
 
-        self.assertFalse(mysql_db_admin.status(self.server, self.args_arraya,
-                                               mail=self.mail))
+        self.assertFalse(
+            mysql_db_admin._process_json(
+                self.args_arraya, self.outdata, self.mode, mail=self.mail))
 
     @mock.patch("mysql_db_admin.mongo_libs.ins_doc")
     @mock.patch("mysql_db_admin.gen_libs.write_file")
@@ -298,8 +201,9 @@ class UnitTest(unittest.TestCase):
         mock_write.return_value = True
         mock_mongo.return_value = (True, None)
 
-        self.assertFalse(mysql_db_admin.status(self.server, self.args_array,
-                                               mail=self.mail))
+        self.assertFalse(
+            mysql_db_admin._process_json(
+                self.args_array, self.outdata, self.mode, mail=self.mail))
 
     @mock.patch("mysql_db_admin.mongo_libs.ins_doc")
     @mock.patch("mysql_db_admin.gen_libs.write_file")
@@ -316,8 +220,9 @@ class UnitTest(unittest.TestCase):
         mock_write.return_value = True
         mock_mongo.return_value = (True, None)
 
-        self.assertFalse(mysql_db_admin.status(self.server, self.args_array,
-                                               ofile="FileName"))
+        self.assertFalse(
+            mysql_db_admin._process_json(
+                self.args_array, self.outdata, self.mode, ofile="FileName"))
 
     @mock.patch("mysql_db_admin.mongo_libs.ins_doc")
     @mock.patch("mysql_db_admin.gen_libs.write_file")
@@ -334,8 +239,9 @@ class UnitTest(unittest.TestCase):
         mock_write.return_value = True
         mock_mongo.return_value = (True, None)
 
-        self.assertFalse(mysql_db_admin.status(self.server, self.args_array4,
-                                               ofile="FileName"))
+        self.assertFalse(
+            mysql_db_admin._process_json(
+                self.args_array4, self.outdata, self.mode, ofile="FileName"))
 
     @mock.patch("mysql_db_admin.mongo_libs.ins_doc")
     @mock.patch("mysql_db_admin.gen_libs.write_file")
@@ -354,8 +260,8 @@ class UnitTest(unittest.TestCase):
 
         with gen_libs.no_std_out():
             self.assertFalse(
-                mysql_db_admin.status(
-                    self.server, self.args_array, class_cfg="Cfg",
+                mysql_db_admin._process_json(
+                    self.args_array, self.outdata, self.mode, class_cfg="Cfg",
                     db_tbl="db:tbl"))
 
     @mock.patch("mysql_db_admin.mongo_libs.ins_doc")
@@ -374,8 +280,8 @@ class UnitTest(unittest.TestCase):
         mock_mongo.return_value = (True, None)
 
         self.assertFalse(
-            mysql_db_admin.status(
-                self.server, self.args_array, class_cfg="Cfg",
+            mysql_db_admin._process_json(
+                self.args_array, self.outdata, self.mode, class_cfg="Cfg",
                 db_tbl="db:tbl"))
 
     def test_non_json(self):
@@ -389,8 +295,9 @@ class UnitTest(unittest.TestCase):
         """
 
         with gen_libs.no_std_out():
-            self.assertFalse(mysql_db_admin.status(self.server,
-                                                   self.args_array2))
+            self.assertFalse(
+                mysql_db_admin._process_json(
+                    self.args_array2, self.outdata, self.mode))
 
     @mock.patch("mysql_db_admin.mongo_libs.ins_doc")
     @mock.patch("mysql_db_admin.gen_libs.write_file")
@@ -407,7 +314,9 @@ class UnitTest(unittest.TestCase):
         mock_write.return_value = True
         mock_mongo.return_value = (True, None)
 
-        self.assertFalse(mysql_db_admin.status(self.server, self.args_array))
+        self.assertFalse(
+            mysql_db_admin._process_json(
+                self.args_array, self.outdata, self.mode))
 
     @mock.patch("mysql_db_admin.mongo_libs.ins_doc")
     @mock.patch("mysql_db_admin.gen_libs.write_file")
@@ -424,7 +333,9 @@ class UnitTest(unittest.TestCase):
         mock_write.return_value = True
         mock_mongo.return_value = (True, None)
 
-        self.assertFalse(mysql_db_admin.status(self.server, self.args_array5))
+        self.assertFalse(
+            mysql_db_admin._process_json(
+                self.args_array5, self.outdata, self.mode))
 
 
 if __name__ == "__main__":
