@@ -108,4 +108,9 @@ pipeline {
             }
         }
     }
+    post {
+        always {
+            cleanWs disableDeferredWipeout: true
+        }
+    }
 }
