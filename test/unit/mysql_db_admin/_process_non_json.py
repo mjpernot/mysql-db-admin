@@ -42,9 +42,9 @@ class Mail(object):
     Description:  Class stub holder for gen_class.Mail class.
 
     Methods:
-        __init__ -> Class initialization.
-        add_2_msg -> add_2_msg method.
-        send_mail -> send_mail method.
+        __init__
+        add_2_msg
+        send_mail
 
     """
 
@@ -82,7 +82,7 @@ class Mail(object):
         Description:  Stub method holder for Mail.send_mail.
 
         Arguments:
-            (input) use_mailx -> True|False - To use mailx command.
+            (input) use_mailx
 
         """
 
@@ -101,8 +101,8 @@ class Server(object):
     Description:  Class stub holder for mysql_class.Server class.
 
     Methods:
-        __init__ -> Class initialization.
-        upd_srv_stat -> upd_srv_stat method.
+        __init__
+        upd_srv_stat
 
     """
 
@@ -145,12 +145,12 @@ class UnitTest(unittest.TestCase):
     Description:  Class which is a representation of a unit testing.
 
     Methods:
-        setUp -> Initialize testing environment.
-        test_mailx_non_json -> Test with using mailx.
-        test_mail_non_json -> Test with emailing out for non-json format.
-        test_file_non_json -> Test with writing to file for non-json format.
-        test_stdout_suppress_non_json -> Test with std out being suppressed.
-        test_non_json -> Test with in non-JSON format.
+        setUp
+        test_mailx_non_json
+        test_mail_non_json
+        test_file_non_json
+        test_stdout_suppress_non_json
+        test_non_json
 
     """
 
