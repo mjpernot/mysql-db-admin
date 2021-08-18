@@ -42,7 +42,7 @@ def check(server, args_array, **kwargs):
     Description:  Function stub holder for mysql_db_admin.check.
 
     Arguments:
-        (input) server -> Server instance.
+        (input) server
         (input) args_array -> Stub holder
         (input) **kwargs
             ofile -> Stub holder
@@ -67,7 +67,7 @@ class Server(object):
     Description:  Class stub holder for mysql_class.Server class.
 
     Methods:
-        __init__ -> Class initialization.
+        __init__
 
     """
 
@@ -109,12 +109,12 @@ class UnitTest(unittest.TestCase):
     Description:  Class which is a representation of a unit testing.
 
     Methods:
-        setUp -> Initialize testing environment.
-        test_connect_failure -> Test with failed connection.
-        test_connect_success -> Test with successful connection.
-        test_email -> Test with email option.
-        test_mongo -> Test with mongo option.
-        test_run_program -> Test run_program function.
+        setUp
+        test_connect_failure
+        test_connect_success
+        test_email
+        test_mongo
+        test_run_program
 
     """
 
