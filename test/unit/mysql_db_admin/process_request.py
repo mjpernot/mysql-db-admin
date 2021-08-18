@@ -42,9 +42,9 @@ def func_holder(server, dbs, tbl):
     Description:  Function stub holder for a generic function call.
 
     Arguments:
-        server -> Server class instance.
-        dbs -> Database name.
-        tbl -> Table name.
+        server
+        dbs
+        tbl
 
     """
 
@@ -63,7 +63,7 @@ class Server(object):
     Description:  Class stub holder for mysql_class.Server class.
 
     Methods:
-        __init__ -> Class initialization.
+        __init__
 
     """
 
@@ -87,11 +87,11 @@ class UnitTest(unittest.TestCase):
     Description:  Class which is a representation of a unit testing.
 
     Methods:
-        setUp -> Initialize testing environment.
-        test_single_miss_tbl -> Test with single missing table in a database.
-        test_single_tbl -> Test with single table in a database.
-        test_all_tbls -> Test with all tables in a database.
-        test_all_dbs -> Test with processing all databases.
+        setUp
+        test_single_miss_tbl
+        test_single_tbl
+        test_all_tbls
+        test_all_dbs
 
     """
 
