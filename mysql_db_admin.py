@@ -116,9 +116,6 @@
             defaults-extra-file format.
         NOTE 3:  Ignore the rep_user and rep_japd entries.  Not required.
 
-        configuration modules -> name is runtime dependent as it can be
-            used to connect to different databases with different names.
-
         Defaults Extra File format (config/mysql.cfg.TEMPLATE)
             password="PASSWORD"
             socket=DIRECTORY_PATH/mysqld.sock
@@ -135,7 +132,7 @@
             inserting data into a database.
             There are two ways to connect:  single or replica set.
 
-            1.)  Single database connection:
+            Single database connection:
 
             # Single Configuration file for Mongo Database Server.
             user = "USER"
@@ -150,12 +147,40 @@
             use_arg = True
             use_uri = False
 
-            2.)  Replica Set connection:  Same format as above, but with these
+            Replica Set connection:  Same format as above, but with these
                 additional entries at the end of the configuration file:
 
             repset = "REPLICA_SET_NAME"
             repset_hosts = "HOST1:PORT, HOST2:PORT, HOST3:PORT, [...]"
             db_auth = "AUTHENTICATION_DATABASE"
+
+            Note:  If using SSL connections then set one or more of the
+                following entries.  This will automatically enable SSL
+                connections. Below are the configuration settings for SSL
+                connections.  See configuration file for details on each entry:
+
+            ssl_client_ca = None
+            ssl_client_key = None
+            ssl_client_cert = None
+            ssl_client_phrase = None
+
+            Note:  FIPS Environment for Mongo.
+              If operating in a FIPS 104-2 environment, this package will
+              require at least a minimum of pymongo==3.8.0 or better.  It will
+              also require a manual change to the auth.py module in the pymongo
+              package.  See below for changes to auth.py.
+
+            - Locate the auth.py file python installed packages on the system
+                in the pymongo package directory.
+            - Edit the file and locate the "_password_digest" function.
+            - In the "_password_digest" function there is an line that should
+                match: "md5hash = hashlib.md5()".  Change it to
+                "md5hash = hashlib.md5(usedforsecurity=False)".
+            - Lastly, it will require the Mongo configuration file entry
+                auth_mech to be set to: SCRAM-SHA-1 or SCRAM-SHA-256.
+
+        Configuration modules -> name is runtime dependent as it can be
+            used to connect to different databases with different names.
 
     Example:
         mysql_db_admin.py -c mysql -d config -D test -t users
