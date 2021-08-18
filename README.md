@@ -31,15 +31,11 @@
     - python-pip
 
   * Local class/library dependencies within the program structure.
-    - lib/arg_parser
-    - lib/gen_libs
-    - lib/gen_class
-    - mysql_lib/mysql_libs
-    - mysql_lib/mysql_class
-    - mongo_lib/mongo_libs
+    - python-lib
+    - mysql-lib
+    - mongo-lib
 
-  * FIPS Environment
-    If operating in a FIPS 104-2 environment, this package will require at least a minimum of pymongo==3.8.0 or better.  It will also require a manual change to the auth.py module in the pymongo package.  See below for changes to auth.py.
+  * FIPS Environment:  If operating in a FIPS 104-2 environment, this package will require at least a minimum of pymongo==3.8.0 or better.  It will also require a manual change to the auth.py module in the pymongo package.  See below for changes to auth.py.
     - Locate the auth.py file python installed packages on the system in the pymongo package directory.
     - Edit the file and locate the \_password_digest function.
     - In the \_password_digest function there is an line that should match: "md5hash = hashlib.md5()".  Change it to "md5hash = hashlib.md5(usedforsecurity=False)".
@@ -92,6 +88,17 @@ Create MySQL configuration file and make the appropriate change to the environme
   * Change these entries only if required:
     - serv_os = "Linux"
     - port = 3306
+
+  * If SSL connections are being used, configure one or more of these entries:
+    - ssl_client_ca = None
+    - ssl_client_key = None
+    - ssl_client_cert = None
+
+  * Only changes these if necessary and have knowledge in MySQL SSL configuration setup:
+    - ssl_client_flag = None
+    - ssl_disabled = False
+    - ssl_verify_id = False
+    - ssl_verify_cert = False
 
 ```
 cd config
