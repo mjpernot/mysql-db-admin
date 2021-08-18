@@ -90,6 +90,17 @@ Create MySQL configuration file and make the appropriate change to the environme
     - serv_os = "Linux"
     - port = 3306
 
+  * If SSL connections are being used, configure one or more of these entries:
+    - ssl_client_ca = None
+    - ssl_client_key = None
+    - ssl_client_cert = None
+
+  * Only changes these if necessary and have knowledge in MySQL SSL configuration setup:
+    - ssl_client_flag = None
+    - ssl_disabled = False
+    - ssl_verify_id = False
+    - ssl_verify_cert = False
+
 ```
 cd config
 cp mysql_cfg.py.TEMPLATE mysql_cfg.py
