@@ -42,7 +42,7 @@ class Server(object):
     Description:  Class stub holder for mysql_class.Server class.
 
     Methods:
-        __init__ -> Class initialization.
+        __init__
 
     """
 
@@ -66,9 +66,9 @@ class UnitTest(unittest.TestCase):
     Description:  Class which is a representation of a unit testing.
 
     Methods:
-        setUp -> Initialize testing environment.
-        test_all_dbs -> Test with listing all databases.
-        test_user_dbs -> Test with listing only user databases.
+        setUp
+        test_all_dbs
+        test_user_dbs
 
     """
 

@@ -41,9 +41,9 @@ def func_holder(server, dbs, tbl):
     Description:  Function stub holder for a generic function call.
 
     Arguments:
-        server -> Server class instance.
-        dbs -> Database name.
-        tbl -> Table name.
+        server
+        dbs
+        tbl
 
     """
 
@@ -62,7 +62,7 @@ class Server(object):
     Description:  Class stub holder for mysql_class.Server class.
 
     Methods:
-        __init__ -> Class initialization.
+        __init__
 
     """
 
@@ -86,9 +86,11 @@ class UnitTest(unittest.TestCase):
     Description:  Class which is a representation of a unit testing.
 
     Methods:
-        setUp -> Initialize testing environment.
-        test_no_dbs -> Test with processing no databases.
-        test_all_dbs -> Test with processing all databases.
+        setUp
+        test_mysql_80
+        test_pre_mysql_80
+        test_no_dbs
+        test_all_dbs
 
     """
 
@@ -106,6 +108,44 @@ class UnitTest(unittest.TestCase):
         self.func_name = func_holder
         self.db_list = ["db1", "db2"]
         self.db_list2 = []
+        self.version = {"version": "5.7"}
+        self.version2 = {"version": "8.0"}
+
+    @mock.patch("mysql_db_admin.gen_libs.dict_2_list")
+    @mock.patch("mysql_db_admin.mysql_libs.fetch_tbl_dict")
+    def test_mysql_80(self, mock_fetch_tbl, mock_list):
+
+        """Function:  test_mysql_80
+
+        Description:  Test with MySQL 8.0 version database.
+
+        Arguments:
+
+        """
+
+        mock_fetch_tbl.return_value = True
+        mock_list.return_value = ["tbl1", "tbl2"]
+
+        self.assertFalse(mysql_db_admin._proc_all_dbs(
+            self.server, self.func_name, self.db_list, self.version2))
+
+    @mock.patch("mysql_db_admin.gen_libs.dict_2_list")
+    @mock.patch("mysql_db_admin.mysql_libs.fetch_tbl_dict")
+    def test_pre_mysql_80(self, mock_fetch_tbl, mock_list):
+
+        """Function:  test_pre_mysql_80
+
+        Description:  Test with pre MySQL 8.0 version database.
+
+        Arguments:
+
+        """
+
+        mock_fetch_tbl.return_value = True
+        mock_list.return_value = ["tbl1", "tbl2"]
+
+        self.assertFalse(mysql_db_admin._proc_all_dbs(
+            self.server, self.func_name, self.db_list, self.version))
 
     @mock.patch("mysql_db_admin.gen_libs.dict_2_list")
     @mock.patch("mysql_db_admin.mysql_libs.fetch_tbl_dict")
@@ -123,7 +163,7 @@ class UnitTest(unittest.TestCase):
         mock_list.return_value = ["tbl1", "tbl2"]
 
         self.assertFalse(mysql_db_admin._proc_all_dbs(
-            self.server, self.func_name, self.db_list2))
+            self.server, self.func_name, self.db_list2, self.version))
 
     @mock.patch("mysql_db_admin.gen_libs.dict_2_list")
     @mock.patch("mysql_db_admin.mysql_libs.fetch_tbl_dict")
@@ -141,7 +181,7 @@ class UnitTest(unittest.TestCase):
         mock_list.return_value = ["tbl1", "tbl2"]
 
         self.assertFalse(mysql_db_admin._proc_all_dbs(
-            self.server, self.func_name, self.db_list))
+            self.server, self.func_name, self.db_list, self.version))
 
 
 if __name__ == "__main__":
