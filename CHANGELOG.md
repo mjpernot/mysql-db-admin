@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 The format is based on "Keep a Changelog".  This project adheres to Semantic Versioning.
 
 
+## [3.2.0] - 2021-08-17
+- Updated to work in MySQL 8.0 and 5.7 environments.
+- Updated to work in a SSL environment.
+- Updated to use the mysql_libs v5.2.2 library.
+
+### Changed
+- \_proc_all_dbs, \_proc_all_tbls, \_proc_some_tbls:  Added dict_key to argument list and to fetch_tbl_dict call.
+- process_request:  Set dictionary key based on MySQL version and refactored a number of if/else statements.
+- config/mongo.py.TEMPLATE: Added SSL configuration options.
+- config/mysql_cfg.py.TEMPLATE: Added SSL configuration options.
+- config/mysql.cfg.TEMPLATE:  Point to correct socket file.
+- Documentation updates.
+
+
 ## [3.1.3] - 2020-11-21
 - Updated to use the mysql_libs v5.0.4 library.
 - Updated to use pymongo v3.8.0.

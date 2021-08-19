@@ -30,6 +30,7 @@ pipeline {
                 pip2 install mysql-connector-python==8.0.16 --user
                 pip2 install pymongo==3.2.0 --user
                 pip2 install simplejson==2.0.9 --user
+                pip2 install psutil==5.4.3 --user
                 ./test/unit/mysql_db_admin/_process_json.py
                 ./test/unit/mysql_db_admin/_process_non_json.py
                 ./test/unit/mysql_db_admin/help_message.py
@@ -106,6 +107,11 @@ pipeline {
                     server.upload(uploadSpec)
                 }
             }
+        }
+    }
+    post {
+        always {
+            cleanWs disableDeferredWipeout: true
         }
     }
 }

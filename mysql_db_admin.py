@@ -94,6 +94,19 @@
             port = 3306
             cfg_file = "MYSQL_DIRECTORY/mysqld.cnf"
 
+            # If SSL connections are being used, configure one or more of these
+                entries:
+            ssl_client_ca = None
+            ssl_client_key = None
+            ssl_client_cert = None
+
+            # Only changes these if necessary and have knowledge in MySQL
+                SSL configuration setup:
+            ssl_client_flag = None
+            ssl_disabled = False
+            ssl_verify_id = False
+            ssl_verify_cert = False
+
         NOTE 1:  Include the cfg_file even if running remotely as the file will
             be used in future releases.
         NOTE 2:  In MySQL 5.6 - it now gives warning if password is passed on
@@ -102,9 +115,6 @@
             database configuration file.  See below for the
             defaults-extra-file format.
         NOTE 3:  Ignore the rep_user and rep_japd entries.  Not required.
-
-        configuration modules -> name is runtime dependent as it can be
-            used to connect to different databases with different names.
 
         Defaults Extra File format (config/mysql.cfg.TEMPLATE)
             password="PASSWORD"
@@ -116,13 +126,15 @@
             is a ~/.my.cnf or ~/.mylogin.cnf file located in the home directory
             of the user running this program.  The extras file will in effect
             be ignored.
+        NOTE 3:  Socket use is only required to be set in certain conditions
+            when connecting using localhost.
 
         Mongo configuration file format (config/mongo.py.TEMPLATE).  The
             configuration file format for the Mongo connection used for
             inserting data into a database.
             There are two ways to connect:  single or replica set.
 
-            1.)  Single database connection:
+            Single database connection:
 
             # Single Configuration file for Mongo Database Server.
             user = "USER"
@@ -137,12 +149,40 @@
             use_arg = True
             use_uri = False
 
-            2.)  Replica Set connection:  Same format as above, but with these
+            Replica Set connection:  Same format as above, but with these
                 additional entries at the end of the configuration file:
 
             repset = "REPLICA_SET_NAME"
             repset_hosts = "HOST1:PORT, HOST2:PORT, HOST3:PORT, [...]"
             db_auth = "AUTHENTICATION_DATABASE"
+
+            Note:  If using SSL connections then set one or more of the
+                following entries.  This will automatically enable SSL
+                connections. Below are the configuration settings for SSL
+                connections.  See configuration file for details on each entry:
+
+            ssl_client_ca = None
+            ssl_client_key = None
+            ssl_client_cert = None
+            ssl_client_phrase = None
+
+            Note:  FIPS Environment for Mongo.
+              If operating in a FIPS 104-2 environment, this package will
+              require at least a minimum of pymongo==3.8.0 or better.  It will
+              also require a manual change to the auth.py module in the pymongo
+              package.  See below for changes to auth.py.
+
+            - Locate the auth.py file python installed packages on the system
+                in the pymongo package directory.
+            - Edit the file and locate the "_password_digest" function.
+            - In the "_password_digest" function there is an line that should
+                match: "md5hash = hashlib.md5()".  Change it to
+                "md5hash = hashlib.md5(usedforsecurity=False)".
+            - Lastly, it will require the Mongo configuration file entry
+                auth_mech to be set to: SCRAM-SHA-1 or SCRAM-SHA-256.
+
+        Configuration modules -> name is runtime dependent as it can be
+            used to connect to different databases with different names.
 
     Example:
         mysql_db_admin.py -c mysql -d config -D test -t users
@@ -323,36 +363,32 @@ def process_request(server, func_name, db_name=None, tbl_name=None, **kwargs):
 
     """
 
-    if db_name is None:
-        db_name = []
-
-    else:
-        db_name = list(db_name)
-
-    if tbl_name is None:
-        tbl_name = []
-
-    else:
-        tbl_name = list(tbl_name)
-
+    db_name = list() if db_name is None else list(db_name)
+    tbl_name = list() if tbl_name is None else list(tbl_name)
     db_list = gen_libs.dict_2_list(mysql_libs.fetch_db_dict(server),
                                    "Database")
+    dict_key = "table_name"
+
+    # Determine the MySQL version for dictionary key name
+    if mysql_class.fetch_sys_var(server, "version",
+                                 level="session")["version"] >= "8.0":
+        dict_key = "TABLE_NAME"
 
     # Process all databases
     if not db_name:
-        _proc_all_dbs(server, func_name, db_list, **kwargs)
+        _proc_all_dbs(server, func_name, db_list, dict_key, **kwargs)
 
     # Process all tables in some databases
     elif not tbl_name:
-        _proc_all_tbls(server, func_name, db_list, db_name, **kwargs)
+        _proc_all_tbls(server, func_name, db_list, db_name, dict_key, **kwargs)
 
     # Process specific tables.
     else:
         _proc_some_tbls(server, func_name, db_list, db_name, tbl_name,
-                        **kwargs)
+                        dict_key, **kwargs)
 
 
-def _proc_all_dbs(server, func_name, db_list, **kwargs):
+def _proc_all_dbs(server, func_name, db_list, dict_key, **kwargs):
 
     """Function:  _proc_all_dbs
 
@@ -363,6 +399,7 @@ def _proc_all_dbs(server, func_name, db_list, **kwargs):
         (input) server -> Server instance.
         (input) func_name -> Name of a function.
         (input) db_list -> List of all databases.
+        (input) dict_key -> Dictionary key for fetch_tbl_dict call.
         (input) **kwargs:
             sys_dbs -> List of system databases.
             multi_val -> List of options that may have multiple values.
@@ -371,11 +408,11 @@ def _proc_all_dbs(server, func_name, db_list, **kwargs):
 
     for dbs in db_list:
         for tbl in gen_libs.dict_2_list(mysql_libs.fetch_tbl_dict(server, dbs),
-                                        "table_name"):
+                                        dict_key):
             func_name(server, dbs, tbl, **kwargs)
 
 
-def _proc_all_tbls(server, func_name, db_list, db_name, **kwargs):
+def _proc_all_tbls(server, func_name, db_list, db_name, dict_key, **kwargs):
 
     """Function:  _proc_all_tbls
 
@@ -387,6 +424,7 @@ def _proc_all_tbls(server, func_name, db_list, db_name, **kwargs):
         (input) func_name -> Name of a function.
         (input) db_list -> List of all databases.
         (input) db_name -> List of database names.
+        (input) dict_key -> Dictionary key for fetch_tbl_dict call.
         (input) **kwargs:
             sys_dbs -> List of system databases.
             multi_val -> List of options that may have multiple values.
@@ -399,11 +437,12 @@ def _proc_all_tbls(server, func_name, db_list, db_name, **kwargs):
 
     for dbs in set(db_name) & set(db_list):
         for tbl in gen_libs.dict_2_list(mysql_libs.fetch_tbl_dict(server, dbs),
-                                        "table_name"):
+                                        dict_key):
             func_name(server, dbs, tbl, **kwargs)
 
 
-def _proc_some_tbls(server, func_name, db_list, db_name, tbl_name, **kwargs):
+def _proc_some_tbls(server, func_name, db_list, db_name, tbl_name, dict_key,
+                    **kwargs):
 
     """Function:  _proc_some_tbls
 
@@ -416,6 +455,7 @@ def _proc_some_tbls(server, func_name, db_list, db_name, tbl_name, **kwargs):
         (input) db_list -> List of all databases.
         (input) db_name -> List of database names.
         (input) tbl_name -> List of table names.
+        (input) dict_key -> Dictionary key for fetch_tbl_dict call.
         (input) **kwargs:
             sys_dbs -> List of system databases.
             multi_val -> List of options that may have multiple values.
@@ -429,7 +469,7 @@ def _proc_some_tbls(server, func_name, db_list, db_name, tbl_name, **kwargs):
 
     for dbs in set(db_name) & set(db_list):
         tbl_list = gen_libs.dict_2_list(mysql_libs.fetch_tbl_dict(server, dbs),
-                                        "table_name")
+                                        dict_key)
         tbls = list(set(tbl_name) - set(tbl_list))
 
         if tbls:
