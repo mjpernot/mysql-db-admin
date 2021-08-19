@@ -377,18 +377,24 @@ def process_request(server, func_name, db_name=None, tbl_name=None, **kwargs):
 
     db_list = gen_libs.dict_2_list(mysql_libs.fetch_db_dict(server),
                                    "Database")
+    dict_key = "table_name"
+
+    # Determine the MySQL version for dictionary key name
+    if mysql_class.fetch_sys_var(master, "version",
+                                 level="session")["version"] >= "8.0":
+        dict_key = "TABLE_NAME"
 
     # Process all databases
     if not db_name:
-        _proc_all_dbs(server, func_name, db_list, **kwargs)
+        _proc_all_dbs(server, func_name, db_list, dict_key, **kwargs)
 
     # Process all tables in some databases
     elif not tbl_name:
-        _proc_all_tbls(server, func_name, db_list, db_name, **kwargs)
+        _proc_all_tbls(server, func_name, db_list, db_name, dict_key, **kwargs)
 
     # Process specific tables.
     else:
-        _proc_some_tbls(server, func_name, db_list, db_name, tbl_name,
+        _proc_some_tbls(server, func_name, db_list, db_name, tbl_name, dict_key,
                         **kwargs)
 
 
