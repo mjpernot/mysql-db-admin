@@ -88,6 +88,8 @@ class UnitTest(unittest.TestCase):
 
     Methods:
         setUp
+        test_mysql_80
+        test_pre_mysql_80
         test_miss_dbs
         test_no_dbs
         test_miss_tbls
@@ -118,6 +120,48 @@ class UnitTest(unittest.TestCase):
         self.tbl_name2 = ["tbl1"]
         self.tbl_name3 = []
         self.tbl_name4 = ["tbl1", "tbl3"]
+        self.version = {"version": "5.7"}
+        self.version2 = {"version": "8.0"}
+
+    @mock.patch("mysql_db_admin.detect_dbs", mock.Mock(return_value=True))
+    @mock.patch("mysql_db_admin.mysql_libs.fetch_tbl_dict",
+                mock.Mock(return_value=True))
+    @mock.patch("mysql_db_admin.gen_libs.dict_2_list")
+    def test_mysql_80(self, mock_list):
+
+        """Function:  test_mysql_80
+
+        Description:  Test with MySQL 8.0 version database.
+
+        Arguments:
+
+        """
+
+        mock_list.return_value = ["tbl1", "tbl2"]
+
+        self.assertFalse(mysql_db_admin._proc_some_tbls(
+            self.server, self.func_name, self.db_list, self.db_name,
+            self.tbl_name, self.version2))
+
+    @mock.patch("mysql_db_admin.detect_dbs", mock.Mock(return_value=True))
+    @mock.patch("mysql_db_admin.mysql_libs.fetch_tbl_dict",
+                mock.Mock(return_value=True))
+    @mock.patch("mysql_db_admin.gen_libs.dict_2_list")
+    def test_pre_mysql_80(self, mock_list):
+
+        """Function:  test_pre_mysql_80
+
+        Description:  Test with pre MySQL 8.0 version database.
+
+        Arguments:
+
+        """
+
+        mock_list.return_value = ["tbl1", "tbl2"]
+
+        self.assertFalse(mysql_db_admin._proc_some_tbls(
+            self.server, self.func_name, self.db_list, self.db_name,
+            self.tbl_name, self.version))
 
     @mock.patch("mysql_db_admin.detect_dbs", mock.Mock(return_value=True))
     def test_miss_dbs(self):
@@ -132,7 +176,7 @@ class UnitTest(unittest.TestCase):
 
         self.assertFalse(mysql_db_admin._proc_some_tbls(
             self.server, self.func_name, self.db_list, self.db_name4,
-            self.tbl_name4))
+            self.tbl_name4, self.version))
 
     @mock.patch("mysql_db_admin.detect_dbs", mock.Mock(return_value=True))
     def test_no_dbs(self):
@@ -147,7 +191,7 @@ class UnitTest(unittest.TestCase):
 
         self.assertFalse(mysql_db_admin._proc_some_tbls(
             self.server, self.func_name, self.db_list, self.db_name3,
-            self.tbl_name4))
+            self.tbl_name4, self.version))
 
     @mock.patch("mysql_db_admin.detect_dbs", mock.Mock(return_value=True))
     @mock.patch("mysql_db_admin.mysql_libs.fetch_tbl_dict",
@@ -168,7 +212,7 @@ class UnitTest(unittest.TestCase):
         with gen_libs.no_std_out():
             self.assertFalse(mysql_db_admin._proc_some_tbls(
                 self.server, self.func_name, self.db_list, self.db_name2,
-                self.tbl_name4))
+                self.tbl_name4, self.version))
 
     @mock.patch("mysql_db_admin.detect_dbs", mock.Mock(return_value=True))
     @mock.patch("mysql_db_admin.mysql_libs.fetch_tbl_dict",
@@ -188,7 +232,7 @@ class UnitTest(unittest.TestCase):
 
         self.assertFalse(mysql_db_admin._proc_some_tbls(
             self.server, self.func_name, self.db_list, self.db_name2,
-            self.tbl_name3))
+            self.tbl_name3, self.version))
 
     @mock.patch("mysql_db_admin.detect_dbs", mock.Mock(return_value=True))
     @mock.patch("mysql_db_admin.mysql_libs.fetch_tbl_dict",
@@ -208,7 +252,7 @@ class UnitTest(unittest.TestCase):
 
         self.assertFalse(mysql_db_admin._proc_some_tbls(
             self.server, self.func_name, self.db_list, self.db_name2,
-            self.tbl_name2))
+            self.tbl_name2, self.version))
 
     @mock.patch("mysql_db_admin.detect_dbs", mock.Mock(return_value=True))
     @mock.patch("mysql_db_admin.mysql_libs.fetch_tbl_dict",
@@ -228,7 +272,7 @@ class UnitTest(unittest.TestCase):
 
         self.assertFalse(mysql_db_admin._proc_some_tbls(
             self.server, self.func_name, self.db_list, self.db_name,
-            self.tbl_name))
+            self.tbl_name, self.version))
 
 
 if __name__ == "__main__":

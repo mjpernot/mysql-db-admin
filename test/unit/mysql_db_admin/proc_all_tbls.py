@@ -124,7 +124,7 @@ class UnitTest(unittest.TestCase):
 
         """Function:  test_mysql_80
 
-        Description:  Test with processing all tables.
+        Description:  Test with MySQL 8.0 version database.
 
         Arguments:
 
@@ -143,7 +143,7 @@ class UnitTest(unittest.TestCase):
 
         """Function:  test_pre_mysql_80
 
-        Description:  Test with processing all tables.
+        Description:  Test with pre MySQL 8.0 version database.
 
         Arguments:
 
