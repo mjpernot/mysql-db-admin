@@ -121,7 +121,8 @@ class UnitTest(unittest.TestCase):
     @mock.patch("mysql_db_admin.gen_libs.dict_2_list")
     @mock.patch("mysql_db_admin.mysql_libs.fetch_tbl_dict")
     @mock.patch("mysql_db_admin.mysql_libs.fetch_db_dict")
-    def test_mysql_80(self, mock_fetch_db, mock_fetch_tbl, mock_list, mock_version):
+    def test_mysql_80(self, mock_fetch_db, mock_fetch_tbl, mock_list,
+                      mock_version):
 
         """Function:  test_mysql_80
 
@@ -136,16 +137,16 @@ class UnitTest(unittest.TestCase):
         mock_fetch_tbl.return_value = True
         mock_list.side_effect = [["db1"], ["tbl1", "tbl2"]]
 
-        self.assertFalse(mysql_db_admin.process_request(self.server,
-                                                        self.func_name,
-                                                        self.db_name,
-                                                        self.tbl_name))
+        self.assertFalse(
+            mysql_db_admin.process_request(
+                self.server, self.func_name, self.db_name, self.tbl_name))
 
     @mock.patch("mysql_db_admin.mysql_class.fetch_sys_var")
     @mock.patch("mysql_db_admin.gen_libs.dict_2_list")
     @mock.patch("mysql_db_admin.mysql_libs.fetch_tbl_dict")
     @mock.patch("mysql_db_admin.mysql_libs.fetch_db_dict")
-    def test_pre_mysql_80(self, mock_fetch_db, mock_fetch_tbl, mock_list, mock_version):
+    def test_pre_mysql_80(self, mock_fetch_db, mock_fetch_tbl, mock_list,
+                          mock_version):
 
         """Function:  test_pre_mysql_80
 
@@ -160,10 +161,9 @@ class UnitTest(unittest.TestCase):
         mock_fetch_tbl.return_value = True
         mock_list.side_effect = [["db1"], ["tbl1", "tbl2"]]
 
-        self.assertFalse(mysql_db_admin.process_request(self.server,
-                                                        self.func_name,
-                                                        self.db_name,
-                                                        self.tbl_name))
+        self.assertFalse(
+            mysql_db_admin.process_request(
+                self.server, self.func_name, self.db_name, self.tbl_name))
 
     @mock.patch("mysql_db_admin.mysql_class.fetch_sys_var")
     @mock.patch("mysql_db_admin.detect_dbs")
@@ -188,10 +188,10 @@ class UnitTest(unittest.TestCase):
         mock_detect.return_value = True
 
         with gen_libs.no_std_out():
-            self.assertFalse(mysql_db_admin.process_request(self.server,
-                                                            self.func_name,
-                                                            self.db_name2,
-                                                            self.tbl_name3))
+            self.assertFalse(
+                mysql_db_admin.process_request(
+                    self.server, self.func_name, self.db_name2,
+                    self.tbl_name3))
 
     @mock.patch("mysql_db_admin.mysql_class.fetch_sys_var")
     @mock.patch("mysql_db_admin.detect_dbs")
@@ -215,10 +215,9 @@ class UnitTest(unittest.TestCase):
         mock_list.side_effect = [["db1"], ["tbl1", "tbl2"]]
         mock_detect.return_value = True
 
-        self.assertFalse(mysql_db_admin.process_request(self.server,
-                                                        self.func_name,
-                                                        self.db_name2,
-                                                        self.tbl_name2))
+        self.assertFalse(
+            mysql_db_admin.process_request(
+                self.server, self.func_name, self.db_name2, self.tbl_name2))
 
     @mock.patch("mysql_db_admin.mysql_class.fetch_sys_var")
     @mock.patch("mysql_db_admin.detect_dbs")
@@ -242,16 +241,16 @@ class UnitTest(unittest.TestCase):
         mock_list.side_effect = [["db1"], ["tbl1", "tbl2"]]
         mock_detect.return_value = True
 
-        self.assertFalse(mysql_db_admin.process_request(self.server,
-                                                        self.func_name,
-                                                        self.db_name2,
-                                                        self.tbl_name))
+        self.assertFalse(
+            mysql_db_admin.process_request(
+                self.server, self.func_name, self.db_name2, self.tbl_name))
 
     @mock.patch("mysql_db_admin.mysql_class.fetch_sys_var")
     @mock.patch("mysql_db_admin.gen_libs.dict_2_list")
     @mock.patch("mysql_db_admin.mysql_libs.fetch_tbl_dict")
     @mock.patch("mysql_db_admin.mysql_libs.fetch_db_dict")
-    def test_all_dbs(self, mock_fetch_db, mock_fetch_tbl, mock_list, mock_version):
+    def test_all_dbs(self, mock_fetch_db, mock_fetch_tbl, mock_list,
+                     mock_version):
 
         """Function:  test_all_dbs
 
@@ -266,10 +265,9 @@ class UnitTest(unittest.TestCase):
         mock_fetch_tbl.return_value = True
         mock_list.side_effect = [["db1"], ["tbl1", "tbl2"]]
 
-        self.assertFalse(mysql_db_admin.process_request(self.server,
-                                                        self.func_name,
-                                                        self.db_name,
-                                                        self.tbl_name))
+        self.assertFalse(
+            mysql_db_admin.process_request(
+                self.server, self.func_name, self.db_name, self.tbl_name))
 
 
 if __name__ == "__main__":
