@@ -132,8 +132,10 @@ class UnitTest(unittest.TestCase):
 
         mock_list.return_value = ["tbl1", "tbl2"]
 
-        self.assertFalse(mysql_db_admin._proc_all_tbls(
-            self.server, self.func_name, self.db_list, self.db_name, self.version2))
+        self.assertFalse(
+            mysql_db_admin._proc_all_tbls(
+                self.server, self.func_name, self.db_list, self.db_name,
+                self.version2))
 
     @mock.patch("mysql_db_admin.detect_dbs", mock.Mock(return_value=True))
     @mock.patch("mysql_db_admin.mysql_libs.fetch_tbl_dict",
@@ -151,8 +153,10 @@ class UnitTest(unittest.TestCase):
 
         mock_list.return_value = ["tbl1", "tbl2"]
 
-        self.assertFalse(mysql_db_admin._proc_all_tbls(
-            self.server, self.func_name, self.db_list, self.db_name, self.version))
+        self.assertFalse(
+            mysql_db_admin._proc_all_tbls(
+                self.server, self.func_name, self.db_list, self.db_name,
+                self.version))
 
     @mock.patch("mysql_db_admin.detect_dbs", mock.Mock(return_value=True))
     def test_no_tbls2(self):
@@ -165,8 +169,10 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        self.assertFalse(mysql_db_admin._proc_all_tbls(
-            self.server, self.func_name, self.db_list, self.db_name4, self.version))
+        self.assertFalse(
+            mysql_db_admin._proc_all_tbls(
+                self.server, self.func_name, self.db_list, self.db_name4,
+                self.version))
 
     @mock.patch("mysql_db_admin.detect_dbs", mock.Mock(return_value=True))
     def test_no_tbls(self):
@@ -179,8 +185,10 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        self.assertFalse(mysql_db_admin._proc_all_tbls(
-            self.server, self.func_name, self.db_list, self.db_name3, self.version))
+        self.assertFalse(
+            mysql_db_admin._proc_all_tbls(
+                self.server, self.func_name, self.db_list, self.db_name3,
+                self.version))
 
     @mock.patch("mysql_db_admin.detect_dbs", mock.Mock(return_value=True))
     @mock.patch("mysql_db_admin.mysql_libs.fetch_tbl_dict",
@@ -198,8 +206,10 @@ class UnitTest(unittest.TestCase):
 
         mock_list.return_value = ["tbl1", "tbl2"]
 
-        self.assertFalse(mysql_db_admin._proc_all_tbls(
-            self.server, self.func_name, self.db_list, self.db_name2, self.version))
+        self.assertFalse(
+            mysql_db_admin._proc_all_tbls(
+                self.server, self.func_name, self.db_list, self.db_name2,
+                self.version))
 
     @mock.patch("mysql_db_admin.detect_dbs", mock.Mock(return_value=True))
     @mock.patch("mysql_db_admin.mysql_libs.fetch_tbl_dict",
@@ -217,8 +227,10 @@ class UnitTest(unittest.TestCase):
 
         mock_list.return_value = ["tbl1", "tbl2"]
 
-        self.assertFalse(mysql_db_admin._proc_all_tbls(
-            self.server, self.func_name, self.db_list, self.db_name, self.version))
+        self.assertFalse(
+            mysql_db_admin._proc_all_tbls(
+                self.server, self.func_name, self.db_list, self.db_name,
+                self.version))
 
 
 if __name__ == "__main__":
