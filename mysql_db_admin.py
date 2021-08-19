@@ -384,8 +384,8 @@ def process_request(server, func_name, db_name=None, tbl_name=None, **kwargs):
 
     # Process specific tables.
     else:
-        _proc_some_tbls(server, func_name, db_list, db_name, tbl_name, dict_key,
-                        **kwargs)
+        _proc_some_tbls(server, func_name, db_list, db_name, tbl_name,
+                        dict_key, **kwargs)
 
 
 def _proc_all_dbs(server, func_name, db_list, dict_key, **kwargs):
@@ -441,7 +441,8 @@ def _proc_all_tbls(server, func_name, db_list, db_name, dict_key, **kwargs):
             func_name(server, dbs, tbl, **kwargs)
 
 
-def _proc_some_tbls(server, func_name, db_list, db_name, tbl_name, dict_key, **kwargs):
+def _proc_some_tbls(server, func_name, db_list, db_name, tbl_name, dict_key,
+                    **kwargs):
 
     """Function:  _proc_some_tbls
 
