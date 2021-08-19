@@ -370,7 +370,7 @@ def process_request(server, func_name, db_name=None, tbl_name=None, **kwargs):
     dict_key = "table_name"
 
     # Determine the MySQL version for dictionary key name
-    if mysql_class.fetch_sys_var(master, "version",
+    if mysql_class.fetch_sys_var(server, "version",
                                  level="session")["version"] >= "8.0":
         dict_key = "TABLE_NAME"
 
