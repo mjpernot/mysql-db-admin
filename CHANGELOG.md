@@ -6,6 +6,8 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 
 ## [3.2.0] - 2021-08-17
 - Updated to work in MySQL 8.0 and 5.7 environments.
+- Updated to work in a SSL environment.
+- Updated to use the mysql_libs v5.2.2 library.
 
 ### Changed
 - \_proc_all_dbs, \_proc_all_tbls, \_proc_some_tbls:  Added dict_key to argument list and to fetch_tbl_dict call.
