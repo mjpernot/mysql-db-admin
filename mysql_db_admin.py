@@ -363,18 +363,8 @@ def process_request(server, func_name, db_name=None, tbl_name=None, **kwargs):
 
     """
 
-    if db_name is None:
-        db_name = []
-
-    else:
-        db_name = list(db_name)
-
-    if tbl_name is None:
-        tbl_name = []
-
-    else:
-        tbl_name = list(tbl_name)
-
+    db_name = list() if db_name is None else list(db_name)
+    tbl_name = list() if tbl_name is None else list(tbl_name)
     db_list = gen_libs.dict_2_list(mysql_libs.fetch_db_dict(server),
                                    "Database")
     dict_key = "table_name"

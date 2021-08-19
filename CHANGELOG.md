@@ -9,7 +9,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 
 ### Changed
 - \_proc_all_dbs, \_proc_all_tbls, \proc_some_tbls:  Added dict_key to argument list and to fetch_tbl_dict call.
-- process_request:  Set dictionary key based on MySQL version.
+- process_request:  Set dictionary key based on MySQL version and refactored a number of if/else statements.
 - config/mongo.py.TEMPLATE: Added SSL configuration options.
 - config/mysql_cfg.py.TEMPLATE: Added SSL configuration options.
 - config/mysql.cfg.TEMPLATE:  Point to correct socket file.
