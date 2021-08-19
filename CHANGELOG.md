@@ -10,6 +10,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - Updated to use the mysql_libs v5.2.2 library.
 
 ### Changed
+- Removed unnesscary \*\*kwargs from function parameters lists.
 - \_proc_all_dbs, \_proc_all_tbls, \_proc_some_tbls:  Added dict_key to argument list and to fetch_tbl_dict call.
 - process_request:  Set dictionary key based on MySQL version and refactored a number of if/else statements.
 - config/mongo.py.TEMPLATE: Added SSL configuration options.
