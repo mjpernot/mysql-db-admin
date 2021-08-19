@@ -363,36 +363,32 @@ def process_request(server, func_name, db_name=None, tbl_name=None, **kwargs):
 
     """
 
-    if db_name is None:
-        db_name = []
-
-    else:
-        db_name = list(db_name)
-
-    if tbl_name is None:
-        tbl_name = []
-
-    else:
-        tbl_name = list(tbl_name)
-
+    db_name = list() if db_name is None else list(db_name)
+    tbl_name = list() if tbl_name is None else list(tbl_name)
     db_list = gen_libs.dict_2_list(mysql_libs.fetch_db_dict(server),
                                    "Database")
+    dict_key = "table_name"
+
+    # Determine the MySQL version for dictionary key name
+    if mysql_class.fetch_sys_var(server, "version",
+                                 level="session")["version"] >= "8.0":
+        dict_key = "TABLE_NAME"
 
     # Process all databases
     if not db_name:
-        _proc_all_dbs(server, func_name, db_list, **kwargs)
+        _proc_all_dbs(server, func_name, db_list, dict_key, **kwargs)
 
     # Process all tables in some databases
     elif not tbl_name:
-        _proc_all_tbls(server, func_name, db_list, db_name, **kwargs)
+        _proc_all_tbls(server, func_name, db_list, db_name, dict_key, **kwargs)
 
     # Process specific tables.
     else:
-        _proc_some_tbls(server, func_name, db_list, db_name, tbl_name,
+        _proc_some_tbls(server, func_name, db_list, db_name, tbl_name, dict_key,
                         **kwargs)
 
 
-def _proc_all_dbs(server, func_name, db_list, **kwargs):
+def _proc_all_dbs(server, func_name, db_list, dict_key, **kwargs):
 
     """Function:  _proc_all_dbs
 
@@ -403,6 +399,7 @@ def _proc_all_dbs(server, func_name, db_list, **kwargs):
         (input) server -> Server instance.
         (input) func_name -> Name of a function.
         (input) db_list -> List of all databases.
+        (input) dict_key -> Dictionary key for fetch_tbl_dict call.
         (input) **kwargs:
             sys_dbs -> List of system databases.
             multi_val -> List of options that may have multiple values.
@@ -411,11 +408,11 @@ def _proc_all_dbs(server, func_name, db_list, **kwargs):
 
     for dbs in db_list:
         for tbl in gen_libs.dict_2_list(mysql_libs.fetch_tbl_dict(server, dbs),
-                                        "table_name"):
+                                        dict_key):
             func_name(server, dbs, tbl, **kwargs)
 
 
-def _proc_all_tbls(server, func_name, db_list, db_name, **kwargs):
+def _proc_all_tbls(server, func_name, db_list, db_name, dict_key, **kwargs):
 
     """Function:  _proc_all_tbls
 
@@ -427,6 +424,7 @@ def _proc_all_tbls(server, func_name, db_list, db_name, **kwargs):
         (input) func_name -> Name of a function.
         (input) db_list -> List of all databases.
         (input) db_name -> List of database names.
+        (input) dict_key -> Dictionary key for fetch_tbl_dict call.
         (input) **kwargs:
             sys_dbs -> List of system databases.
             multi_val -> List of options that may have multiple values.
@@ -439,11 +437,11 @@ def _proc_all_tbls(server, func_name, db_list, db_name, **kwargs):
 
     for dbs in set(db_name) & set(db_list):
         for tbl in gen_libs.dict_2_list(mysql_libs.fetch_tbl_dict(server, dbs),
-                                        "table_name"):
+                                        dict_key):
             func_name(server, dbs, tbl, **kwargs)
 
 
-def _proc_some_tbls(server, func_name, db_list, db_name, tbl_name, **kwargs):
+def _proc_some_tbls(server, func_name, db_list, db_name, tbl_name, dict_key, **kwargs):
 
     """Function:  _proc_some_tbls
 
@@ -456,6 +454,7 @@ def _proc_some_tbls(server, func_name, db_list, db_name, tbl_name, **kwargs):
         (input) db_list -> List of all databases.
         (input) db_name -> List of database names.
         (input) tbl_name -> List of table names.
+        (input) dict_key -> Dictionary key for fetch_tbl_dict call.
         (input) **kwargs:
             sys_dbs -> List of system databases.
             multi_val -> List of options that may have multiple values.
@@ -469,7 +468,7 @@ def _proc_some_tbls(server, func_name, db_list, db_name, tbl_name, **kwargs):
 
     for dbs in set(db_name) & set(db_list):
         tbl_list = gen_libs.dict_2_list(mysql_libs.fetch_tbl_dict(server, dbs),
-                                        "table_name")
+                                        dict_key)
         tbls = list(set(tbl_name) - set(tbl_list))
 
         if tbls:
