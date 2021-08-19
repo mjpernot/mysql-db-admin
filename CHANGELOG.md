@@ -8,6 +8,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - Updated to work in MySQL 8.0 and 5.7 environments.
 
 ### Changed
+- \_proc_all_dbs:  Added dict_key to argument list and to fetch_tbl_dict call.
 - process_request:  Set dictionary key based on MySQL version.
 - config/mongo.py.TEMPLATE: Added SSL configuration options.
 - config/mysql_cfg.py.TEMPLATE: Added SSL configuration options.
