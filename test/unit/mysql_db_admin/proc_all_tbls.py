@@ -87,6 +87,8 @@ class UnitTest(unittest.TestCase):
 
     Methods:
         setUp
+        test_mysql_80
+        test_pre_mysql_80
         test_no_tbls2
         test_no_tbls
         test_some_tbls
@@ -111,6 +113,46 @@ class UnitTest(unittest.TestCase):
         self.db_name2 = ["db1"]
         self.db_name3 = []
         self.db_name4 = ["db3"]
+        self.version = {"version": "5.7"}
+        self.version2 = {"version": "8.0"}
+
+    @mock.patch("mysql_db_admin.detect_dbs", mock.Mock(return_value=True))
+    @mock.patch("mysql_db_admin.mysql_libs.fetch_tbl_dict",
+                mock.Mock(return_value=True))
+    @mock.patch("mysql_db_admin.gen_libs.dict_2_list")
+    def test_mysql_80(self, mock_list):
+
+        """Function:  test_mysql_80
+
+        Description:  Test with processing all tables.
+
+        Arguments:
+
+        """
+
+        mock_list.return_value = ["tbl1", "tbl2"]
+
+        self.assertFalse(mysql_db_admin._proc_all_tbls(
+            self.server, self.func_name, self.db_list, self.db_name, self.version2))
+
+    @mock.patch("mysql_db_admin.detect_dbs", mock.Mock(return_value=True))
+    @mock.patch("mysql_db_admin.mysql_libs.fetch_tbl_dict",
+                mock.Mock(return_value=True))
+    @mock.patch("mysql_db_admin.gen_libs.dict_2_list")
+    def test_pre_mysql_80(self, mock_list):
+
+        """Function:  test_pre_mysql_80
+
+        Description:  Test with processing all tables.
+
+        Arguments:
+
+        """
+
+        mock_list.return_value = ["tbl1", "tbl2"]
+
+        self.assertFalse(mysql_db_admin._proc_all_tbls(
+            self.server, self.func_name, self.db_list, self.db_name, self.version))
 
     @mock.patch("mysql_db_admin.detect_dbs", mock.Mock(return_value=True))
     def test_no_tbls2(self):
@@ -124,7 +166,7 @@ class UnitTest(unittest.TestCase):
         """
 
         self.assertFalse(mysql_db_admin._proc_all_tbls(
-            self.server, self.func_name, self.db_list, self.db_name4))
+            self.server, self.func_name, self.db_list, self.db_name4, self.version))
 
     @mock.patch("mysql_db_admin.detect_dbs", mock.Mock(return_value=True))
     def test_no_tbls(self):
@@ -138,7 +180,7 @@ class UnitTest(unittest.TestCase):
         """
 
         self.assertFalse(mysql_db_admin._proc_all_tbls(
-            self.server, self.func_name, self.db_list, self.db_name3))
+            self.server, self.func_name, self.db_list, self.db_name3, self.version))
 
     @mock.patch("mysql_db_admin.detect_dbs", mock.Mock(return_value=True))
     @mock.patch("mysql_db_admin.mysql_libs.fetch_tbl_dict",
@@ -157,7 +199,7 @@ class UnitTest(unittest.TestCase):
         mock_list.return_value = ["tbl1", "tbl2"]
 
         self.assertFalse(mysql_db_admin._proc_all_tbls(
-            self.server, self.func_name, self.db_list, self.db_name2))
+            self.server, self.func_name, self.db_list, self.db_name2, self.version))
 
     @mock.patch("mysql_db_admin.detect_dbs", mock.Mock(return_value=True))
     @mock.patch("mysql_db_admin.mysql_libs.fetch_tbl_dict",
@@ -176,7 +218,7 @@ class UnitTest(unittest.TestCase):
         mock_list.return_value = ["tbl1", "tbl2"]
 
         self.assertFalse(mysql_db_admin._proc_all_tbls(
-            self.server, self.func_name, self.db_list, self.db_name))
+            self.server, self.func_name, self.db_list, self.db_name, self.version))
 
 
 if __name__ == "__main__":
