@@ -13,6 +13,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 ### Changed
 - config/mysql_cfg.py.TEMPLATE: Added TLS version entry.
 - config/mongo.py.TEMPLATE: Removed old entries.
+- Documentation updates.
 
 
 ## [3.2.0] - 2021-08-17
