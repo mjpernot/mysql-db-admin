@@ -8,6 +8,11 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - Upgraded python-lib to v2.9.2
 - Upgraded mysql-lib to v5.3.1
 - Upgraded mongo-lib to v4.2.1
+- Added TLS capability
+
+### Changed
+- config/mysql_cfg.py.TEMPLATE: Added TLS version entry.
+- config/mongo.py.TEMPLATE: Removed old entries.
 
 
 ## [3.2.0] - 2021-08-17
