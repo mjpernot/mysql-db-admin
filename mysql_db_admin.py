@@ -11,7 +11,7 @@
         connection usage, memory use, and database server status.
 
     Usage:
-        mysql_db_admin.py -c file -d path
+        mysql_db_admin.py -c mysql_cfg -d path
             {-C [db_name [db_name2 ...]] [-t table_name [table_name2 ...]] |
              -A [db_name [db_name2 ...] [-t table_name [table_name2 ...]] |
              -S [db_name [db_name2 ...]] [-t table_name [table_name2 ...]] |
@@ -24,7 +24,7 @@
             [-v | -h]
 
     Arguments:
-        -c file => Server configuration file.  Required arg.
+        -c mysql_cfg => MySQL configuration file.  Required arg.
         -d dir path => Directory path to config file (-c). Required arg.
 
         -C [database name(s)] => Check a table for errors.
@@ -107,6 +107,9 @@
             ssl_verify_id = False
             ssl_verify_cert = False
 
+            # TLS versions: Set the TLS versions allowed in the connection
+            tls_versions = []
+
         NOTE 1:  Include the cfg_file even if running remotely as the file will
             be used in future releases.
         NOTE 2:  In MySQL 5.6 - it now gives warning if password is passed on
@@ -117,7 +120,7 @@
         NOTE 3:  Ignore the rep_user and rep_japd entries.  Not required.
 
         Defaults Extra File format (config/mysql.cfg.TEMPLATE)
-            password="PASSWORD"
+            password="PSWORD"
             socket=DIRECTORY_PATH/mysqld.sock
 
         NOTE 1:  The socket information can be obtained from the my.cnf
@@ -146,8 +149,6 @@
             auth = True
             auth_db = "admin"
             auth_mech = "SCRAM-SHA-1"
-            use_arg = True
-            use_uri = False
 
             Replica Set connection:  Same format as above, but with these
                 additional entries at the end of the configuration file:
