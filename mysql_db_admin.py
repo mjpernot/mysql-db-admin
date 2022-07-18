@@ -779,72 +779,97 @@ def main():
         line arguments and values.
 
     Variables:
-        dir_chk_list -> contains options which will be directories.
-        file_chk_list -> contains the options which will have files included.
-        file_crt_list -> contains options which require files to be created.
-        func_dict -> dictionary list for the function calls or other options.
-        opt_con_req_list -> contains the options that require other options.
-        opt_def_dict -> contains options with their default values.
-        opt_multi_list -> contains the options that will have multiple values.
-        opt_req_list -> contains the options that are required for the program.
-        opt_val_list -> contains options which require values.
-        opt_xor_dict -> contains options which are XOR with its values.
+        dir_perms_chk -> contains options which will be directories and the
+            octal permission settings
+        dir_chk_list -> contains options which will be directories
+        file_chk_list -> contains the options which will have files included
+        file_crt_list -> contains options which require files to be created
+        func_dict -> dictionary list for the function calls or other options
+        opt_con_req_list -> contains the options that require other options
+        opt_def_dict -> contains options with their default values
+        opt_multi_list -> contains the options that will have multiple values
+        opt_req_list -> contains the options that are required for the program
+        opt_val_list -> contains options which require values
+        opt_xor_dict -> contains options which are XOR with its values
         sys_dbs -> contains a list of system databases that will be skipped
-            over for some functions.
+            over for some functions
 
     Arguments:
-        (input) argv -> Arguments from the command line.
+        (input) argv -> arguments from the command line
 
     """
 
     cmdline = gen_libs.get_inst(sys)
-    dir_chk_list = ["-d"]
+#    dir_chk_list = ["-d"]
+    dir_perms_chk = {"-d": 5}
     file_chk_list = ["-o"]
     file_crt_list = ["-o"]
-    func_dict = {"-A": analyze, "-C": check, "-D": optimize, "-S": checksum,
-                 "-M": status, "-L": listdbs}
+    func_dict = {
+        "-A": analyze, "-C": check, "-D": optimize, "-S": checksum,
+        "-M": status, "-L": listdbs}
     opt_con_req_list = {"-i": ["-m"], "-s": ["-e"], "-u": ["-e"]}
-    opt_def_dict = {"-t": None, "-A": [], "-C": [], "-D": [], "-S": [],
-                    "-i": "sysmon:mysql_db_status"}
+    opt_def_dict = {
+        "-t": None, "-A": [], "-C": [], "-D": [], "-S": [],
+        "-i": "sysmon:mysql_db_status"}
     opt_multi_list = ["-A", "-C", "-D", "-S", "-t", "-e", "-s"]
     opt_req_list = ["-c", "-d"]
-    opt_val_list = ["-c", "-d", "-t", "-A", "-C", "-D", "-S", "-i", "-m", "-o",
-                    "-e", "-s", "-y"]
-    opt_xor_dict = {"-A": ["-C", "-D", "-M", "-S", "-L"],
-                    "-C": ["-A", "-D", "-M", "-S", "-L"],
-                    "-D": ["-A", "-C", "-M", "-S", "-L"],
-                    "-S": ["-A", "-C", "-D", "-M", "-L"],
-                    "-M": ["-A", "-C", "-D", "-S", "-L"],
-                    "-L": ["-A", "-C", "-D", "-S", "-M"]}
+    opt_val_list = [
+        "-c", "-d", "-t", "-A", "-C", "-D", "-S", "-i", "-m", "-o", "-e", "-s",
+        "-y"]
+    opt_xor_dict = {
+        "-A": ["-C", "-D", "-M", "-S", "-L"],
+        "-C": ["-A", "-D", "-M", "-S", "-L"],
+        "-D": ["-A", "-C", "-M", "-S", "-L"],
+        "-S": ["-A", "-C", "-D", "-M", "-L"],
+        "-M": ["-A", "-C", "-D", "-S", "-L"],
+        "-L": ["-A", "-C", "-D", "-S", "-M"]}
     sys_dbs = ["performance_schema", "information_schema", "mysql", "sys"]
 
     # Process argument list from command line.
-    args_array = arg_parser.arg_parse2(cmdline.argv, opt_val_list,
-                                       opt_def_dict, multi_val=opt_multi_list)
+#    args_array = arg_parser.arg_parse2(cmdline.argv, opt_val_list,
+#                                       opt_def_dict, multi_val=opt_multi_list)
+    args = gen_class.ArgParser(
+        cmdline.argv, opt_val=opt_val_list, multi_val=opt_multi_list,
+        opt_def=opt_def_dict, do_parse=True)
 
     # Set JSON format for certain option settings
-    if "-i" in args_array.keys() and "-m" in args_array.keys() \
-       and "-j" not in args_array.keys():
-        args_array["-j"] = True
+#    if "-i" in args_array.keys() and "-m" in args_array.keys() \
+#       and "-j" not in args_array.keys():
+#        args_array["-j"] = True
+    if args.arg_exist("-i") and args.arg_exist("-m") \
+       and not args.arg_exist("-j"):
+        args.insert_arg("-j", True)
 
-    if not gen_libs.help_func(args_array, __version__, help_message) \
-       and not arg_parser.arg_require(args_array, opt_req_list) \
-       and arg_parser.arg_xor_dict(args_array, opt_xor_dict) \
-       and arg_parser.arg_cond_req(args_array, opt_con_req_list) \
-       and not arg_parser.arg_dir_chk_crt(args_array, dir_chk_list) \
-       and not arg_parser.arg_file_chk(args_array, file_chk_list,
-                                       file_crt_list):
+#    if not gen_libs.help_func(args_array, __version__, help_message) \
+#       and not arg_parser.arg_require(args_array, opt_req_list) \
+#       and arg_parser.arg_xor_dict(args_array, opt_xor_dict) \
+#       and arg_parser.arg_cond_req(args_array, opt_con_req_list) \
+#       and not arg_parser.arg_dir_chk_crt(args_array, dir_chk_list) \
+#       and not arg_parser.arg_file_chk(args_array, file_chk_list,
+#                                       file_crt_list):
+    if not gen_libs.help_func(args.get_args(), __version__, help_message)        \
+       and args.arg_require(opt_req=opt_req_list)                           \
+       and args.arg_xor_dict(opt_xor_val=opt_xor_dict)                      \
+       and args.arg_cond_req(opt_con_req=opt_con_req_list)                  \
+       and args.arg_dir_chk(dir_perms_chk=dir_perms_chk)                    \
+       and args.arg_file_chk(file_chk=file_chk_list, file_crt=file_crt_list):
 
         try:
-            proglock = gen_class.ProgramLock(cmdline.argv,
-                                             args_array.get("-y", ""))
-            run_program(args_array, func_dict, sys_dbs=sys_dbs,
-                        multi_val=opt_multi_list)
+#            proglock = gen_class.ProgramLock(cmdline.argv,
+#                                             args_array.get("-y", ""))
+#            run_program(args_array, func_dict, sys_dbs=sys_dbs,
+#                        multi_val=opt_multi_list)
+            proglock = gen_class.ProgramLock(
+                cmdline.argv, args.get_val("-y", def_val=""))
+            run_program(
+                args, func_dict, sys_dbs=sys_dbs, multi_val=opt_multi_list)
             del proglock
 
         except gen_class.SingleInstanceException:
+#            print("WARNING:  lock in place for mysql_db_admin with id of: %s"
+#                  % (args_array.get("-y", "")))
             print("WARNING:  lock in place for mysql_db_admin with id of: %s"
-                  % (args_array.get("-y", "")))
+                  % (args.get_val("-y", def_val="")))
 
 
 if __name__ == "__main__":

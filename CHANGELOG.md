@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on "Keep a Changelog".  This project adheres to Semantic Versioning.
 
 
+## [3.3.0]
+- Replaced args_parser module with the gen_class.ArgParser class.
+
+### Changed
+- main: Replaced the use of arg_parser (args_array) with gen_class.ArgParser class (args).
+
+
 ## [3.2.1]
 - Upgraded python-lib to v2.9.2
 - Upgraded mysql-lib to v5.3.1
