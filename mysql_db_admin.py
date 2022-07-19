@@ -725,25 +725,27 @@ def listdbs(server, args_array, **kwargs):
             print("    %s" % (item))
 
 
-def run_program(args_array, func_dict, **kwargs):
+def run_program(args, func_dict, **kwargs):
 
     """Function:  run_program
 
     Description:  Creates class instance(s) and controls flow of the program.
 
     Arguments:
-        (input) args_array -> Dictionary of command line options.
-        (input) func_dict -> Dictionary of functions.
+        (input) args -> ArgParser class instance
+        (input) func_dict -> Dictionary of functions
         (input) **kwargs:
-            sys_dbs -> List of system databases.
-            multi_val -> List of options that may have multiple values.
+            sys_dbs -> List of system databases
+            multi_val -> List of options that may have multiple values
 
     """
 
-    args_array = dict(args_array)
+#    args_array = dict(args_array)
     func_dict = dict(func_dict)
-    server = mysql_libs.create_instance(args_array["-c"], args_array["-d"],
-                                        mysql_class.Server)
+#    server = mysql_libs.create_instance(args_array["-c"], args_array["-d"],
+#                                        mysql_class.Server)
+    server = mysql_libs.create_instance(
+        args.get_val("-c"), args.get_val("-d"), mysql_class.Server)
     server.connect(silent=True)
 
     if server.conn_msg:
@@ -751,21 +753,32 @@ def run_program(args_array, func_dict, **kwargs):
               (server.name, server.conn_msg))
 
     else:
-        outfile = args_array.get("-o", None)
-        db_tbl = args_array.get("-i", None)
+#        outfile = args_array.get("-o", None)
+#        db_tbl = args_array.get("-i", None)
+        outfile = args.get_val("-o", def_val=None)
+        db_tbl = args.get_val("-i", def_val=None)
         mongo = None
         mail = None
 
-        if args_array.get("-m", None):
-            mongo = gen_libs.load_module(args_array["-m"], args_array["-d"])
+#        if args_array.get("-m", None):
+#            mongo = gen_libs.load_module(args_array["-m"], args_array["-d"])
+        if args.arg_exist("-m"):
+            mongo = gen_libs.load_module(
+                args.get_val("-m"), args.get_val("-d"))
 
-        if args_array.get("-e", None):
-            mail = gen_class.setup_mail(args_array.get("-e"),
-                                        subj=args_array.get("-s", None))
+#        if args_array.get("-e", None):
+#            mail = gen_class.setup_mail(args_array.get("-e"),
+#                                        subj=args_array.get("-s", None))
+        if args.arg_exist("-e"):
+            mail = gen_class.setup_mail(
+                args.get_val("-e"), subj=args.get_val("-s", def_val=None))
 
         # Intersect args_array & func_dict to determine which functions to call
-        for item in set(args_array.keys()) & set(func_dict.keys()):
-            func_dict[item](server, args_array, ofile=outfile, db_tbl=db_tbl,
+#        for item in set(args_array.keys()) & set(func_dict.keys()):
+#            func_dict[item](server, args_array, ofile=outfile, db_tbl=db_tbl,
+#                            class_cfg=mongo, mail=mail, **kwargs)
+        for item in set(args.args_array.keys()) & set(func_dict.keys()):
+            func_dict[item](server, args, ofile=outfile, db_tbl=db_tbl,
                             class_cfg=mongo, mail=mail, **kwargs)
 
         mysql_libs.disconnect(server)

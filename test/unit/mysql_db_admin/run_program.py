@@ -60,6 +60,56 @@ def check(server, args_array, **kwargs):
     return status
 
 
+class ArgParser(object):
+
+    """Class:  ArgParser
+
+    Description:  Class stub holder for gen_class.ArgParser class.
+
+    Methods:
+        __init__
+        arg_exist
+        get_val
+
+    """
+
+    def __init__(self):
+
+        """Method:  __init__
+
+        Description:  Class initialization.
+
+        Arguments:
+
+        """
+
+        self.args_array = {"-c": "mysql_cfg", "-d": "config"}
+
+    def arg_exist(self, arg):
+
+        """Method:  arg_exist
+
+        Description:  Method stub holder for gen_class.ArgParser.arg_exist.
+
+        Arguments:
+
+        """
+
+        return True if arg in self.args_array else False
+
+    def get_val(self, skey, def_val=None):
+
+        """Method:  get_val
+
+        Description:  Method stub holder for gen_class.ArgParser.get_val.
+
+        Arguments:
+
+        """
+
+        return self.args_array.get(skey, def_val)
+
+
 class Server(object):
 
     """Class:  Server
@@ -129,11 +179,12 @@ class UnitTest(unittest.TestCase):
         """
 
         self.server = Server()
+        self.args = ArgParser() 
         self.func_dict = {"-C": check}
-        self.args_array = {"-m": True, "-d": True, "-c": True, "-C": True}
-        self.args_array2 = {"-m": True, "-d": True, "-c": True, "-C": True,
-                            "-e": "ToEmail", "-s": "SubjectLine"}
-        self.args_array3 = {"-d": True, "-c": True, "-C": True}
+#        self.args_array = {"-m": True, "-d": True, "-c": True, "-C": True}
+#        self.args_array2 = {"-m": True, "-d": True, "-c": True, "-C": True,
+#                            "-e": "ToEmail", "-s": "SubjectLine"}
+#        self.args_array3 = {"-d": True, "-c": True, "-C": True}
 
     @mock.patch("mysql_db_admin.mysql_libs.disconnect")
     @mock.patch("mysql_db_admin.mysql_libs.create_instance")
@@ -148,13 +199,14 @@ class UnitTest(unittest.TestCase):
         """
 
         self.server.conn_msg = "Error connection message"
+        self.args.args_array["-C"] = True
 
         mock_inst.return_value = self.server
         mock_disconn.return_value = True
 
         with gen_libs.no_std_out():
-            self.assertFalse(mysql_db_admin.run_program(self.args_array3,
-                                                        self.func_dict))
+            self.assertFalse(
+                mysql_db_admin.run_program(self.args, self.func_dict))
 
     @mock.patch("mysql_db_admin.mysql_libs.disconnect")
     @mock.patch("mysql_db_admin.mysql_libs.create_instance")
@@ -168,11 +220,12 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        self.args.args_array["-C"] = True
+
         mock_inst.return_value = self.server
         mock_disconn.return_value = True
 
-        self.assertFalse(mysql_db_admin.run_program(self.args_array3,
-                                                    self.func_dict))
+        self.assertFalse(mysql_db_admin.run_program(self.args, self.func_dict))
 
     @mock.patch("mysql_db_admin.mysql_libs.disconnect")
     @mock.patch("mysql_db_admin.gen_libs.load_module")
@@ -187,12 +240,16 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        self.args.args_array["-C"] = True
+        self.args.args_array["-m"] = True
+        self.args.args_array["-e"] = "ToEmail"
+        self.args.args_array["-s"] = "SubjectLine"
+
         mock_inst.return_value = self.server
         mock_mongo.return_value = True
         mock_disconn.return_value = True
 
-        self.assertFalse(mysql_db_admin.run_program(self.args_array2,
-                                                    self.func_dict))
+        self.assertFalse(mysql_db_admin.run_program(self.args, self.func_dict))
 
     @mock.patch("mysql_db_admin.mysql_libs.disconnect")
     @mock.patch("mysql_db_admin.gen_libs.load_module")
@@ -207,12 +264,14 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        self.args.args_array["-C"] = True
+        self.args.args_array["-m"] = True
+
         mock_inst.return_value = self.server
         mock_mongo.return_value = True
         mock_disconn.return_value = True
 
-        self.assertFalse(mysql_db_admin.run_program(self.args_array,
-                                                    self.func_dict))
+        self.assertFalse(mysql_db_admin.run_program(self.args, self.func_dict))
 
     @mock.patch("mysql_db_admin.mysql_libs.disconnect")
     @mock.patch("mysql_db_admin.mysql_libs.create_instance")
@@ -226,11 +285,12 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        self.args.args_array["-C"] = True
+
         mock_inst.return_value = self.server
         mock_disconn.return_value = True
 
-        self.assertFalse(mysql_db_admin.run_program(self.args_array3,
-                                                    self.func_dict))
+        self.assertFalse(mysql_db_admin.run_program(self.args, self.func_dict))
 
 
 if __name__ == "__main__":

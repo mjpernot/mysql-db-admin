@@ -8,7 +8,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - Replaced args_parser module with the gen_class.ArgParser class.
 
 ### Changed
-- main: Replaced the use of arg_parser (args_array) with gen_class.ArgParser class (args).
+- main, run_program: Replaced the use of arg_parser (args_array) with gen_class.ArgParser class (args).
 
 
 ## [3.2.1]
