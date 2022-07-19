@@ -35,6 +35,44 @@ import version
 __version__ = version.__version__
 
 
+class ArgParser(object):
+
+    """Class:  ArgParser
+
+    Description:  Class stub holder for gen_class.ArgParser class.
+
+    Methods:
+        __init__
+        arg_exist
+        get_val
+
+    """
+
+    def __init__(self):
+
+        """Method:  __init__
+
+        Description:  Class initialization.
+
+        Arguments:
+
+        """
+
+        self.args_array = {"-c": "mysql_cfg", "-d": "config", "-L": True}
+
+    def arg_exist(self, arg):
+
+        """Method:  arg_exist
+
+        Description:  Method stub holder for gen_class.ArgParser.arg_exist.
+
+        Arguments:
+
+        """
+
+        return True if arg in self.args_array else False
+
+
 class Server(object):
 
     """Class:  Server
@@ -83,8 +121,9 @@ class UnitTest(unittest.TestCase):
         """
 
         self.server = Server()
-        self.args_array = {"-L": True}
-        self.args_array2 = {"-L": True, "-k": True}
+        self.args = ArgParser()
+#        self.args_array = {"-L": True}
+#        self.args_array2 = {"-L": True, "-k": True}
         self.db_list = ["db1", "db2", "performance_schema",
                         "information_schema", "mysql", "sys"]
         self.sys_dbs = ["performance_schema", "information_schema", "mysql",
@@ -103,12 +142,14 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        self.args.args_array["-k"] = True
+
         mock_list.return_value = self.db_list
 
         with gen_libs.no_std_out():
             self.assertFalse(
                 mysql_db_admin.listdbs(
-                    self.server, self.args_array2, sys_dbs=self.sys_dbs))
+                    self.server, self.args, sys_dbs=self.sys_dbs))
 
     @mock.patch("mysql_db_admin.mysql_libs.fetch_db_dict",
                 mock.Mock(return_value=True))
@@ -128,7 +169,7 @@ class UnitTest(unittest.TestCase):
         with gen_libs.no_std_out():
             self.assertFalse(
                 mysql_db_admin.listdbs(
-                    self.server, self.args_array, sys_dbs=self.sys_dbs))
+                    self.server, self.args, sys_dbs=self.sys_dbs))
 
 
 if __name__ == "__main__":
