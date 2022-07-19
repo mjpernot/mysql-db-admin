@@ -35,6 +35,56 @@ import version
 __version__ = version.__version__
 
 
+class ArgParser(object):
+
+    """Class:  ArgParser
+
+    Description:  Class stub holder for gen_class.ArgParser class.
+
+    Methods:
+        __init__
+        arg_exist
+        get_val
+
+    """
+
+    def __init__(self):
+
+        """Method:  __init__
+
+        Description:  Class initialization.
+
+        Arguments:
+
+        """
+
+        self.args_array = {"-c": "mysql_cfg", "-d": "config"}
+
+    def arg_exist(self, arg):
+
+        """Method:  arg_exist
+
+        Description:  Method stub holder for gen_class.ArgParser.arg_exist.
+
+        Arguments:
+
+        """
+
+        return True if arg in self.args_array else False
+
+    def get_val(self, skey, def_val=None):
+
+        """Method:  get_val
+
+        Description:  Method stub holder for gen_class.ArgParser.get_val.
+
+        Arguments:
+
+        """
+
+        return self.args_array.get(skey, def_val)
+
+
 class Mail(object):
 
     """Class:  Mail
@@ -166,6 +216,7 @@ class UnitTest(unittest.TestCase):
 
         self.server = Server()
         self.mail = Mail()
+        self.args = ArgParser()
         self.args_array = {"-z": True}
         self.args_arraya = {"-z": True, "-u": True}
         self.args_array2 = {}
@@ -182,9 +233,11 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        self.args.args_array["-z"] = True
+        self.args.args_array["-u"] = True
+
         self.assertFalse(mysql_db_admin._process_non_json(
-            self.server, self.args_arraya, self.outdata, self.mode,
-            mail=self.mail))
+            self.server, self.args, self.outdata, self.mode, mail=self.mail))
 
     def test_mail_non_json(self):
 
@@ -196,9 +249,10 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        self.args.args_array["-z"] = True
+
         self.assertFalse(mysql_db_admin._process_non_json(
-            self.server, self.args_array, self.outdata, self.mode,
-            mail=self.mail))
+            self.server, self.args, self.outdata, self.mode, mail=self.mail))
 
     @mock.patch("mysql_db_admin.gen_libs.write_file")
     def test_file_non_json(self, mock_write):
@@ -211,11 +265,12 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        self.args.args_array["-z"] = True
+
         mock_write.return_value = True
 
         self.assertFalse(mysql_db_admin._process_non_json(
-            self.server, self.args_array, self.outdata, self.mode,
-            ofile="FileName"))
+            self.server, self.args, self.outdata, self.mode, ofile="FileName"))
 
     def test_stdout_suppress_non_json(self):
 
@@ -227,8 +282,10 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        self.args.args_array["-z"] = True
+
         self.assertFalse(mysql_db_admin._process_non_json(
-            self.server, self.args_array, self.outdata, self.mode))
+            self.server, self.args, self.outdata, self.mode))
 
     def test_non_json(self):
 
@@ -242,7 +299,7 @@ class UnitTest(unittest.TestCase):
 
         with gen_libs.no_std_out():
             self.assertFalse(mysql_db_admin._process_non_json(
-                self.server, self.args_array2, self.outdata, self.mode))
+                self.server, self.args, self.outdata, self.mode))
 
 
 if __name__ == "__main__":

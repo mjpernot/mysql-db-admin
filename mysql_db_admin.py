@@ -646,7 +646,7 @@ def _process_json(args_array, outdata, mode, **kwargs):
         gen_libs.print_data(jdata)
 
 
-def _process_non_json(server, args_array, outdata, mode, **kwargs):
+def _process_non_json(server, args, outdata, mode, **kwargs):
 
     """Function:  _process_non_json
 
@@ -654,17 +654,17 @@ def _process_non_json(server, args_array, outdata, mode, **kwargs):
         data.
 
     Arguments:
-        (input) server -> Server instance.
-        (input) args_array -> Dictionary of command line options.
-        (input) outdata -> Dictionary of performance data.
-        (input) mode -> File write mode.
+        (input) server -> Server instance
+        (input) args -> ArgParser class instance
+        (input) outdata -> Dictionary of performance data
+        (input) mode -> File write mode
         (input) **kwargs:
-            ofile -> file name - Name of output file.
-            mail -> Mail instance.
+            ofile -> file name - Name of output file
+            mail -> Mail instance
 
     """
 
-    args_array = dict(args_array)
+#    args_array = dict(args_array)
     outdata = dict(outdata)
     ofile = kwargs.get("ofile", None)
     mail = kwargs.get("mail", None)
@@ -673,7 +673,8 @@ def _process_non_json(server, args_array, outdata, mode, **kwargs):
     for key, value in outdata.items():
         pdata += "{}: {}".format(key, value) + "\n"
 
-    if not args_array.get("-z", False):
+#    if not args_array.get("-z", False):
+    if not args.arg_exist("-z"):
         print("\nDatabase Status Check for Server: %s" % (server.name))
         gen_libs.prt_msg("Uptime (days)", server.days_up, 0)
         gen_libs.prt_msg("Memory", "", 0)
@@ -690,7 +691,8 @@ def _process_non_json(server, args_array, outdata, mode, **kwargs):
 
     if mail:
         mail.add_2_msg(pdata)
-        mail.send_mail(use_mailx=args_array.get("-u", False))
+#        mail.send_mail(use_mailx=args_array.get("-u", False))
+        mail.send_mail(use_mailx=args.get_val("-u", def_val=False))
 
 
 def listdbs(server, args, **kwargs):
