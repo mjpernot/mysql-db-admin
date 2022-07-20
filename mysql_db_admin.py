@@ -237,11 +237,11 @@ def run_analyze(server, dbs, tbl, **kwargs):
     Description:  Calls the analyze table command and prints the results.
 
     Arguments:
-        (input) server -> Server instance.
-        (input) dbs -> Database name.
-        (input) tbl -> Table name.
+        (input) server -> Server instance
+        (input) dbs -> Database name
+        (input) tbl -> Table name
         (input) **kwargs:
-            sys_dbs -> List of system databases to skip.
+            sys_dbs -> List of system databases to skip
 
     """
 
@@ -261,9 +261,9 @@ def run_checksum(server, dbs, tbl, **kwargs):
     Description:  Calls the checksum table command and prints the results.
 
     Arguments:
-        (input) server -> Server instance.
-        (input) dbs -> Database name.
-        (input) tbl -> Table name.
+        (input) server -> Server instance
+        (input) dbs -> Database name
+        (input) tbl -> Table name
 
     """
 
@@ -279,11 +279,11 @@ def run_optimize(server, dbs, tbl, **kwargs):
     Description:  Calls the optimize table command and print the results.
 
     Arguments:
-        (input) server -> Server instance.
-        (input) dbs -> Database name.
-        (input) tbl -> Table name.
+        (input) server -> Server instance
+        (input) dbs -> Database name
+        (input) tbl -> Table name
         (input) **kwargs:
-            sys_dbs -> List of system databases to skip.
+            sys_dbs -> List of system databases to skip
 
     """
 
@@ -310,9 +310,9 @@ def run_check(server, dbs, tbl, **kwargs):
     Description:  Calls the check table command and print the results.
 
     Arguments:
-        (input) server -> Server instance.
-        (input) dbs -> Database name.
-        (input) tbl -> Table name.
+        (input) server -> Server instance
+        (input) dbs -> Database name
+        (input) tbl -> Table name
 
     """
 
@@ -331,8 +331,8 @@ def detect_dbs(sub_db_list, full_db_list, **kwargs):
         Database list 2.
 
     Arguments:
-        (input) sub_db_list -> Subset Database list.
-        (input) full_db_list -> Full Database list.
+        (input) sub_db_list -> Subset Database list
+        (input) full_db_list -> Full Database list
 
     """
 
@@ -354,13 +354,13 @@ def process_request(server, func_name, db_name=None, tbl_name=None, **kwargs):
             process all databases/tables repsectively.
 
     Arguments:
-        (input) server -> Server instance.
-        (input) func_name -> Name of a function.
-        (input) db_name -> Database name.
-        (input) tbl_name -> Table name.
+        (input) server -> Server instance
+        (input) func_name -> Name of a function
+        (input) db_name -> Database name
+        (input) tbl_name -> Table name
         (input) **kwargs:
-            sys_dbs -> List of system databases.
-            multi_val -> List of options that may have multiple values.
+            sys_dbs -> List of system databases
+            multi_val -> List of options that may have multiple values
 
     """
 
@@ -397,13 +397,13 @@ def _proc_all_dbs(server, func_name, db_list, dict_key, **kwargs):
         databases.
 
     Arguments:
-        (input) server -> Server instance.
-        (input) func_name -> Name of a function.
-        (input) db_list -> List of all databases.
-        (input) dict_key -> Dictionary key for fetch_tbl_dict call.
+        (input) server -> Server instance
+        (input) func_name -> Name of a function
+        (input) db_list -> List of all databases
+        (input) dict_key -> Dictionary key for fetch_tbl_dict call
         (input) **kwargs:
-            sys_dbs -> List of system databases.
-            multi_val -> List of options that may have multiple values.
+            sys_dbs -> List of system databases
+            multi_val -> List of options that may have multiple values
 
     """
 
@@ -421,14 +421,14 @@ def _proc_all_tbls(server, func_name, db_list, db_name, dict_key, **kwargs):
         in listed databases.
 
     Arguments:
-        (input) server -> Server instance.
-        (input) func_name -> Name of a function.
-        (input) db_list -> List of all databases.
-        (input) db_name -> List of database names.
-        (input) dict_key -> Dictionary key for fetch_tbl_dict call.
+        (input) server -> Server instance
+        (input) func_name -> Name of a function
+        (input) db_list -> List of all databases
+        (input) db_name -> List of database names
+        (input) dict_key -> Dictionary key for fetch_tbl_dict call
         (input) **kwargs:
-            sys_dbs -> List of system databases.
-            multi_val -> List of options that may have multiple values.
+            sys_dbs -> List of system databases
+            multi_val -> List of options that may have multiple values
 
     """
 
@@ -451,15 +451,15 @@ def _proc_some_tbls(server, func_name, db_list, db_name, tbl_name, dict_key,
         tables in listed databases.
 
     Arguments:
-        (input) server -> Server instance.
-        (input) func_name -> Name of a function.
-        (input) db_list -> List of all databases.
-        (input) db_name -> List of database names.
-        (input) tbl_name -> List of table names.
-        (input) dict_key -> Dictionary key for fetch_tbl_dict call.
+        (input) server -> Server instance
+        (input) func_name -> Name of a function
+        (input) db_list -> List of all databases
+        (input) db_name -> List of database names
+        (input) tbl_name -> List of table names
+        (input) dict_key -> Dictionary key for fetch_tbl_dict call
         (input) **kwargs:
-            sys_dbs -> List of system databases.
-            multi_val -> List of options that may have multiple values.
+            sys_dbs -> List of system databases
+            multi_val -> List of options that may have multiple values
 
     """
 
@@ -481,82 +481,90 @@ def _proc_some_tbls(server, func_name, db_list, db_name, tbl_name, dict_key,
             func_name(server, dbs, tbl, **kwargs)
 
 
-def analyze(server, args_array, **kwargs):
+def analyze(server, args, **kwargs):
 
     """Function:  analyze
 
     Description:  Sets up the processing for the analyze table command.
 
     Arguments:
-        (input) server -> Server instance.
-        (input) args_array -> Dictionary of command line options.
+        (input) server -> Server instance
+        (input) args -> ArgParser class instance
         (input) **kwargs:
-            sys_dbs -> List of system databases to skip.
-            multi_val -> List of options that may have multiple values.
+            sys_dbs -> List of system databases to skip
+            multi_val -> List of options that may have multiple values
 
     """
 
-    args_array = dict(args_array)
-    process_request(server, run_analyze, args_array["-A"],
-                    args_array.get("-t", None), **kwargs)
+#    args_array = dict(args_array)
+#    process_request(server, run_analyze, args_array["-A"],
+#                    args_array.get("-t", None), **kwargs)
+    process_request(server, run_analyze, args.get_val("-A"),
+                    args.get_val("-t", def_val=None), **kwargs)
 
 
-def checksum(server, args_array, **kwargs):
+def checksum(server, args, **kwargs):
 
     """Function:  checksum
 
     Description:  Sets up the processing for the checksum table command.
 
     Arguments:
-        (input) server -> Server instance.
-        (input) args_array -> Dictionary of command line options.
+        (input) server -> Server instance
+        (input) args -> ArgParser class instance
         (input) **kwargs:
-            multi_val -> List of options that may have multiple values.
+            multi_val -> List of options that may have multiple values
 
     """
 
-    args_array = dict(args_array)
-    process_request(server, run_checksum, args_array["-S"],
-                    args_array.get("-t", None), **kwargs)
+#    args_array = dict(args_array)
+#    process_request(server, run_checksum, args_array["-S"],
+#                    args_array.get("-t", None), **kwargs)
+    process_request(server, run_checksum, args.get_val("-S"),
+                    args.get_val("-t", def_val=None), **kwargs)
 
 
-def optimize(server, args_array, **kwargs):
+def optimize(server, args, **kwargs):
 
     """Function:  optimize
 
     Description:  Sets up the processing for the optimization table command.
 
     Arguments:
-        (input) server -> Server instance.
-        (input) args_array -> Dictionary of command line options.
+        (input) server -> Server instance
+        (input) args -> ArgParser class instance
         (input) **kwargs:
-            sys_dbs -> List of system databases.
-            multi_val -> List of options that may have multiple values.
+            sys_dbs -> List of system databases
+            multi_val -> List of options that may have multiple values
 
     """
 
-    args_array = dict(args_array)
-    process_request(server, run_optimize, args_array["-D"],
-                    args_array.get("-t", None), **kwargs)
+#    args_array = dict(args_array)
+#    process_request(server, run_optimize, args_array["-D"],
+#                    args_array.get("-t", None), **kwargs)
+    process_request(server, run_optimize, args.get_val("-D"),
+                    args.get_val("-t", def_val=None), **kwargs)
 
 
-def check(server, args_array, **kwargs):
+def check(server, args, **kwargs):
 
     """Function:  check
 
     Description:  Sets up the processing for the check table command.
 
     Arguments:
-        (input) server -> Server instance.
-        (input) args_array -> Dictionary of command line options.
+        (input) server -> Server instance
+        (input) args -> ArgParser class instance
         (input) **kwargs:
-            multi_val -> List of options that may have multiple values.
+            multi_val -> List of options that may have multiple values
 
     """
 
-    args_array = dict(args_array)
-    process_request(server, run_check, args_array["-C"],
-                    args_array.get("-t", None), **kwargs)
+#    args_array = dict(args_array)
+#    process_request(server, run_check, args_array["-C"],
+#                    args_array.get("-t", None), **kwargs)
+    process_request(server, run_check, args.get_val("-C"),
+                    args.get_val("-t", def_val=None), **kwargs)
 
 
 def status(server, args, **kwargs):
@@ -781,11 +789,11 @@ def run_program(args, func_dict, **kwargs):
             mail = gen_class.setup_mail(
                 args.get_val("-e"), subj=args.get_val("-s", def_val=None))
 
-        # Intersect args_array & func_dict to determine which functions to call
+        # Intersect args.args_array & func_dict to determine functions to call
 #        for item in set(args_array.keys()) & set(func_dict.keys()):
 #            func_dict[item](server, args_array, ofile=outfile, db_tbl=db_tbl,
 #                            class_cfg=mongo, mail=mail, **kwargs)
-        for item in set(args.args_array.keys()) & set(func_dict.keys()):
+        for item in set(args.get_args_keys()) & set(func_dict.keys()):
             func_dict[item](server, args, ofile=outfile, db_tbl=db_tbl,
                             class_cfg=mongo, mail=mail, **kwargs)
 

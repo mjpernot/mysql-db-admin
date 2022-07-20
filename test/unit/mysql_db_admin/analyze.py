@@ -34,6 +34,43 @@ import version
 __version__ = version.__version__
 
 
+class ArgParser(object):
+
+    """Class:  ArgParser
+
+    Description:  Class stub holder for gen_class.ArgParser class.
+
+    Methods:
+        __init__
+        get_val
+
+    """
+
+    def __init__(self):
+
+        """Method:  __init__
+
+        Description:  Class initialization.
+
+        Arguments:
+
+        """
+
+        self.args_array = {"-c": "mysql_cfg", "-d": "config"}
+
+    def get_val(self, skey, def_val=None):
+
+        """Method:  get_val
+
+        Description:  Method stub holder for gen_class.ArgParser.get_val.
+
+        Arguments:
+
+        """
+
+        return self.args_array.get(skey, def_val)
+
+
 class Server(object):
 
     """Class:  Server
@@ -66,7 +103,8 @@ class UnitTest(unittest.TestCase):
 
     Methods:
         setUp
-        test_analyze
+        test_db_tbl
+        test_db_only
 
     """
 
@@ -81,15 +119,34 @@ class UnitTest(unittest.TestCase):
         """
 
         self.server = Server()
+        self.args = ArgParser()
+        self.args.args_array["-A"] = ["db_name"]
         self.run_analyze = True
-        self.args_array = {"-A": True}
+#        self.args_array = {"-A": True}
 
     @mock.patch("mysql_db_admin.process_request")
-    def test_analyze(self, mock_process):
+    def test_db_tbl(self, mock_process):
 
-        """Function:  test_analyze
+        """Function:  test_db_tbl
 
-        Description:  Test analyze function.
+        Description:  Test check function with database and table names.
+
+        Arguments:
+
+        """
+
+        self.args.args_array["-t"] = ["tbl_name"]
+
+        mock_process.return_value = True
+
+        self.assertFalse(mysql_db_admin.analyze(self.server, self.args))
+
+    @mock.patch("mysql_db_admin.process_request")
+    def test_db_only(self, mock_process):
+
+        """Function:  test_db_only
+
+        Description:  Test check function with database name only.
 
         Arguments:
 
@@ -97,7 +154,7 @@ class UnitTest(unittest.TestCase):
 
         mock_process.return_value = True
 
-        self.assertFalse(mysql_db_admin.analyze(self.server, self.args_array))
+        self.assertFalse(mysql_db_admin.analyze(self.server, self.args))
 
 
 if __name__ == "__main__":

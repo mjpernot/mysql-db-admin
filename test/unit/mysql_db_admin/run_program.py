@@ -35,15 +35,15 @@ import version
 __version__ = version.__version__
 
 
-def check(server, args_array, **kwargs):
+def check(server, args, **kwargs):
 
     """Method:  check
 
     Description:  Function stub holder for mysql_db_admin.check.
 
     Arguments:
-        (input) server
-        (input) args_array -> Stub holder
+        (input) server > Stub holder
+        (input) args -> Stub holder
         (input) **kwargs
             ofile -> Stub holder
             db_tbl -> Stub holder
@@ -54,7 +54,7 @@ def check(server, args_array, **kwargs):
     ofile = kwargs.get("ofile", "file")
     status = True
 
-    if server and args_array and ofile:
+    if server and args and ofile:
         status = True
 
     return status
@@ -70,6 +70,8 @@ class ArgParser(object):
         __init__
         arg_exist
         get_val
+        get_args_keys
+        
 
     """
 
@@ -108,6 +110,18 @@ class ArgParser(object):
         """
 
         return self.args_array.get(skey, def_val)
+
+    def get_args_keys(self):
+
+        """Method:  get_args_keys
+
+        Description:  Method stub holder for gen_class.ArgParser.get_args_keys.
+
+        Arguments:
+
+        """
+
+        return self.args_array.keys()
 
 
 class Server(object):
