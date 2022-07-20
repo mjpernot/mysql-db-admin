@@ -825,7 +825,7 @@ def main():
        and not args.arg_exist("-j"):
         args.insert_arg("-j", True)
 
-    if not gen_libs.help_func(args.get_args(), __version__, help_message)        \
+    if not gen_libs.help_func(args.get_args(), __version__, help_message)   \
        and args.arg_require(opt_req=opt_req_list)                           \
        and args.arg_xor_dict(opt_xor_val=opt_xor_dict)                      \
        and args.arg_cond_req(opt_con_req=opt_con_req_list)                  \

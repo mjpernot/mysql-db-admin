@@ -34,6 +34,7 @@ import version
 
 __version__ = version.__version__
 
+
 class ArgParser(object):
 
     """Class:  ArgParser
