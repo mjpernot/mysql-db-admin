@@ -217,9 +217,9 @@ class UnitTest(unittest.TestCase):
         self.server = Server()
         self.mail = Mail()
         self.args = ArgParser()
-        self.args_array = {"-z": True}
-        self.args_arraya = {"-z": True, "-u": True}
-        self.args_array2 = {}
+#        self.args_array = {"-z": True}
+#        self.args_arraya = {"-z": True, "-u": True}
+#        self.args_array2 = {}
         self.mode = "w"
         self.outdata = {"Application": "MySQL Database"}
 

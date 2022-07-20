@@ -559,7 +559,7 @@ def check(server, args_array, **kwargs):
                     args_array.get("-t", None), **kwargs)
 
 
-def status(server, args_array, **kwargs):
+def status(server, args, **kwargs):
 
     """Function:  status
 
@@ -568,60 +568,63 @@ def status(server, args_array, **kwargs):
         is printed and poissibly inserted into a Mongo database.
 
     Arguments:
-        (input) server -> Server instance.
-        (input) args_array -> Dictionary of command line options.
+        (input) server -> Server instance
+        (input) args -> ArgParser class instance
         (input) **kwargs:
-            ofile -> file name - Name of output file.
-            db_tbl database:table_name -> Mongo database and table name.
-            class_cfg -> Mongo server configuration.
-            mail -> Mail instance.
+            ofile -> file name - Name of output file
+            db_tbl database:table_name -> Mongo database and table name
+            class_cfg -> Mongo server configuration
+            mail -> Mail instance
 
     """
 
-    args_array = dict(args_array)
+#    args_array = dict(args_array)
     server.upd_srv_stat()
 
-    mode = "a" if args_array.get("-a", False) else "w"
+#    mode = "a" if args_array.get("-a", False) else "w"
+    mode = "a" if args.arg_exist("-a") else "w"
 
-    outdata = {"Application": "MySQL Database",
-               "Server": server.name,
-               "AsOf": datetime.datetime.strftime(datetime.datetime.now(),
-                                                  "%Y-%m-%d %H:%M:%S"),
-               "Memory": {"CurrentUsage": server.cur_mem_mb,
-                          "MaxUsage": server.max_mem_mb,
-                          "PercentUsed": server.prct_mem},
-               "UpTime": server.days_up,
-               "Connections": {"CurrentConnected": server.cur_conn,
-                               "MaxConnections": server.max_conn,
-                               "PercentUsed": server.prct_conn}}
+    outdata = {
+        "Application": "MySQL Database", "Server": server.name,
+        "AsOf": datetime.datetime.strftime(
+            datetime.datetime.now(), "%Y-%m-%d %H:%M:%S"),
+        "Memory": {
+            "CurrentUsage": server.cur_mem_mb, "MaxUsage": server.max_mem_mb,
+            "PercentUsed": server.prct_mem},
+        "UpTime": server.days_up,
+        "Connections": {
+            "CurrentConnected": server.cur_conn,
+            "MaxConnections": server.max_conn,
+            "PercentUsed": server.prct_conn}}
 
-    if "-j" in args_array:
-        _process_json(args_array, outdata, mode, **kwargs)
+#    if "-j" in args_array:
+    if args.arg_exist("-j"):
+        _process_json(args, outdata, mode, **kwargs)
 
     else:
-        _process_non_json(server, args_array, outdata, mode, **kwargs)
+        _process_non_json(server, args, outdata, mode, **kwargs)
 
 
-def _process_json(args_array, outdata, mode, **kwargs):
+def _process_json(args, outdata, mode, **kwargs):
 
     """Function:  _process_json
 
     Description:  Private function for status to process json format data.
 
     Arguments:
-        (input) args_array -> Dictionary of command line options.
-        (input) outdata -> Dictionary of performance data.
-        (input) mode -> File write mode.
+        (input) args -> ArgParser class instance
+        (input) outdata -> Dictionary of performance data
+        (input) mode -> File write mode
         (input) **kwargs:
-            ofile -> file name - Name of output file.
-            db_tbl database:table_name -> Mongo database and table name.
-            class_cfg -> Mongo server configuration.
-            mail -> Mail instance.
+            ofile -> file name - Name of output file
+            db_tbl database:table_name -> Mongo database and table name
+            class_cfg -> Mongo server configuration
+            mail -> Mail instance
 
     """
 
-    indent = None if args_array.get("-f", False) else 4
-
+#    indent = None if args_array.get("-f", False) else 4
+    indent = None if args.get_val("-f", def_val=False) else 4
     jdata = json.dumps(outdata, indent=indent)
     mongo_cfg = kwargs.get("class_cfg", None)
     db_tbl = kwargs.get("db_tbl", None)
@@ -640,9 +643,11 @@ def _process_json(args_array, outdata, mode, **kwargs):
 
     if mail:
         mail.add_2_msg(jdata)
-        mail.send_mail(use_mailx=args_array.get("-u", False))
+#        mail.send_mail(use_mailx=args_array.get("-u", False))
+        mail.send_mail(use_mailx=args.get_val("-u", def_val=False))
 
-    if not args_array.get("-z", False):
+#    if not args_array.get("-z", False):
+    if not args.arg_exist("-z"):
         gen_libs.print_data(jdata)
 
 

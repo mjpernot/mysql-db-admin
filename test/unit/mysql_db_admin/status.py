@@ -34,6 +34,55 @@ import version
 
 __version__ = version.__version__
 
+class ArgParser(object):
+
+    """Class:  ArgParser
+
+    Description:  Class stub holder for gen_class.ArgParser class.
+
+    Methods:
+        __init__
+        arg_exist
+        get_val
+
+    """
+
+    def __init__(self):
+
+        """Method:  __init__
+
+        Description:  Class initialization.
+
+        Arguments:
+
+        """
+
+        self.args_array = {"-c": "mysql_cfg", "-d": "config"}
+
+    def arg_exist(self, arg):
+
+        """Method:  arg_exist
+
+        Description:  Method stub holder for gen_class.ArgParser.arg_exist.
+
+        Arguments:
+
+        """
+
+        return True if arg in self.args_array else False
+
+    def get_val(self, skey, def_val=None):
+
+        """Method:  get_val
+
+        Description:  Method stub holder for gen_class.ArgParser.get_val.
+
+        Arguments:
+
+        """
+
+        return self.args_array.get(skey, def_val)
+
 
 class Mail(object):
 
@@ -176,14 +225,15 @@ class UnitTest(unittest.TestCase):
 
         self.server = Server()
         self.mail = Mail()
-        self.args_array = {"-j": True, "-z": True}
-        self.args_arraya = {"-j": True, "-z": True, "-u": True}
-        self.args_array2 = {}
-        self.args_array3 = {"-j": True}
-        self.args_array4 = {"-j": True, "-a": True, "-z": True}
-        self.args_array5 = {"-j": True, "-f": True, "-z": True}
-        self.args_array6 = {"-z": True}
-        self.args_array6a = {"-z": True, "-u": True}
+        self.args = ArgParser()
+#        self.args_array = {"-j": True, "-z": True}
+#        self.args_arraya = {"-j": True, "-z": True, "-u": True}
+#        self.args_array2 = {}
+#        self.args_array3 = {"-j": True}
+#        self.args_array4 = {"-j": True, "-a": True, "-z": True}
+#        self.args_array5 = {"-j": True, "-f": True, "-z": True}
+#        self.args_array6 = {"-z": True}
+#        self.args_array6a = {"-z": True, "-u": True}
 
     def test_mailx_non_json(self):
 
@@ -195,8 +245,11 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        self.assertFalse(mysql_db_admin.status(self.server, self.args_array6a,
-                                               mail=self.mail))
+        self.args.args_array["-u"] = True
+        self.args.args_array["-z"] = True
+
+        self.assertFalse(
+            mysql_db_admin.status(self.server, self.args, mail=self.mail))
 
     def test_mail_non_json(self):
 
@@ -208,8 +261,11 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        self.assertFalse(mysql_db_admin.status(self.server, self.args_array6,
-                                               mail=self.mail))
+        self.args.args_array["-u"] = True
+        self.args.args_array["-z"] = True
+
+        self.assertFalse(
+            mysql_db_admin.status(self.server, self.args, mail=self.mail))
 
     @mock.patch("mysql_db_admin.gen_libs.write_file")
     def test_file_non_json(self, mock_write):
@@ -222,10 +278,13 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        self.args.args_array["-u"] = True
+        self.args.args_array["-z"] = True
+
         mock_write.return_value = True
 
-        self.assertFalse(mysql_db_admin.status(self.server, self.args_array6,
-                                               ofile="FileName"))
+        self.assertFalse(
+            mysql_db_admin.status(self.server, self.args, ofile="FileName"))
 
     def test_stdout_suppress_non_json(self):
 
@@ -237,8 +296,13 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        self.assertFalse(mysql_db_admin.status(self.server, self.args_array6))
+        self.args.args_array["-u"] = True
+        self.args.args_array["-z"] = True
 
+        self.assertFalse(mysql_db_admin.status(self.server, self.args))
+
+    @mock.patch("mysql_db_admin.gen_libs.print_data",
+                mock.Mock(return_value=True))
     def test_stdout(self):
 
         """Function:  test_stdout
@@ -249,9 +313,9 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        with gen_libs.no_std_out():
-            self.assertFalse(mysql_db_admin.status(self.server,
-                                                   self.args_array3))
+        self.args.args_array["-j"] = True
+
+        self.assertFalse(mysql_db_admin.status(self.server, self.args))
 
     def test_stdout_suppress_json(self):
 
@@ -263,7 +327,10 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        self.assertFalse(mysql_db_admin.status(self.server, self.args_array))
+        self.args.args_array["-j"] = True
+        self.args.args_array["-z"] = True
+
+        self.assertFalse(mysql_db_admin.status(self.server, self.args))
 
     @mock.patch("mysql_db_admin.mongo_libs.ins_doc")
     @mock.patch("mysql_db_admin.gen_libs.write_file")
@@ -277,11 +344,15 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        self.args.args_array["-j"] = True
+        self.args.args_array["-z"] = True
+        self.args.args_array["-u"] = True
+
         mock_write.return_value = True
         mock_mongo.return_value = (True, None)
 
-        self.assertFalse(mysql_db_admin.status(self.server, self.args_arraya,
-                                               mail=self.mail))
+        self.assertFalse(
+            mysql_db_admin.status(self.server, self.args, mail=self.mail))
 
     @mock.patch("mysql_db_admin.mongo_libs.ins_doc")
     @mock.patch("mysql_db_admin.gen_libs.write_file")
@@ -295,11 +366,14 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        self.args.args_array["-j"] = True
+        self.args.args_array["-z"] = True
+
         mock_write.return_value = True
         mock_mongo.return_value = (True, None)
 
-        self.assertFalse(mysql_db_admin.status(self.server, self.args_array,
-                                               mail=self.mail))
+        self.assertFalse(
+            mysql_db_admin.status(self.server, self.args, mail=self.mail))
 
     @mock.patch("mysql_db_admin.mongo_libs.ins_doc")
     @mock.patch("mysql_db_admin.gen_libs.write_file")
@@ -313,11 +387,14 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        self.args.args_array["-j"] = True
+        self.args.args_array["-z"] = True
+
         mock_write.return_value = True
         mock_mongo.return_value = (True, None)
 
-        self.assertFalse(mysql_db_admin.status(self.server, self.args_array,
-                                               ofile="FileName"))
+        self.assertFalse(
+            mysql_db_admin.status(self.server, self.args, ofile="FileName"))
 
     @mock.patch("mysql_db_admin.mongo_libs.ins_doc")
     @mock.patch("mysql_db_admin.gen_libs.write_file")
@@ -331,11 +408,15 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        self.args.args_array["-j"] = True
+        self.args.args_array["-z"] = True
+        self.args.args_array["-a"] = True
+
         mock_write.return_value = True
         mock_mongo.return_value = (True, None)
 
-        self.assertFalse(mysql_db_admin.status(self.server, self.args_array4,
-                                               ofile="FileName"))
+        self.assertFalse(
+            mysql_db_admin.status(self.server, self.args, ofile="FileName"))
 
     @mock.patch("mysql_db_admin.mongo_libs.ins_doc")
     @mock.patch("mysql_db_admin.gen_libs.write_file")
@@ -349,14 +430,16 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        self.args.args_array["-j"] = True
+        self.args.args_array["-z"] = True
+
         mock_write.return_value = True
         mock_mongo.return_value = (False, "Error Message")
 
         with gen_libs.no_std_out():
             self.assertFalse(
                 mysql_db_admin.status(
-                    self.server, self.args_array, class_cfg="Cfg",
-                    db_tbl="db:tbl"))
+                    self.server, self.args, class_cfg="Cfg", db_tbl="db:tbl"))
 
     @mock.patch("mysql_db_admin.mongo_libs.ins_doc")
     @mock.patch("mysql_db_admin.gen_libs.write_file")
@@ -370,13 +453,15 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        self.args.args_array["-j"] = True
+        self.args.args_array["-z"] = True
+
         mock_write.return_value = True
         mock_mongo.return_value = (True, None)
 
         self.assertFalse(
             mysql_db_admin.status(
-                self.server, self.args_array, class_cfg="Cfg",
-                db_tbl="db:tbl"))
+                self.server, self.args, class_cfg="Cfg", db_tbl="db:tbl"))
 
     def test_non_json(self):
 
@@ -389,9 +474,10 @@ class UnitTest(unittest.TestCase):
         """
 
         with gen_libs.no_std_out():
-            self.assertFalse(mysql_db_admin.status(self.server,
-                                                   self.args_array2))
+            self.assertFalse(mysql_db_admin.status(self.server, self.args))
 
+    @mock.patch("mysql_db_admin.gen_libs.print_data",
+                mock.Mock(return_value=True))
     @mock.patch("mysql_db_admin.mongo_libs.ins_doc")
     @mock.patch("mysql_db_admin.gen_libs.write_file")
     def test_json(self, mock_write, mock_mongo):
@@ -404,10 +490,12 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        self.args.args_array["-j"] = True
+
         mock_write.return_value = True
         mock_mongo.return_value = (True, None)
 
-        self.assertFalse(mysql_db_admin.status(self.server, self.args_array))
+        self.assertFalse(mysql_db_admin.status(self.server, self.args))
 
     @mock.patch("mysql_db_admin.mongo_libs.ins_doc")
     @mock.patch("mysql_db_admin.gen_libs.write_file")
@@ -421,10 +509,14 @@ class UnitTest(unittest.TestCase):
 
         """
 
+        self.args.args_array["-j"] = True
+        self.args.args_array["-z"] = True
+        self.args.args_array["-f"] = True
+
         mock_write.return_value = True
         mock_mongo.return_value = (True, None)
 
-        self.assertFalse(mysql_db_admin.status(self.server, self.args_array5))
+        self.assertFalse(mysql_db_admin.status(self.server, self.args))
 
 
 if __name__ == "__main__":
