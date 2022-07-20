@@ -496,9 +496,6 @@ def analyze(server, args, **kwargs):
 
     """
 
-#    args_array = dict(args_array)
-#    process_request(server, run_analyze, args_array["-A"],
-#                    args_array.get("-t", None), **kwargs)
     process_request(server, run_analyze, args.get_val("-A"),
                     args.get_val("-t", def_val=None), **kwargs)
 
@@ -517,9 +514,6 @@ def checksum(server, args, **kwargs):
 
     """
 
-#    args_array = dict(args_array)
-#    process_request(server, run_checksum, args_array["-S"],
-#                    args_array.get("-t", None), **kwargs)
     process_request(server, run_checksum, args.get_val("-S"),
                     args.get_val("-t", def_val=None), **kwargs)
 
@@ -539,9 +533,6 @@ def optimize(server, args, **kwargs):
 
     """
 
-#    args_array = dict(args_array)
-#    process_request(server, run_optimize, args_array["-D"],
-#                    args_array.get("-t", None), **kwargs)
     process_request(server, run_optimize, args.get_val("-D"),
                     args.get_val("-t", def_val=None), **kwargs)
 
@@ -560,9 +551,6 @@ def check(server, args, **kwargs):
 
     """
 
-#    args_array = dict(args_array)
-#    process_request(server, run_check, args_array["-C"],
-#                    args_array.get("-t", None), **kwargs)
     process_request(server, run_check, args.get_val("-C"),
                     args.get_val("-t", def_val=None), **kwargs)
 
@@ -586,12 +574,8 @@ def status(server, args, **kwargs):
 
     """
 
-#    args_array = dict(args_array)
     server.upd_srv_stat()
-
-#    mode = "a" if args_array.get("-a", False) else "w"
     mode = "a" if args.arg_exist("-a") else "w"
-
     outdata = {
         "Application": "MySQL Database", "Server": server.name,
         "AsOf": datetime.datetime.strftime(
@@ -605,7 +589,6 @@ def status(server, args, **kwargs):
             "MaxConnections": server.max_conn,
             "PercentUsed": server.prct_conn}}
 
-#    if "-j" in args_array:
     if args.arg_exist("-j"):
         _process_json(args, outdata, mode, **kwargs)
 
@@ -631,7 +614,6 @@ def _process_json(args, outdata, mode, **kwargs):
 
     """
 
-#    indent = None if args_array.get("-f", False) else 4
     indent = None if args.get_val("-f", def_val=False) else 4
     jdata = json.dumps(outdata, indent=indent)
     mongo_cfg = kwargs.get("class_cfg", None)
@@ -651,10 +633,8 @@ def _process_json(args, outdata, mode, **kwargs):
 
     if mail:
         mail.add_2_msg(jdata)
-#        mail.send_mail(use_mailx=args_array.get("-u", False))
         mail.send_mail(use_mailx=args.get_val("-u", def_val=False))
 
-#    if not args_array.get("-z", False):
     if not args.arg_exist("-z"):
         gen_libs.print_data(jdata)
 
@@ -677,7 +657,6 @@ def _process_non_json(server, args, outdata, mode, **kwargs):
 
     """
 
-#    args_array = dict(args_array)
     outdata = dict(outdata)
     ofile = kwargs.get("ofile", None)
     mail = kwargs.get("mail", None)
@@ -686,7 +665,6 @@ def _process_non_json(server, args, outdata, mode, **kwargs):
     for key, value in outdata.items():
         pdata += "{}: {}".format(key, value) + "\n"
 
-#    if not args_array.get("-z", False):
     if not args.arg_exist("-z"):
         print("\nDatabase Status Check for Server: %s" % (server.name))
         gen_libs.prt_msg("Uptime (days)", server.days_up, 0)
@@ -704,7 +682,6 @@ def _process_non_json(server, args, outdata, mode, **kwargs):
 
     if mail:
         mail.add_2_msg(pdata)
-#        mail.send_mail(use_mailx=args_array.get("-u", False))
         mail.send_mail(use_mailx=args.get_val("-u", def_val=False))
 
 
@@ -722,12 +699,10 @@ def listdbs(server, args, **kwargs):
 
     """
 
-#    args_array = dict(args_array)
     sys_dbs = list(kwargs.get("sys_dbs", []))
-    db_list = gen_libs.dict_2_list(
-        mysql_libs.fetch_db_dict(server), "Database")
+    db_list = gen_libs.dict_2_list(mysql_libs.fetch_db_dict(server),
+                                   "Database")
 
-#    if "-k" in args_array:
     if args.arg_exist("-k"):
         print("List of user and system databases:")
 
@@ -756,10 +731,7 @@ def run_program(args, func_dict, **kwargs):
 
     """
 
-#    args_array = dict(args_array)
     func_dict = dict(func_dict)
-#    server = mysql_libs.create_instance(args_array["-c"], args_array["-d"],
-#                                        mysql_class.Server)
     server = mysql_libs.create_instance(
         args.get_val("-c"), args.get_val("-d"), mysql_class.Server)
     server.connect(silent=True)
@@ -769,30 +741,20 @@ def run_program(args, func_dict, **kwargs):
               (server.name, server.conn_msg))
 
     else:
-#        outfile = args_array.get("-o", None)
-#        db_tbl = args_array.get("-i", None)
         outfile = args.get_val("-o", def_val=None)
         db_tbl = args.get_val("-i", def_val=None)
         mongo = None
         mail = None
 
-#        if args_array.get("-m", None):
-#            mongo = gen_libs.load_module(args_array["-m"], args_array["-d"])
         if args.arg_exist("-m"):
             mongo = gen_libs.load_module(
                 args.get_val("-m"), args.get_val("-d"))
 
-#        if args_array.get("-e", None):
-#            mail = gen_class.setup_mail(args_array.get("-e"),
-#                                        subj=args_array.get("-s", None))
         if args.arg_exist("-e"):
             mail = gen_class.setup_mail(
                 args.get_val("-e"), subj=args.get_val("-s", def_val=None))
 
         # Intersect args.args_array & func_dict to determine functions to call
-#        for item in set(args_array.keys()) & set(func_dict.keys()):
-#            func_dict[item](server, args_array, ofile=outfile, db_tbl=db_tbl,
-#                            class_cfg=mongo, mail=mail, **kwargs)
         for item in set(args.get_args_keys()) & set(func_dict.keys()):
             func_dict[item](server, args, ofile=outfile, db_tbl=db_tbl,
                             class_cfg=mongo, mail=mail, **kwargs)
@@ -829,7 +791,6 @@ def main():
     """
 
     cmdline = gen_libs.get_inst(sys)
-#    dir_chk_list = ["-d"]
     dir_perms_chk = {"-d": 5}
     file_chk_list = ["-o"]
     file_crt_list = ["-o"]
@@ -855,27 +816,15 @@ def main():
     sys_dbs = ["performance_schema", "information_schema", "mysql", "sys"]
 
     # Process argument list from command line.
-#    args_array = arg_parser.arg_parse2(cmdline.argv, opt_val_list,
-#                                       opt_def_dict, multi_val=opt_multi_list)
     args = gen_class.ArgParser(
         cmdline.argv, opt_val=opt_val_list, multi_val=opt_multi_list,
         opt_def=opt_def_dict, do_parse=True)
 
     # Set JSON format for certain option settings
-#    if "-i" in args_array.keys() and "-m" in args_array.keys() \
-#       and "-j" not in args_array.keys():
-#        args_array["-j"] = True
     if args.arg_exist("-i") and args.arg_exist("-m") \
        and not args.arg_exist("-j"):
         args.insert_arg("-j", True)
 
-#    if not gen_libs.help_func(args_array, __version__, help_message) \
-#       and not arg_parser.arg_require(args_array, opt_req_list) \
-#       and arg_parser.arg_xor_dict(args_array, opt_xor_dict) \
-#       and arg_parser.arg_cond_req(args_array, opt_con_req_list) \
-#       and not arg_parser.arg_dir_chk_crt(args_array, dir_chk_list) \
-#       and not arg_parser.arg_file_chk(args_array, file_chk_list,
-#                                       file_crt_list):
     if not gen_libs.help_func(args.get_args(), __version__, help_message)        \
        and args.arg_require(opt_req=opt_req_list)                           \
        and args.arg_xor_dict(opt_xor_val=opt_xor_dict)                      \
@@ -884,10 +833,6 @@ def main():
        and args.arg_file_chk(file_chk=file_chk_list, file_crt=file_crt_list):
 
         try:
-#            proglock = gen_class.ProgramLock(cmdline.argv,
-#                                             args_array.get("-y", ""))
-#            run_program(args_array, func_dict, sys_dbs=sys_dbs,
-#                        multi_val=opt_multi_list)
             proglock = gen_class.ProgramLock(
                 cmdline.argv, args.get_val("-y", def_val=""))
             run_program(
@@ -895,8 +840,6 @@ def main():
             del proglock
 
         except gen_class.SingleInstanceException:
-#            print("WARNING:  lock in place for mysql_db_admin with id of: %s"
-#                  % (args_array.get("-y", "")))
             print("WARNING:  lock in place for mysql_db_admin with id of: %s"
                   % (args.get_val("-y", def_val="")))
 
