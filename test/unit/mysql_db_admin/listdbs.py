@@ -122,8 +122,6 @@ class UnitTest(unittest.TestCase):
 
         self.server = Server()
         self.args = ArgParser()
-#        self.args_array = {"-L": True}
-#        self.args_array2 = {"-L": True, "-k": True}
         self.db_list = ["db1", "db2", "performance_schema",
                         "information_schema", "mysql", "sys"]
         self.sys_dbs = ["performance_schema", "information_schema", "mysql",

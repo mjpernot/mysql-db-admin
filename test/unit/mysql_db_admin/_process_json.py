@@ -178,14 +178,6 @@ class UnitTest(unittest.TestCase):
 
         self.mail = Mail()
         self.args = ArgParser()
-#        self.args_array = {"-j": True, "-z": True}
-#        self.args_arraya = {"-j": True, "-z": True, "-u": True}
-#        self.args_array2 = {}
-#        self.args_array3 = {"-j": True}
-#        self.args_array4 = {"-j": True, "-a": True, "-z": True}
-#        self.args_array5 = {"-j": True, "-f": True, "-z": True}
-#        self.args_array6 = {"-z": True}
-#        self.args_array6a = {"-z": True, "-u": True}
         self.mode = "w"
         self.outdata = {"Application": "MySQL Database"}
 

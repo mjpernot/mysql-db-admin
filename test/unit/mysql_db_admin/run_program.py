@@ -195,10 +195,6 @@ class UnitTest(unittest.TestCase):
         self.server = Server()
         self.args = ArgParser()
         self.func_dict = {"-C": check}
-#        self.args_array = {"-m": True, "-d": True, "-c": True, "-C": True}
-#        self.args_array2 = {"-m": True, "-d": True, "-c": True, "-C": True,
-#                            "-e": "ToEmail", "-s": "SubjectLine"}
-#        self.args_array3 = {"-d": True, "-c": True, "-C": True}
 
     @mock.patch("mysql_db_admin.mysql_libs.disconnect")
     @mock.patch("mysql_db_admin.mysql_libs.create_instance")

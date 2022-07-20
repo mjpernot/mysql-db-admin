@@ -122,7 +122,6 @@ class UnitTest(unittest.TestCase):
         self.args = ArgParser()
         self.args.args_array["-D"] = ["db_name"]
         self.run_optimize = True
-#        self.args_array = {"-D": True}
 
     @mock.patch("mysql_db_admin.process_request")
     def test_db_tbl(self, mock_process):
