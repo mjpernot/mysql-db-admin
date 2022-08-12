@@ -5,6 +5,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 
 
 ## [3.3.0]
+- Upgraded python-lib to v2.9.3
 - Replaced args_parser module with the gen_class.ArgParser class.
 
 ### Changed
