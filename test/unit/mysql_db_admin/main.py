@@ -69,12 +69,12 @@ class ArgParser(object):
         self.args_array = dict()
         self.opt_req = None
         self.dir_perms_chk = None
-        self.file_chk = None
+        self.file_perm_chk = None
         self.file_crt = None
         self.opt_con_req = None
         self.opt_req2 = True
         self.dir_perms_chk2 = True
-        self.file_chk2 = True
+        self.file_perm_chk2 = True
         self.opt_con_req2 = True
         self.opt_or = None
         self.opt_or2 = True
@@ -121,7 +121,7 @@ class ArgParser(object):
 
         return True if arg in self.args_array else False
 
-    def arg_file_chk(self, file_chk, file_crt):
+    def arg_file_chk(self, file_perm_chk, file_crt):
 
         """Method:  arg_file_chk
 
@@ -131,10 +131,10 @@ class ArgParser(object):
 
         """
 
-        self.file_chk = file_chk
+        self.file_perm_chk = file_perm_chk
         self.file_crt = file_crt
 
-        return self.file_chk2
+        return self.file_perm_chk2
 
     def arg_require(self, opt_req):
 
@@ -498,7 +498,7 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        self.args.file_chk2 = False
+        self.args.file_perm_chk2 = False
 
         mock_arg.return_value = self.args
         mock_help.return_value = False
@@ -517,7 +517,7 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        self.args.file_chk2 = False
+        self.args.file_perm_chk2 = False
 
         mock_arg.return_value = self.args
         mock_help.return_value = False
