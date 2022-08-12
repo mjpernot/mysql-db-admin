@@ -791,7 +791,7 @@ def main():
 
     cmdline = gen_libs.get_inst(sys)
     dir_perms_chk = {"-d": 5}
-    file_chk_list = ["-o"]
+    file_perm_chk = {"-o": 6}
     file_crt_list = ["-o"]
     func_dict = {
         "-A": analyze, "-C": check, "-D": optimize, "-S": checksum,
@@ -829,7 +829,8 @@ def main():
        and args.arg_xor_dict(opt_xor_val=opt_xor_dict)                      \
        and args.arg_cond_req(opt_con_req=opt_con_req_list)                  \
        and args.arg_dir_chk(dir_perms_chk=dir_perms_chk)                    \
-       and args.arg_file_chk(file_chk=file_chk_list, file_crt=file_crt_list):
+       and args.arg_file_chk(
+           file_perm_chk=file_perm_chk, file_crt=file_crt_list):
 
         try:
             proglock = gen_class.ProgramLock(
