@@ -5,10 +5,11 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 
 
 ## [3.3.0]
+- Upgraded python-lib to v2.9.3
 - Replaced args_parser module with the gen_class.ArgParser class.
 
 ### Changed
-- main: Replaced the use of arg_parser (args_array) with gen_class.ArgParser class (args).
+- Multiple functions: Replaced the use of arg_parser (args_array) with gen_class.ArgParser class (args).
 
 
 ## [3.2.1]
