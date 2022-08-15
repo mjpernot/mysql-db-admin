@@ -202,7 +202,6 @@ import datetime
 import json
 
 # Local
-import lib.arg_parser as arg_parser
 import lib.gen_libs as gen_libs
 import lib.gen_class as gen_class
 import mysql_lib.mysql_libs as mysql_libs
@@ -237,11 +236,11 @@ def run_analyze(server, dbs, tbl, **kwargs):
     Description:  Calls the analyze table command and prints the results.
 
     Arguments:
-        (input) server -> Server instance.
-        (input) dbs -> Database name.
-        (input) tbl -> Table name.
+        (input) server -> Server instance
+        (input) dbs -> Database name
+        (input) tbl -> Table name
         (input) **kwargs:
-            sys_dbs -> List of system databases to skip.
+            sys_dbs -> List of system databases to skip
 
     """
 
@@ -261,9 +260,9 @@ def run_checksum(server, dbs, tbl, **kwargs):
     Description:  Calls the checksum table command and prints the results.
 
     Arguments:
-        (input) server -> Server instance.
-        (input) dbs -> Database name.
-        (input) tbl -> Table name.
+        (input) server -> Server instance
+        (input) dbs -> Database name
+        (input) tbl -> Table name
 
     """
 
@@ -279,11 +278,11 @@ def run_optimize(server, dbs, tbl, **kwargs):
     Description:  Calls the optimize table command and print the results.
 
     Arguments:
-        (input) server -> Server instance.
-        (input) dbs -> Database name.
-        (input) tbl -> Table name.
+        (input) server -> Server instance
+        (input) dbs -> Database name
+        (input) tbl -> Table name
         (input) **kwargs:
-            sys_dbs -> List of system databases to skip.
+            sys_dbs -> List of system databases to skip
 
     """
 
@@ -310,9 +309,9 @@ def run_check(server, dbs, tbl, **kwargs):
     Description:  Calls the check table command and print the results.
 
     Arguments:
-        (input) server -> Server instance.
-        (input) dbs -> Database name.
-        (input) tbl -> Table name.
+        (input) server -> Server instance
+        (input) dbs -> Database name
+        (input) tbl -> Table name
 
     """
 
@@ -331,8 +330,8 @@ def detect_dbs(sub_db_list, full_db_list, **kwargs):
         Database list 2.
 
     Arguments:
-        (input) sub_db_list -> Subset Database list.
-        (input) full_db_list -> Full Database list.
+        (input) sub_db_list -> Subset Database list
+        (input) full_db_list -> Full Database list
 
     """
 
@@ -354,13 +353,13 @@ def process_request(server, func_name, db_name=None, tbl_name=None, **kwargs):
             process all databases/tables repsectively.
 
     Arguments:
-        (input) server -> Server instance.
-        (input) func_name -> Name of a function.
-        (input) db_name -> Database name.
-        (input) tbl_name -> Table name.
+        (input) server -> Server instance
+        (input) func_name -> Name of a function
+        (input) db_name -> Database name
+        (input) tbl_name -> Table name
         (input) **kwargs:
-            sys_dbs -> List of system databases.
-            multi_val -> List of options that may have multiple values.
+            sys_dbs -> List of system databases
+            multi_val -> List of options that may have multiple values
 
     """
 
@@ -397,13 +396,13 @@ def _proc_all_dbs(server, func_name, db_list, dict_key, **kwargs):
         databases.
 
     Arguments:
-        (input) server -> Server instance.
-        (input) func_name -> Name of a function.
-        (input) db_list -> List of all databases.
-        (input) dict_key -> Dictionary key for fetch_tbl_dict call.
+        (input) server -> Server instance
+        (input) func_name -> Name of a function
+        (input) db_list -> List of all databases
+        (input) dict_key -> Dictionary key for fetch_tbl_dict call
         (input) **kwargs:
-            sys_dbs -> List of system databases.
-            multi_val -> List of options that may have multiple values.
+            sys_dbs -> List of system databases
+            multi_val -> List of options that may have multiple values
 
     """
 
@@ -421,14 +420,14 @@ def _proc_all_tbls(server, func_name, db_list, db_name, dict_key, **kwargs):
         in listed databases.
 
     Arguments:
-        (input) server -> Server instance.
-        (input) func_name -> Name of a function.
-        (input) db_list -> List of all databases.
-        (input) db_name -> List of database names.
-        (input) dict_key -> Dictionary key for fetch_tbl_dict call.
+        (input) server -> Server instance
+        (input) func_name -> Name of a function
+        (input) db_list -> List of all databases
+        (input) db_name -> List of database names
+        (input) dict_key -> Dictionary key for fetch_tbl_dict call
         (input) **kwargs:
-            sys_dbs -> List of system databases.
-            multi_val -> List of options that may have multiple values.
+            sys_dbs -> List of system databases
+            multi_val -> List of options that may have multiple values
 
     """
 
@@ -451,15 +450,15 @@ def _proc_some_tbls(server, func_name, db_list, db_name, tbl_name, dict_key,
         tables in listed databases.
 
     Arguments:
-        (input) server -> Server instance.
-        (input) func_name -> Name of a function.
-        (input) db_list -> List of all databases.
-        (input) db_name -> List of database names.
-        (input) tbl_name -> List of table names.
-        (input) dict_key -> Dictionary key for fetch_tbl_dict call.
+        (input) server -> Server instance
+        (input) func_name -> Name of a function
+        (input) db_list -> List of all databases
+        (input) db_name -> List of database names
+        (input) tbl_name -> List of table names
+        (input) dict_key -> Dictionary key for fetch_tbl_dict call
         (input) **kwargs:
-            sys_dbs -> List of system databases.
-            multi_val -> List of options that may have multiple values.
+            sys_dbs -> List of system databases
+            multi_val -> List of options that may have multiple values
 
     """
 
@@ -481,85 +480,81 @@ def _proc_some_tbls(server, func_name, db_list, db_name, tbl_name, dict_key,
             func_name(server, dbs, tbl, **kwargs)
 
 
-def analyze(server, args_array, **kwargs):
+def analyze(server, args, **kwargs):
 
     """Function:  analyze
 
     Description:  Sets up the processing for the analyze table command.
 
     Arguments:
-        (input) server -> Server instance.
-        (input) args_array -> Dictionary of command line options.
+        (input) server -> Server instance
+        (input) args -> ArgParser class instance
         (input) **kwargs:
-            sys_dbs -> List of system databases to skip.
-            multi_val -> List of options that may have multiple values.
+            sys_dbs -> List of system databases to skip
+            multi_val -> List of options that may have multiple values
 
     """
 
-    args_array = dict(args_array)
-    process_request(server, run_analyze, args_array["-A"],
-                    args_array.get("-t", None), **kwargs)
+    process_request(server, run_analyze, args.get_val("-A"),
+                    args.get_val("-t", def_val=None), **kwargs)
 
 
-def checksum(server, args_array, **kwargs):
+def checksum(server, args, **kwargs):
 
     """Function:  checksum
 
     Description:  Sets up the processing for the checksum table command.
 
     Arguments:
-        (input) server -> Server instance.
-        (input) args_array -> Dictionary of command line options.
+        (input) server -> Server instance
+        (input) args -> ArgParser class instance
         (input) **kwargs:
-            multi_val -> List of options that may have multiple values.
+            multi_val -> List of options that may have multiple values
 
     """
 
-    args_array = dict(args_array)
-    process_request(server, run_checksum, args_array["-S"],
-                    args_array.get("-t", None), **kwargs)
+    process_request(server, run_checksum, args.get_val("-S"),
+                    args.get_val("-t", def_val=None), **kwargs)
 
 
-def optimize(server, args_array, **kwargs):
+def optimize(server, args, **kwargs):
 
     """Function:  optimize
 
     Description:  Sets up the processing for the optimization table command.
 
     Arguments:
-        (input) server -> Server instance.
-        (input) args_array -> Dictionary of command line options.
+        (input) server -> Server instance
+        (input) args -> ArgParser class instance
         (input) **kwargs:
-            sys_dbs -> List of system databases.
-            multi_val -> List of options that may have multiple values.
+            sys_dbs -> List of system databases
+            multi_val -> List of options that may have multiple values
 
     """
 
-    args_array = dict(args_array)
-    process_request(server, run_optimize, args_array["-D"],
-                    args_array.get("-t", None), **kwargs)
+    process_request(server, run_optimize, args.get_val("-D"),
+                    args.get_val("-t", def_val=None), **kwargs)
 
 
-def check(server, args_array, **kwargs):
+def check(server, args, **kwargs):
 
     """Function:  check
 
     Description:  Sets up the processing for the check table command.
 
     Arguments:
-        (input) server -> Server instance.
-        (input) args_array -> Dictionary of command line options.
+        (input) server -> Server instance
+        (input) args -> ArgParser class instance
         (input) **kwargs:
-            multi_val -> List of options that may have multiple values.
+            multi_val -> List of options that may have multiple values
 
     """
 
-    args_array = dict(args_array)
-    process_request(server, run_check, args_array["-C"],
-                    args_array.get("-t", None), **kwargs)
+    process_request(server, run_check, args.get_val("-C"),
+                    args.get_val("-t", def_val=None), **kwargs)
 
 
-def status(server, args_array, **kwargs):
+def status(server, args, **kwargs):
 
     """Function:  status
 
@@ -568,60 +563,57 @@ def status(server, args_array, **kwargs):
         is printed and poissibly inserted into a Mongo database.
 
     Arguments:
-        (input) server -> Server instance.
-        (input) args_array -> Dictionary of command line options.
+        (input) server -> Server instance
+        (input) args -> ArgParser class instance
         (input) **kwargs:
-            ofile -> file name - Name of output file.
-            db_tbl database:table_name -> Mongo database and table name.
-            class_cfg -> Mongo server configuration.
-            mail -> Mail instance.
+            ofile -> file name - Name of output file
+            db_tbl database:table_name -> Mongo database and table name
+            class_cfg -> Mongo server configuration
+            mail -> Mail instance
 
     """
 
-    args_array = dict(args_array)
     server.upd_srv_stat()
+    mode = "a" if args.arg_exist("-a") else "w"
+    outdata = {
+        "Application": "MySQL Database", "Server": server.name,
+        "AsOf": datetime.datetime.strftime(
+            datetime.datetime.now(), "%Y-%m-%d %H:%M:%S"),
+        "Memory": {
+            "CurrentUsage": server.cur_mem_mb, "MaxUsage": server.max_mem_mb,
+            "PercentUsed": server.prct_mem},
+        "UpTime": server.days_up,
+        "Connections": {
+            "CurrentConnected": server.cur_conn,
+            "MaxConnections": server.max_conn,
+            "PercentUsed": server.prct_conn}}
 
-    mode = "a" if args_array.get("-a", False) else "w"
-
-    outdata = {"Application": "MySQL Database",
-               "Server": server.name,
-               "AsOf": datetime.datetime.strftime(datetime.datetime.now(),
-                                                  "%Y-%m-%d %H:%M:%S"),
-               "Memory": {"CurrentUsage": server.cur_mem_mb,
-                          "MaxUsage": server.max_mem_mb,
-                          "PercentUsed": server.prct_mem},
-               "UpTime": server.days_up,
-               "Connections": {"CurrentConnected": server.cur_conn,
-                               "MaxConnections": server.max_conn,
-                               "PercentUsed": server.prct_conn}}
-
-    if "-j" in args_array:
-        _process_json(args_array, outdata, mode, **kwargs)
+    if args.arg_exist("-j"):
+        _process_json(args, outdata, mode, **kwargs)
 
     else:
-        _process_non_json(server, args_array, outdata, mode, **kwargs)
+        _process_non_json(server, args, outdata, mode, **kwargs)
 
 
-def _process_json(args_array, outdata, mode, **kwargs):
+def _process_json(args, outdata, mode, **kwargs):
 
     """Function:  _process_json
 
     Description:  Private function for status to process json format data.
 
     Arguments:
-        (input) args_array -> Dictionary of command line options.
-        (input) outdata -> Dictionary of performance data.
-        (input) mode -> File write mode.
+        (input) args -> ArgParser class instance
+        (input) outdata -> Dictionary of performance data
+        (input) mode -> File write mode
         (input) **kwargs:
-            ofile -> file name - Name of output file.
-            db_tbl database:table_name -> Mongo database and table name.
-            class_cfg -> Mongo server configuration.
-            mail -> Mail instance.
+            ofile -> file name - Name of output file
+            db_tbl database:table_name -> Mongo database and table name
+            class_cfg -> Mongo server configuration
+            mail -> Mail instance
 
     """
 
-    indent = None if args_array.get("-f", False) else 4
-
+    indent = None if args.get_val("-f", def_val=False) else 4
     jdata = json.dumps(outdata, indent=indent)
     mongo_cfg = kwargs.get("class_cfg", None)
     db_tbl = kwargs.get("db_tbl", None)
@@ -640,13 +632,13 @@ def _process_json(args_array, outdata, mode, **kwargs):
 
     if mail:
         mail.add_2_msg(jdata)
-        mail.send_mail(use_mailx=args_array.get("-u", False))
+        mail.send_mail(use_mailx=args.get_val("-u", def_val=False))
 
-    if not args_array.get("-z", False):
+    if not args.arg_exist("-z"):
         gen_libs.print_data(jdata)
 
 
-def _process_non_json(server, args_array, outdata, mode, **kwargs):
+def _process_non_json(server, args, outdata, mode, **kwargs):
 
     """Function:  _process_non_json
 
@@ -654,17 +646,16 @@ def _process_non_json(server, args_array, outdata, mode, **kwargs):
         data.
 
     Arguments:
-        (input) server -> Server instance.
-        (input) args_array -> Dictionary of command line options.
-        (input) outdata -> Dictionary of performance data.
-        (input) mode -> File write mode.
+        (input) server -> Server instance
+        (input) args -> ArgParser class instance
+        (input) outdata -> Dictionary of performance data
+        (input) mode -> File write mode
         (input) **kwargs:
-            ofile -> file name - Name of output file.
-            mail -> Mail instance.
+            ofile -> file name - Name of output file
+            mail -> Mail instance
 
     """
 
-    args_array = dict(args_array)
     outdata = dict(outdata)
     ofile = kwargs.get("ofile", None)
     mail = kwargs.get("mail", None)
@@ -673,7 +664,7 @@ def _process_non_json(server, args_array, outdata, mode, **kwargs):
     for key, value in outdata.items():
         pdata += "{}: {}".format(key, value) + "\n"
 
-    if not args_array.get("-z", False):
+    if not args.arg_exist("-z"):
         print("\nDatabase Status Check for Server: %s" % (server.name))
         gen_libs.prt_msg("Uptime (days)", server.days_up, 0)
         gen_libs.prt_msg("Memory", "", 0)
@@ -690,29 +681,28 @@ def _process_non_json(server, args_array, outdata, mode, **kwargs):
 
     if mail:
         mail.add_2_msg(pdata)
-        mail.send_mail(use_mailx=args_array.get("-u", False))
+        mail.send_mail(use_mailx=args.get_val("-u", def_val=False))
 
 
-def listdbs(server, args_array, **kwargs):
+def listdbs(server, args, **kwargs):
 
     """Function:  listdbs
 
     Description:  List user or user/system databases in the database instance.
 
     Arguments:
-        (input) server -> Server instance.
-        (input) args_array -> Dictionary of command line options.
+        (input) server -> Server instance
+        (input) args -> ArgParser class instance
         (input) **kwargs:
-            sys_dbs -> List of system databases.
+            sys_dbs -> List of system databases
 
     """
 
-    args_array = dict(args_array)
     sys_dbs = list(kwargs.get("sys_dbs", []))
     db_list = gen_libs.dict_2_list(mysql_libs.fetch_db_dict(server),
                                    "Database")
 
-    if "-k" in args_array:
+    if args.arg_exist("-k"):
         print("List of user and system databases:")
 
         for item in db_list:
@@ -725,25 +715,24 @@ def listdbs(server, args_array, **kwargs):
             print("    %s" % (item))
 
 
-def run_program(args_array, func_dict, **kwargs):
+def run_program(args, func_dict, **kwargs):
 
     """Function:  run_program
 
     Description:  Creates class instance(s) and controls flow of the program.
 
     Arguments:
-        (input) args_array -> Dictionary of command line options.
-        (input) func_dict -> Dictionary of functions.
+        (input) args -> ArgParser class instance
+        (input) func_dict -> Dictionary of functions
         (input) **kwargs:
-            sys_dbs -> List of system databases.
-            multi_val -> List of options that may have multiple values.
+            sys_dbs -> List of system databases
+            multi_val -> List of options that may have multiple values
 
     """
 
-    args_array = dict(args_array)
     func_dict = dict(func_dict)
-    server = mysql_libs.create_instance(args_array["-c"], args_array["-d"],
-                                        mysql_class.Server)
+    server = mysql_libs.create_instance(
+        args.get_val("-c"), args.get_val("-d"), mysql_class.Server)
     server.connect(silent=True)
 
     if server.conn_msg:
@@ -751,21 +740,22 @@ def run_program(args_array, func_dict, **kwargs):
               (server.name, server.conn_msg))
 
     else:
-        outfile = args_array.get("-o", None)
-        db_tbl = args_array.get("-i", None)
+        outfile = args.get_val("-o", def_val=None)
+        db_tbl = args.get_val("-i", def_val=None)
         mongo = None
         mail = None
 
-        if args_array.get("-m", None):
-            mongo = gen_libs.load_module(args_array["-m"], args_array["-d"])
+        if args.arg_exist("-m"):
+            mongo = gen_libs.load_module(
+                args.get_val("-m"), args.get_val("-d"))
 
-        if args_array.get("-e", None):
-            mail = gen_class.setup_mail(args_array.get("-e"),
-                                        subj=args_array.get("-s", None))
+        if args.arg_exist("-e"):
+            mail = gen_class.setup_mail(
+                args.get_val("-e"), subj=args.get_val("-s", def_val=None))
 
-        # Intersect args_array & func_dict to determine which functions to call
-        for item in set(args_array.keys()) & set(func_dict.keys()):
-            func_dict[item](server, args_array, ofile=outfile, db_tbl=db_tbl,
+        # Intersect args.args_array & func_dict to determine functions to call
+        for item in set(args.get_args_keys()) & set(func_dict.keys()):
+            func_dict[item](server, args, ofile=outfile, db_tbl=db_tbl,
                             class_cfg=mongo, mail=mail, **kwargs)
 
         mysql_libs.disconnect(server)
@@ -779,72 +769,79 @@ def main():
         line arguments and values.
 
     Variables:
-        dir_chk_list -> contains options which will be directories.
-        file_chk_list -> contains the options which will have files included.
-        file_crt_list -> contains options which require files to be created.
-        func_dict -> dictionary list for the function calls or other options.
-        opt_con_req_list -> contains the options that require other options.
-        opt_def_dict -> contains options with their default values.
-        opt_multi_list -> contains the options that will have multiple values.
-        opt_req_list -> contains the options that are required for the program.
-        opt_val_list -> contains options which require values.
-        opt_xor_dict -> contains options which are XOR with its values.
+        dir_perms_chk -> contains options which will be directories and the
+            octal permission settings
+        dir_chk_list -> contains options which will be directories
+        file_chk_list -> contains the options which will have files included
+        file_crt_list -> contains options which require files to be created
+        func_dict -> dictionary list for the function calls or other options
+        opt_con_req_list -> contains the options that require other options
+        opt_def_dict -> contains options with their default values
+        opt_multi_list -> contains the options that will have multiple values
+        opt_req_list -> contains the options that are required for the program
+        opt_val_list -> contains options which require values
+        opt_xor_dict -> contains options which are XOR with its values
         sys_dbs -> contains a list of system databases that will be skipped
-            over for some functions.
+            over for some functions
 
     Arguments:
-        (input) argv -> Arguments from the command line.
+        (input) argv -> arguments from the command line
 
     """
 
     cmdline = gen_libs.get_inst(sys)
-    dir_chk_list = ["-d"]
-    file_chk_list = ["-o"]
+    dir_perms_chk = {"-d": 5}
+    file_perm_chk = {"-o": 6}
     file_crt_list = ["-o"]
-    func_dict = {"-A": analyze, "-C": check, "-D": optimize, "-S": checksum,
-                 "-M": status, "-L": listdbs}
+    func_dict = {
+        "-A": analyze, "-C": check, "-D": optimize, "-S": checksum,
+        "-M": status, "-L": listdbs}
     opt_con_req_list = {"-i": ["-m"], "-s": ["-e"], "-u": ["-e"]}
-    opt_def_dict = {"-t": None, "-A": [], "-C": [], "-D": [], "-S": [],
-                    "-i": "sysmon:mysql_db_status"}
+    opt_def_dict = {
+        "-t": None, "-A": [], "-C": [], "-D": [], "-S": [],
+        "-i": "sysmon:mysql_db_status"}
     opt_multi_list = ["-A", "-C", "-D", "-S", "-t", "-e", "-s"]
     opt_req_list = ["-c", "-d"]
-    opt_val_list = ["-c", "-d", "-t", "-A", "-C", "-D", "-S", "-i", "-m", "-o",
-                    "-e", "-s", "-y"]
-    opt_xor_dict = {"-A": ["-C", "-D", "-M", "-S", "-L"],
-                    "-C": ["-A", "-D", "-M", "-S", "-L"],
-                    "-D": ["-A", "-C", "-M", "-S", "-L"],
-                    "-S": ["-A", "-C", "-D", "-M", "-L"],
-                    "-M": ["-A", "-C", "-D", "-S", "-L"],
-                    "-L": ["-A", "-C", "-D", "-S", "-M"]}
+    opt_val_list = [
+        "-c", "-d", "-t", "-A", "-C", "-D", "-S", "-i", "-m", "-o", "-e", "-s",
+        "-y"]
+    opt_xor_dict = {
+        "-A": ["-C", "-D", "-M", "-S", "-L"],
+        "-C": ["-A", "-D", "-M", "-S", "-L"],
+        "-D": ["-A", "-C", "-M", "-S", "-L"],
+        "-S": ["-A", "-C", "-D", "-M", "-L"],
+        "-M": ["-A", "-C", "-D", "-S", "-L"],
+        "-L": ["-A", "-C", "-D", "-S", "-M"]}
     sys_dbs = ["performance_schema", "information_schema", "mysql", "sys"]
 
     # Process argument list from command line.
-    args_array = arg_parser.arg_parse2(cmdline.argv, opt_val_list,
-                                       opt_def_dict, multi_val=opt_multi_list)
+    args = gen_class.ArgParser(
+        cmdline.argv, opt_val=opt_val_list, multi_val=opt_multi_list,
+        opt_def=opt_def_dict, do_parse=True)
 
     # Set JSON format for certain option settings
-    if "-i" in args_array.keys() and "-m" in args_array.keys() \
-       and "-j" not in args_array.keys():
-        args_array["-j"] = True
+    if args.arg_exist("-i") and args.arg_exist("-m") \
+       and not args.arg_exist("-j"):
+        args.insert_arg("-j", True)
 
-    if not gen_libs.help_func(args_array, __version__, help_message) \
-       and not arg_parser.arg_require(args_array, opt_req_list) \
-       and arg_parser.arg_xor_dict(args_array, opt_xor_dict) \
-       and arg_parser.arg_cond_req(args_array, opt_con_req_list) \
-       and not arg_parser.arg_dir_chk_crt(args_array, dir_chk_list) \
-       and not arg_parser.arg_file_chk(args_array, file_chk_list,
-                                       file_crt_list):
+    if not gen_libs.help_func(args.get_args(), __version__, help_message)   \
+       and args.arg_require(opt_req=opt_req_list)                           \
+       and args.arg_xor_dict(opt_xor_val=opt_xor_dict)                      \
+       and args.arg_cond_req(opt_con_req=opt_con_req_list)                  \
+       and args.arg_dir_chk(dir_perms_chk=dir_perms_chk)                    \
+       and args.arg_file_chk(
+           file_perm_chk=file_perm_chk, file_crt=file_crt_list):
 
         try:
-            proglock = gen_class.ProgramLock(cmdline.argv,
-                                             args_array.get("-y", ""))
-            run_program(args_array, func_dict, sys_dbs=sys_dbs,
-                        multi_val=opt_multi_list)
+            proglock = gen_class.ProgramLock(
+                cmdline.argv, args.get_val("-y", def_val=""))
+            run_program(
+                args, func_dict, sys_dbs=sys_dbs, multi_val=opt_multi_list)
             del proglock
 
         except gen_class.SingleInstanceException:
             print("WARNING:  lock in place for mysql_db_admin with id of: %s"
-                  % (args_array.get("-y", "")))
+                  % (args.get_val("-y", def_val="")))
 
 
 if __name__ == "__main__":
