@@ -1,4 +1,3 @@
-#!/usr/bin/python
 # Classification (U)
 
 """Program:  run_program.py
@@ -120,7 +119,7 @@ class ArgParser(object):
 
         """
 
-        return self.args_array.keys()
+        return list(self.args_array.keys())
 
 
 class Server(object):
@@ -193,7 +192,7 @@ class UnitTest(unittest.TestCase):
 
         self.server = Server()
         self.args = ArgParser()
-        self.func_dict = {"-C": check}
+        self.func_list = {"-C": check}
 
     @mock.patch("mysql_db_admin.mysql_libs.disconnect")
     @mock.patch("mysql_db_admin.mysql_libs.create_instance")
@@ -215,7 +214,7 @@ class UnitTest(unittest.TestCase):
 
         with gen_libs.no_std_out():
             self.assertFalse(
-                mysql_db_admin.run_program(self.args, self.func_dict))
+                mysql_db_admin.run_program(self.args, self.func_list))
 
     @mock.patch("mysql_db_admin.mysql_libs.disconnect")
     @mock.patch("mysql_db_admin.mysql_libs.create_instance")
@@ -234,7 +233,7 @@ class UnitTest(unittest.TestCase):
         mock_inst.return_value = self.server
         mock_disconn.return_value = True
 
-        self.assertFalse(mysql_db_admin.run_program(self.args, self.func_dict))
+        self.assertFalse(mysql_db_admin.run_program(self.args, self.func_list))
 
     @mock.patch("mysql_db_admin.mysql_libs.disconnect")
     @mock.patch("mysql_db_admin.gen_libs.load_module")
@@ -258,7 +257,7 @@ class UnitTest(unittest.TestCase):
         mock_mongo.return_value = True
         mock_disconn.return_value = True
 
-        self.assertFalse(mysql_db_admin.run_program(self.args, self.func_dict))
+        self.assertFalse(mysql_db_admin.run_program(self.args, self.func_list))
 
     @mock.patch("mysql_db_admin.mysql_libs.disconnect")
     @mock.patch("mysql_db_admin.gen_libs.load_module")
@@ -280,7 +279,7 @@ class UnitTest(unittest.TestCase):
         mock_mongo.return_value = True
         mock_disconn.return_value = True
 
-        self.assertFalse(mysql_db_admin.run_program(self.args, self.func_dict))
+        self.assertFalse(mysql_db_admin.run_program(self.args, self.func_list))
 
     @mock.patch("mysql_db_admin.mysql_libs.disconnect")
     @mock.patch("mysql_db_admin.mysql_libs.create_instance")
@@ -299,7 +298,7 @@ class UnitTest(unittest.TestCase):
         mock_inst.return_value = self.server
         mock_disconn.return_value = True
 
-        self.assertFalse(mysql_db_admin.run_program(self.args, self.func_dict))
+        self.assertFalse(mysql_db_admin.run_program(self.args, self.func_list))
 
 
 if __name__ == "__main__":

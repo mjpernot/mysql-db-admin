@@ -1,4 +1,3 @@
-#!/usr/bin/python
 # Classification (U)
 
 """Program:  proc_all_dbs.py
@@ -105,7 +104,7 @@ class UnitTest(unittest.TestCase):
         """
 
         self.server = Server()
-        self.func_name = func_holder
+        self.funcname = func_holder
         self.db_list = ["db1", "db2"]
         self.db_list2 = []
         self.version = {"version": "5.7"}
@@ -127,7 +126,7 @@ class UnitTest(unittest.TestCase):
         mock_list.return_value = ["tbl1", "tbl2"]
 
         self.assertFalse(mysql_db_admin._proc_all_dbs(
-            self.server, self.func_name, self.db_list, self.version2))
+            self.server, self.funcname, self.db_list, self.version2))
 
     @mock.patch("mysql_db_admin.gen_libs.dict_2_list")
     @mock.patch("mysql_db_admin.mysql_libs.fetch_tbl_dict")
@@ -145,7 +144,7 @@ class UnitTest(unittest.TestCase):
         mock_list.return_value = ["tbl1", "tbl2"]
 
         self.assertFalse(mysql_db_admin._proc_all_dbs(
-            self.server, self.func_name, self.db_list, self.version))
+            self.server, self.funcname, self.db_list, self.version))
 
     @mock.patch("mysql_db_admin.gen_libs.dict_2_list")
     @mock.patch("mysql_db_admin.mysql_libs.fetch_tbl_dict")
@@ -163,7 +162,7 @@ class UnitTest(unittest.TestCase):
         mock_list.return_value = ["tbl1", "tbl2"]
 
         self.assertFalse(mysql_db_admin._proc_all_dbs(
-            self.server, self.func_name, self.db_list2, self.version))
+            self.server, self.funcname, self.db_list2, self.version))
 
     @mock.patch("mysql_db_admin.gen_libs.dict_2_list")
     @mock.patch("mysql_db_admin.mysql_libs.fetch_tbl_dict")
@@ -181,7 +180,7 @@ class UnitTest(unittest.TestCase):
         mock_list.return_value = ["tbl1", "tbl2"]
 
         self.assertFalse(mysql_db_admin._proc_all_dbs(
-            self.server, self.func_name, self.db_list, self.version))
+            self.server, self.funcname, self.db_list, self.version))
 
 
 if __name__ == "__main__":

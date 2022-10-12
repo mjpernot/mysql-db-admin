@@ -5,6 +5,13 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 
 
 ## [3.3.1] - 2022-10-12
+- Updated to work in Python 3 too
+- Upgraded python-lib to v2.9.4
+- Upgraded mysql-lib to v5.3.2
+- Upgraded mongo-lib to v4.2.2
+
+### Changed
+- \_process_non_json:  Converted dictionary items call to a list.
 
 
 ## [3.3.0] - 2022-08-16

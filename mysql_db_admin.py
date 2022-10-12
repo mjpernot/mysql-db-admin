@@ -191,10 +191,10 @@
 """
 
 # Libraries and Global Variables
+from __future__ import print_function
+from __future__ import absolute_import
 
 # Standard
-# For Python 2.6/2.7: Redirection of stdout in a print command.
-from __future__ import print_function
 import sys
 import datetime
 
@@ -202,12 +202,21 @@ import datetime
 import json
 
 # Local
-import lib.gen_libs as gen_libs
-import lib.gen_class as gen_class
-import mysql_lib.mysql_libs as mysql_libs
-import mysql_lib.mysql_class as mysql_class
-import mongo_lib.mongo_libs as mongo_libs
-import version
+try:
+    from .lib import gen_libs
+    from .lib import gen_class
+    from .mysql_lib import mysql_class
+    from .mysql_lib import mysql_libs
+    from .mongo_lib import mongo_libs
+    from . import version
+
+except (ValueError, ImportError) as err:
+    import lib.gen_libs as gen_libs
+    import lib.gen_class as gen_class
+    import mysql_lib.mysql_class as mysql_class
+    import mysql_lib.mysql_libs as mysql_libs
+    import mongo_lib.mongo_libs as mongo_libs
+    import version
 
 __version__ = version.__version__
 
@@ -661,7 +670,7 @@ def _process_non_json(server, args, outdata, mode, **kwargs):
     mail = kwargs.get("mail", None)
     pdata = ""
 
-    for key, value in outdata.items():
+    for key, value in list(outdata.items()):
         pdata += "{}: {}".format(key, value) + "\n"
 
     if not args.arg_exist("-z"):
