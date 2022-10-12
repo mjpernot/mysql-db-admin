@@ -4,7 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on "Keep a Changelog".  This project adheres to Semantic Versioning.
 
 
-## [3.3.0]
+## [3.3.1] - 2022-10-12
+- Updated to work in Python 3 too
+- Upgraded python-lib to v2.9.4
+- Upgraded mysql-lib to v5.3.2
+- Upgraded mongo-lib to v4.2.2
+
+### Changed
+- \_process_non_json:  Converted dictionary items call to a list.
+
+
+## [3.3.0] - 2022-08-16
 - Upgraded python-lib to v2.9.3
 - Replaced args_parser module with the gen_class.ArgParser class.
 
@@ -12,7 +22,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - Multiple functions: Replaced the use of arg_parser (args_array) with gen_class.ArgParser class (args).
 
 
-## [3.2.1]
+## [3.2.1] - 2022-07-12
 - Upgraded python-lib to v2.9.2
 - Upgraded mysql-lib to v5.3.1
 - Upgraded mongo-lib to v4.2.1
