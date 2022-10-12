@@ -778,10 +778,8 @@ def main():
         line arguments and values.
 
     Variables:
-        dir_perms_chk -> contains options which will be directories and the
-            octal permission settings
-        dir_chk_list -> contains options which will be directories
-        file_chk_list -> contains the options which will have files included
+        dir_perms_chk -> directory check options and their perms in octal
+        file_perms -> file check options with their perms in octal
         file_crt_list -> contains options which require files to be created
         func_dict -> dictionary list for the function calls or other options
         opt_con_req_list -> contains the options that require other options
@@ -800,7 +798,7 @@ def main():
 
     cmdline = gen_libs.get_inst(sys)
     dir_perms_chk = {"-d": 5}
-    file_perm_chk = {"-o": 6}
+    file_perms = {"-o": 6}
     file_crt_list = ["-o"]
     func_dict = {
         "-A": analyze, "-C": check, "-D": optimize, "-S": checksum,
@@ -838,8 +836,7 @@ def main():
        and args.arg_xor_dict(opt_xor_val=opt_xor_dict)                      \
        and args.arg_cond_req(opt_con_req=opt_con_req_list)                  \
        and args.arg_dir_chk(dir_perms_chk=dir_perms_chk)                    \
-       and args.arg_file_chk(
-           file_perm_chk=file_perm_chk, file_crt=file_crt_list):
+       and args.arg_file_chk(file_perm_chk=file_perms, file_crt=file_crt_list):
 
         try:
             proglock = gen_class.ProgramLock(
