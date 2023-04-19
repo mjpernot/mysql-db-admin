@@ -12,6 +12,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 
 ### Changed
 - \_process_non_json:  Converted dictionary items call to a list.
+- Converted imports to use Python 2.7 or Python 3.
 
 
 ## [3.3.0] - 2022-08-16
