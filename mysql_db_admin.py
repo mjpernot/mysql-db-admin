@@ -191,23 +191,30 @@
 """
 
 # Libraries and Global Variables
+from __future__ import print_function
+from __future__ import absolute_import
 
 # Standard
-# For Python 2.6/2.7: Redirection of stdout in a print command.
-from __future__ import print_function
 import sys
 import datetime
-
-# Third party
 import json
 
 # Local
-import lib.gen_libs as gen_libs
-import lib.gen_class as gen_class
-import mysql_lib.mysql_libs as mysql_libs
-import mysql_lib.mysql_class as mysql_class
-import mongo_lib.mongo_libs as mongo_libs
-import version
+try:
+    from .lib import gen_libs
+    from .lib import gen_class
+    from .mysql_lib import mysql_class
+    from .mysql_lib import mysql_libs
+    from .mongo_lib import mongo_libs
+    from . import version
+
+except (ValueError, ImportError) as err:
+    import lib.gen_libs as gen_libs
+    import lib.gen_class as gen_class
+    import mysql_lib.mysql_class as mysql_class
+    import mysql_lib.mysql_libs as mysql_libs
+    import mongo_lib.mongo_libs as mongo_libs
+    import version
 
 __version__ = version.__version__
 
@@ -661,7 +668,7 @@ def _process_non_json(server, args, outdata, mode, **kwargs):
     mail = kwargs.get("mail", None)
     pdata = ""
 
-    for key, value in outdata.items():
+    for key, value in list(outdata.items()):
         pdata += "{}: {}".format(key, value) + "\n"
 
     if not args.arg_exist("-z"):
@@ -769,10 +776,8 @@ def main():
         line arguments and values.
 
     Variables:
-        dir_perms_chk -> contains options which will be directories and the
-            octal permission settings
-        dir_chk_list -> contains options which will be directories
-        file_chk_list -> contains the options which will have files included
+        dir_perms_chk -> directory check options and their perms in octal
+        file_perms -> file check options with their perms in octal
         file_crt_list -> contains options which require files to be created
         func_dict -> dictionary list for the function calls or other options
         opt_con_req_list -> contains the options that require other options
@@ -791,7 +796,7 @@ def main():
 
     cmdline = gen_libs.get_inst(sys)
     dir_perms_chk = {"-d": 5}
-    file_perm_chk = {"-o": 6}
+    file_perms = {"-o": 6}
     file_crt_list = ["-o"]
     func_dict = {
         "-A": analyze, "-C": check, "-D": optimize, "-S": checksum,
@@ -829,8 +834,7 @@ def main():
        and args.arg_xor_dict(opt_xor_val=opt_xor_dict)                      \
        and args.arg_cond_req(opt_con_req=opt_con_req_list)                  \
        and args.arg_dir_chk(dir_perms_chk=dir_perms_chk)                    \
-       and args.arg_file_chk(
-           file_perm_chk=file_perm_chk, file_crt=file_crt_list):
+       and args.arg_file_chk(file_perm_chk=file_perms, file_crt=file_crt_list):
 
         try:
             proglock = gen_class.ProgramLock(
