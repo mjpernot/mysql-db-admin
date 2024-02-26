@@ -329,7 +329,7 @@ def run_check(server, dbs, tbl, **kwargs):
         gen_libs.prt_msg(item["Msg_type"], item["Msg_text"])
 
 
-def detect_dbs(sub_db_list, full_db_list, **kwargs):
+def detect_dbs(sub_db_list, full_db_list):
 
     """Function:  detect_dbs
 
@@ -440,7 +440,7 @@ def _proc_all_tbls(server, func_name, db_list, db_name, dict_key, **kwargs):
 
     db_name = list(db_name)
     db_list = list(db_list)
-    detect_dbs(db_name, db_list, **kwargs)
+    detect_dbs(db_name, db_list)
 
     for dbs in set(db_name) & set(db_list):
         for tbl in gen_libs.dict_2_list(mysql_libs.fetch_tbl_dict(server, dbs),
@@ -472,7 +472,7 @@ def _proc_some_tbls(server, func_name, db_list, db_name, tbl_name, dict_key,
     db_name = list(db_name)
     db_list = list(db_list)
     tbl_name = list(tbl_name)
-    detect_dbs(db_name, db_list, **kwargs)
+    detect_dbs(db_name, db_list)
 
     for dbs in set(db_name) & set(db_list):
         tbl_list = gen_libs.dict_2_list(mysql_libs.fetch_tbl_dict(server, dbs),
@@ -794,7 +794,6 @@ def main():
 
     """
 
-    cmdline = gen_libs.get_inst(sys)
     dir_perms_chk = {"-d": 5}
     file_perms = {"-o": 6}
     file_crt_list = ["-o"]
@@ -821,7 +820,7 @@ def main():
 
     # Process argument list from command line.
     args = gen_class.ArgParser(
-        cmdline.argv, opt_val=opt_val_list, multi_val=opt_multi_list,
+        sys.argv, opt_val=opt_val_list, multi_val=opt_multi_list,
         opt_def=opt_def_dict, do_parse=True)
 
     # Set JSON format for certain option settings
@@ -829,7 +828,7 @@ def main():
        and not args.arg_exist("-j"):
         args.insert_arg("-j", True)
 
-    if not gen_libs.help_func(args.get_args(), __version__, help_message)   \
+    if not gen_libs.help_func(args, __version__, help_message)              \
        and args.arg_require(opt_req=opt_req_list)                           \
        and args.arg_xor_dict(opt_xor_val=opt_xor_dict)                      \
        and args.arg_cond_req(opt_con_req=opt_con_req_list)                  \
@@ -838,7 +837,7 @@ def main():
 
         try:
             proglock = gen_class.ProgramLock(
-                cmdline.argv, args.get_val("-y", def_val=""))
+                sys.argv, args.get_val("-y", def_val=""))
             run_program(
                 args, func_dict, sys_dbs=sys_dbs, multi_val=opt_multi_list)
             del proglock
