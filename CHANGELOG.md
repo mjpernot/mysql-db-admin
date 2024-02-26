@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 The format is based on "Keep a Changelog".  This project adheres to Semantic Versioning.
 
 
+## [3.3.2] - 2026-02-26
+- Updated to work in Red Hat 8
+- Updated mysql-lib to v5.3.4
+- Updated mongo-lib to v4.2.9
+- Updated python-lib to v3.0.3
+
+### Changed
+- main:  Removed the gen_libs.get_inst call and changed gen_libs.help_func to use the gen_class.ArgParser parameter format.
+- detect_dbs:  Removed \*\*kwargs from parameter list, no longer required.
+- Set simplejson to 3.12.0 for Python 3.
+- Set chardet to 3.0.4 for Python 2.
+- Documentation updates.
+
+
 ## [3.3.1] - 2022-10-12
 - Updated to work in Python 3 too
 - Upgraded python-lib to v2.9.4
