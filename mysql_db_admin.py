@@ -185,6 +185,11 @@
         Configuration modules -> name is runtime dependent as it can be
             used to connect to different databases with different names.
 
+        Global variables:
+            SYS_DBS -> Is a list of databases to be skipped under some options,
+                but is overridden if set within the configration file
+                (sys_dbs).
+
     Example:
         mysql_db_admin.py -c mysql -d config -D test -t users
 
@@ -220,6 +225,7 @@ __version__ = version.__version__
 
 # Global
 PRT_TEMPLATE = "DB: {0:20} Table: {1:50}\t"
+SYS_DBS = ["performance_schema", "information_schema", "mysql", "sys"]
 
 
 def help_message():
@@ -737,6 +743,8 @@ def run_program(args, func_dict, **kwargs):
 
     """
 
+    global SYS_DBS
+
     func_dict = dict(func_dict)
     server = mysql_libs.create_instance(
         args.get_val("-c"), args.get_val("-d"), mysql_class.Server)
@@ -762,8 +770,11 @@ def run_program(args, func_dict, **kwargs):
 
         # Intersect args.args_array & func_dict to determine functions to call
         for item in set(args.get_args_keys()) & set(func_dict.keys()):
-            func_dict[item](server, args, ofile=outfile, db_tbl=db_tbl,
-                            class_cfg=mongo, mail=mail, **kwargs)
+            cfg = gen_libs.load_module(args.get_val("-c"), args.get_val("-d"))
+            sys_dbs = cfg.sys_dbs if hasattr(cfg, "sys_dbs") else SYS_DBS 
+            func_dict[item](
+                server, args, ofile=outfile, db_tbl=db_tbl, class_cfg=mongo,
+                mail=mail, sys_dbs=sys_dbs, **kwargs)
 
         mysql_libs.disconnect(server)
 
@@ -786,8 +797,6 @@ def main():
         opt_req_list -> contains the options that are required for the program
         opt_val_list -> contains options which require values
         opt_xor_dict -> contains options which are XOR with its values
-        sys_dbs -> contains a list of system databases that will be skipped
-            over for some functions
 
     Arguments:
         (input) argv -> arguments from the command line
@@ -816,7 +825,6 @@ def main():
         "-S": ["-A", "-C", "-D", "-M", "-L"],
         "-M": ["-A", "-C", "-D", "-S", "-L"],
         "-L": ["-A", "-C", "-D", "-S", "-M"]}
-    sys_dbs = ["performance_schema", "information_schema", "mysql", "sys"]
 
     # Process argument list from command line.
     args = gen_class.ArgParser(
@@ -838,8 +846,7 @@ def main():
         try:
             proglock = gen_class.ProgramLock(
                 sys.argv, args.get_val("-y", def_val=""))
-            run_program(
-                args, func_dict, sys_dbs=sys_dbs, multi_val=opt_multi_list)
+            run_program(args, func_dict, multi_val=opt_multi_list)
             del proglock
 
         except gen_class.SingleInstanceException:

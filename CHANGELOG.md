@@ -6,6 +6,10 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 
 ## [3.3.3] - 2024-03-12
 
+### Changed
+- run_program: Read in configuration module and set the sys_dbs variable.
+- main: Moved the sys_dbs variable to the global SYS_DBS variable.
+
 
 ## [3.3.2] - 2024-02-26
 - Updated to work in Red Hat 8
