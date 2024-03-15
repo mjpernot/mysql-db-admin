@@ -771,7 +771,7 @@ def run_program(args, func_dict, **kwargs):
         # Intersect args.args_array & func_dict to determine functions to call
         for item in set(args.get_args_keys()) & set(func_dict.keys()):
             cfg = gen_libs.load_module(args.get_val("-c"), args.get_val("-d"))
-            sys_dbs = cfg.sys_dbs if hasattr(cfg, "sys_dbs") else SYS_DBS 
+            sys_dbs = cfg.sys_dbs if hasattr(cfg, "sys_dbs") else SYS_DBS
             func_dict[item](
                 server, args, ofile=outfile, db_tbl=db_tbl, class_cfg=mongo,
                 mail=mail, sys_dbs=sys_dbs, **kwargs)
