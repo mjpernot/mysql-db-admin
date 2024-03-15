@@ -158,6 +158,56 @@ class Server(object):
         return status
 
 
+class Cfg(object):
+
+    """Class:  Cfg
+
+    Description:  Emulate a configuration file.
+
+    Methods:
+        __init__
+
+    """
+
+    def __init__(self):
+
+        """Method:  __init__
+
+        Description:  Initialization.
+
+        Arguments:
+
+        """
+
+        self.sys_dbs = [
+            "performance_schema", "information_schema", "mysql", "sys"]
+
+
+class Cfg2(object):
+
+    """Class:  Cfg
+
+    Description:  Emulate a configuration file.
+
+    Methods:
+        __init__
+
+    """
+
+    def __init__(self):
+
+        """Method:  __init__
+
+        Description:  Initialization.
+
+        Arguments:
+
+        """
+
+        self.sys_dbs2 = [
+            "performance_schema", "information_schema", "mysql", "sys"]
+
+
 class UnitTest(unittest.TestCase):
 
     """Class:  UnitTest
@@ -166,6 +216,8 @@ class UnitTest(unittest.TestCase):
 
     Methods:
         setUp
+        test_default_sys_dbs
+        test_cfg_sys_dbs
         test_connect_failure
         test_connect_success
         test_email
@@ -186,7 +238,51 @@ class UnitTest(unittest.TestCase):
 
         self.server = Server()
         self.args = ArgParser()
+        self.cfg = Cfg()
+        self.cfg2 = Cfg2()
         self.func_list = {"-C": check}
+
+    @mock.patch("mysql_db_admin.gen_libs.load_module")
+    @mock.patch("mysql_db_admin.mysql_libs.disconnect")
+    @mock.patch("mysql_db_admin.mysql_libs.create_instance")
+    def test_default_sys_dbs(self, mock_inst, mock_disconn, mock_cfg):
+
+        """Function:  test_default_sys_dbs
+
+        Description:  Test default global sys_dbs variable.
+
+        Arguments:
+
+        """
+
+        self.args.args_array["-C"] = True
+
+        mock_inst.return_value = self.server
+        mock_disconn.return_value = True
+        mock_cfg.return_value = self.cfg2
+
+        self.assertFalse(mysql_db_admin.run_program(self.args, self.func_list))
+
+    @mock.patch("mysql_db_admin.gen_libs.load_module")
+    @mock.patch("mysql_db_admin.mysql_libs.disconnect")
+    @mock.patch("mysql_db_admin.mysql_libs.create_instance")
+    def test_cfg_sys_dbs(self, mock_inst, mock_disconn, mock_cfg):
+
+        """Function:  test_cfg_sys_dbs
+
+        Description:  Test configuration sys_dbs variable.
+
+        Arguments:
+
+        """
+
+        self.args.args_array["-C"] = True
+
+        mock_inst.return_value = self.server
+        mock_disconn.return_value = True
+        mock_cfg.return_value = self.cfg
+
+        self.assertFalse(mysql_db_admin.run_program(self.args, self.func_list))
 
     @mock.patch("mysql_db_admin.mysql_libs.disconnect")
     @mock.patch("mysql_db_admin.mysql_libs.create_instance")
@@ -210,9 +306,10 @@ class UnitTest(unittest.TestCase):
             self.assertFalse(
                 mysql_db_admin.run_program(self.args, self.func_list))
 
+    @mock.patch("mysql_db_admin.gen_libs.load_module")
     @mock.patch("mysql_db_admin.mysql_libs.disconnect")
     @mock.patch("mysql_db_admin.mysql_libs.create_instance")
-    def test_connect_success(self, mock_inst, mock_disconn):
+    def test_connect_success(self, mock_inst, mock_disconn, mock_cfg):
 
         """Function:  test_connect_success
 
@@ -226,6 +323,7 @@ class UnitTest(unittest.TestCase):
 
         mock_inst.return_value = self.server
         mock_disconn.return_value = True
+        mock_cfg.return_value = self.cfg
 
         self.assertFalse(mysql_db_admin.run_program(self.args, self.func_list))
 
@@ -248,7 +346,7 @@ class UnitTest(unittest.TestCase):
         self.args.args_array["-s"] = "SubjectLine"
 
         mock_inst.return_value = self.server
-        mock_mongo.return_value = True
+        mock_mongo.side_effect = [True, self.cfg]
         mock_disconn.return_value = True
 
         self.assertFalse(mysql_db_admin.run_program(self.args, self.func_list))
@@ -270,14 +368,15 @@ class UnitTest(unittest.TestCase):
         self.args.args_array["-m"] = True
 
         mock_inst.return_value = self.server
-        mock_mongo.return_value = True
+        mock_mongo.side_effect = [True, self.cfg]
         mock_disconn.return_value = True
 
         self.assertFalse(mysql_db_admin.run_program(self.args, self.func_list))
 
+    @mock.patch("mysql_db_admin.gen_libs.load_module")
     @mock.patch("mysql_db_admin.mysql_libs.disconnect")
     @mock.patch("mysql_db_admin.mysql_libs.create_instance")
-    def test_run_program(self, mock_inst, mock_disconn):
+    def test_run_program(self, mock_inst, mock_disconn, mock_cfg):
 
         """Function:  test_run_program
 
@@ -291,6 +390,7 @@ class UnitTest(unittest.TestCase):
 
         mock_inst.return_value = self.server
         mock_disconn.return_value = True
+        mock_cfg.return_value = self.cfg
 
         self.assertFalse(mysql_db_admin.run_program(self.args, self.func_list))
 
