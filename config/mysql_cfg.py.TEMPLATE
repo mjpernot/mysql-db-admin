@@ -20,6 +20,10 @@ serv_os = "Linux"
 port = 3306
 # MySQL configuration settings
 cfg_file = "MYSQL_DIRECTORY/mysqld.cnf"
+# List of databases to be skipped under some options.
+# NOTE: Will default to the global SYS_DBS variable if commented out.
+sys_dbs = ["performance_schema", "information_schema", "mysql", "sys"]
+#
 # SSL Configuration settings
 # If not set will connect to MySQL without using SSL connections.
 # File containing the SSL certificate authority.

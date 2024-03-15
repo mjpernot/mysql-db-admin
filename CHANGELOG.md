@@ -4,7 +4,14 @@ All notable changes to this project will be documented in this file.
 The format is based on "Keep a Changelog".  This project adheres to Semantic Versioning.
 
 
-## [3.3.2] - 2026-02-26
+## [3.3.3] - 2024-03-12
+
+### Changed
+- run_program: Read in configuration module and set the sys_dbs variable.
+- main: Moved the sys_dbs variable to the global SYS_DBS variable.
+
+
+## [3.3.2] - 2024-02-26
 - Updated to work in Red Hat 8
 - Updated mysql-lib to v5.3.4
 - Updated mongo-lib to v4.2.9
