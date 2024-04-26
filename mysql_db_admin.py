@@ -77,6 +77,7 @@
             database.
         NOTE 4:  Default output is in standard output, unless -j option
             is selected.
+        NOTE 5:  -t option only works if passing in a single database name.
 
     Notes:
         Database configuration file format (config/mysql_cfg.py.TEMPLATE):
@@ -499,6 +500,81 @@ def _proc_some_tbls(server, func_name, db_list, db_name, tbl_name, dict_key,
 
         for tbl in set(tbl_name) & set(tbl_list):
             func_name(server, dbs, tbl, **kwargs)
+
+
+def get_db_tbl(server, args, **kwargs):
+
+    """Function:  get_db_tbl
+
+    Description:  Return a dictionary of databases with table lists.
+
+    Arguments:
+        (input) server -> Server instance
+        (input) args -> ArgParser class instance
+        (input) **kwargs:
+            sys_dbs -> List of system databases to skip
+
+    """
+
+    db_dict = dict()
+    db_list = list(args.get_val("-A"))
+    dict_key = "TABLE_NAME" if server.version >= (8, 0) else "table_name"
+
+    if db_list:
+        db_list = gen_libs.del_not_and_list(
+            db_list, kwargs.get("sys_dbs", list()))
+
+        if not db_list:
+            print("Warning:  No non-system databases to process")
+
+        elif len(db_list) == 1 and args.get_val("-t"):
+            db_tables = gen_libs.dict_2_list(
+                mysql_libs.fetch_tbl_dict(server, db_list[0], dict_key))
+            tbl_list = list(set(args.get_val("-t")) - set(db_tables))
+            db_dict[db_list[0]] = tbl_list)
+
+        else:
+            ### Function - get_all_dbs_tbls
+            for dbs in db_list:
+                tbl_list = gen_libs.dict_2_list(
+                    mysql_libs.fetch_tbl_dict(server, dbs, dict_key))
+                db_dict[dbs] = tbl_list)
+
+    else:
+        db_list = gen_libs.dict_2_list(
+            mysql_libs.fetch_db_dict(server), "Database")
+        db_list = gen_libs.del_not_and_list(
+            db_list, kwargs.get("sys_dbs", list()))
+
+        if not db_list:
+            print("Warning:  No non-system databases to process")
+
+        else:
+            ### Function - get_all_dbs_tbls
+            for dbs in db_list:
+                tbl_list = gen_libs.dict_2_list(
+                    mysql_libs.fetch_tbl_dict(server, dbs, dict_key))
+                db_dict[dbs] = tbl_list)
+
+    return db_dict
+
+
+def analyze2(server, args, **kwargs):
+
+    """Function:  analyze2
+
+    Description:  Analzye the table(s) for problems.
+
+    Arguments:
+        (input) server -> Server instance
+        (input) args -> ArgParser class instance
+        (input) **kwargs:
+            sys_dbs -> List of system databases to skip
+
+    """
+
+    db_dict = get_db_tbl(server, args, **kwargs)
+    ### STOPPED HERE
 
 
 def analyze(server, args, **kwargs):

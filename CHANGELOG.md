@@ -7,6 +7,12 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 ## [4.0.0] - 2024-04-24
 Breaking Change
 
+- Change output to a JSON format.
+- Add ability to email, insert into Mongo, save to file and/or display to standard out.
+
+### Changed
+- Documentation updates.
+
 
 ## [3.3.4] - 2024-04-23
 - Updated mongo-lib to v4.3.0
