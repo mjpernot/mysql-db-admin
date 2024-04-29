@@ -629,7 +629,7 @@ def analyze2(server, args, **kwargs):
             temp["Status"] = data["Msg_text"]
             t_results["Tables"].append(temp)
 
-        results.append(t_results)
+        results["Results"].append(t_results)
 
     print(results)
 
