@@ -502,22 +502,48 @@ def _proc_some_tbls(server, func_name, db_list, db_name, tbl_name, dict_key,
             func_name(server, dbs, tbl, **kwargs)
 
 
-def get_db_tbl(server, args, **kwargs):
+def get_all_dbs_tbls(db_list, dict_key):
 
-    """Function:  get_db_tbl
+    """Function:  get_all_dbs_tbls
 
     Description:  Return a dictionary of databases with table lists.
 
     Arguments:
-        (input) server -> Server instance
-        (input) args -> ArgParser class instance
-        (input) **kwargs:
-            sys_dbs -> List of system databases to skip
+        (input) db_list -> List of database names
+        (input) dict_key -> Dictionary key that is tuned to the Mysql version
+        (output) db_dict -> Dictionary of databases and lists of tables
 
     """
 
     db_dict = dict()
-    db_list = list(args.get_val("-A"))
+    db_list = list(db_list)
+
+    for dbs in db_list:
+        tbl_list = gen_libs.dict_2_list(
+            mysql_libs.fetch_tbl_dict(server, dbs, dict_key))
+        db_dict[dbs] = tbl_list)
+
+    return db_dict
+
+
+def get_db_tbl(server, args, db_list, **kwargs):
+
+    """Function:  get_db_tbl
+
+    Description:  Determines which databases and tables will be checked.
+
+    Arguments:
+        (input) server -> Server instance
+        (input) args -> ArgParser class instance
+        (input) db_list -> List of database names
+        (input) **kwargs:
+            sys_dbs -> List of system databases to skip
+        (output) db_dict -> Dictionary of databases and lists of tables
+
+    """
+
+    db_dict = dict()
+    db_list = list(db_list)
     dict_key = "TABLE_NAME" if server.version >= (8, 0) else "table_name"
 
     if db_list:
@@ -534,11 +560,7 @@ def get_db_tbl(server, args, **kwargs):
             db_dict[db_list[0]] = tbl_list)
 
         else:
-            ### Function - get_all_dbs_tbls
-            for dbs in db_list:
-                tbl_list = gen_libs.dict_2_list(
-                    mysql_libs.fetch_tbl_dict(server, dbs, dict_key))
-                db_dict[dbs] = tbl_list)
+            db_dict = get_all_dbs_tbls(db_list, dict_key)
 
     else:
         db_list = gen_libs.dict_2_list(
@@ -550,13 +572,28 @@ def get_db_tbl(server, args, **kwargs):
             print("Warning:  No non-system databases to process")
 
         else:
-            ### Function - get_all_dbs_tbls
-            for dbs in db_list:
-                tbl_list = gen_libs.dict_2_list(
-                    mysql_libs.fetch_tbl_dict(server, dbs, dict_key))
-                db_dict[dbs] = tbl_list)
+            db_dict = get_all_dbs_tbls(db_list, dict_key)
 
     return db_dict
+
+
+def get_json_template(server):
+
+    """Function:  get_json_template
+
+    Description:  Return a JSON template format.
+
+    Arguments:
+        (input) server -> Server instance
+        (output) json_doc -> JSON filled-in template document
+
+    """
+
+    json_doc = dict()
+    json_doc["ServerName"] = server.name
+    json_doc["AsOf"] = gen_libs.get_date() + "T" + gen_libs.get_time()
+
+    return json_doc
 
 
 def analyze2(server, args, **kwargs):
@@ -573,8 +610,30 @@ def analyze2(server, args, **kwargs):
 
     """
 
-    db_dict = get_db_tbl(server, args, **kwargs)
-    ### STOPPED HERE
+    db_list = list(args.get_val("-A"))
+    db_dict = get_db_tbl(server, args, db_list, **kwargs)
+    results = get_json_template(server)
+    results["Type"] = "analyze"
+    results["Results"] = list()
+
+    for dbn in db_dict:
+        t_results = dict()
+        t_results["Database"] = dbn
+        t_results["Tables"] = list()
+
+        for tbl in db_dict[dbn]:
+            data = run_analyze2(server, dbn, tbl)[0]
+            temp = dict()
+            temp["TableName"] = tbl
+            temp["Status"] = data["Msg_text"]
+            t_results["Tables"].append(temp)
+
+        results.append(t_results)
+
+    print(results)
+
+    # Process output here.
+            
 
 
 def analyze(server, args, **kwargs):
@@ -891,7 +950,7 @@ def main():
     file_perms = {"-o": 6}
     file_crt_list = ["-o"]
     func_dict = {
-        "-A": analyze, "-C": check, "-D": optimize, "-S": checksum,
+        "-A": analyze2, "-C": check, "-D": optimize, "-S": checksum,
         "-M": status, "-L": listdbs}
     opt_con_req_list = {"-i": ["-m"], "-s": ["-e"], "-u": ["-e"]}
     opt_def_dict = {

@@ -10,7 +10,13 @@ Breaking Change
 - Change output to a JSON format.
 - Add ability to email, insert into Mongo, save to file and/or display to standard out.
 
+### Added
+- get_json_template: Return a JSON template format.
+- get_all_dbs_tbls: Return a dictionary of databases with table lists.
+- get_db_tbl: Determines which databases and tables will be checked.
+
 ### Changed
+- analyze: Refactored entire function.
 - Documentation updates.
 
 
