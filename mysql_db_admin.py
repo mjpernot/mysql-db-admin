@@ -597,6 +597,35 @@ def get_json_template(server):
     return json_doc
 
 
+def create_data_config(args):
+
+    """Function:  create_data_config
+
+    Description:  Create data_out config parameters.
+
+    Arguments:
+        (input) args -> ArgParser class instance
+        (output) data_config -> Dictionary of data_out config parameters
+
+    """
+
+    data_config= dict()
+    data_config["to_addr"] = TO_EMAIL_ADDRESS
+    data_config["subj"] = SUBJECT_LINE
+    data_config["mailx"] = True|False - USE_MAILX
+    data_config["outfile"] = OUTPUT_FILE
+    data_config["mode"] = FILE_MODE
+    data_config["expand"] = True|False - EXPAND_JSON
+    data_config["indent"] = 4|N - JSON_INDENTATION
+    data_config["suppress"] = True|False - SUPPRESS_STANDARD_OUT
+    data_config["mongo"] = MONGO_CONFIG_FILE_NAME
+    data_config["db_tbl"] = MONGO_DB_TBL_NAME "db:tbl"
+
+    return data_config
+
+
+def data_out(data, **kwargs):
+### STOPPED HERE
 def analyze2(server, args, **kwargs):
 
     """Function:  analyze2
@@ -616,6 +645,7 @@ def analyze2(server, args, **kwargs):
     results = get_json_template(server)
     results["Type"] = "analyze"
     results["Results"] = list()
+    data_config = dict(create_data_config(args))
 
     for dbn in db_dict:
         t_results = dict()
@@ -631,10 +661,7 @@ def analyze2(server, args, **kwargs):
 
         results["Results"].append(t_results)
 
-    print(results)
-
-    # Process output here.
-            
+    data_out(results, **data_config)
 
 
 def analyze(server, args, **kwargs):
