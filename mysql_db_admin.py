@@ -521,7 +521,7 @@ def get_all_dbs_tbls(db_list, dict_key):
     for dbs in db_list:
         tbl_list = gen_libs.dict_2_list(
             mysql_libs.fetch_tbl_dict(server, dbs, dict_key))
-        db_dict[dbs] = tbl_list)
+        db_dict[dbs] = tbl_list
 
     return db_dict
 
