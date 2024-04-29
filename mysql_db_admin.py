@@ -502,13 +502,14 @@ def _proc_some_tbls(server, func_name, db_list, db_name, tbl_name, dict_key,
             func_name(server, dbs, tbl, **kwargs)
 
 
-def get_all_dbs_tbls(db_list, dict_key):
+def get_all_dbs_tbls(server, db_list, dict_key):
 
     """Function:  get_all_dbs_tbls
 
     Description:  Return a dictionary of databases with table lists.
 
     Arguments:
+        (input) server -> Server instance
         (input) db_list -> List of database names
         (input) dict_key -> Dictionary key that is tuned to the Mysql version
         (output) db_dict -> Dictionary of databases and lists of tables
@@ -560,7 +561,7 @@ def get_db_tbl(server, args, db_list, **kwargs):
             db_dict[db_list[0]] = tbl_list
 
         else:
-            db_dict = get_all_dbs_tbls(db_list, dict_key)
+            db_dict = get_all_dbs_tbls(server, db_list, dict_key)
 
     else:
         db_list = gen_libs.dict_2_list(
@@ -572,7 +573,7 @@ def get_db_tbl(server, args, db_list, **kwargs):
             print("Warning:  No non-system databases to process")
 
         else:
-            db_dict = get_all_dbs_tbls(db_list, dict_key)
+            db_dict = get_all_dbs_tbls(server, db_list, dict_key)
 
     return db_dict
 
