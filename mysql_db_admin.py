@@ -557,7 +557,7 @@ def get_db_tbl(server, args, db_list, **kwargs):
             db_tables = gen_libs.dict_2_list(
                 mysql_libs.fetch_tbl_dict(server, db_list[0], dict_key))
             tbl_list = list(set(args.get_val("-t")) - set(db_tables))
-            db_dict[db_list[0]] = tbl_list)
+            db_dict[db_list[0]] = tbl_list
 
         else:
             db_dict = get_all_dbs_tbls(db_list, dict_key)
