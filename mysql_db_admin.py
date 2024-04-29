@@ -623,7 +623,7 @@ def analyze2(server, args, **kwargs):
         t_results["Tables"] = list()
 
         for tbl in db_dict[dbn]:
-            data = run_analyze2(server, dbn, tbl)[0]
+            data = mysql_libs.analyze_tbl(server, dbs, tbl)[0]
             temp = dict()
             temp["TableName"] = tbl
             temp["Status"] = data["Msg_text"]
