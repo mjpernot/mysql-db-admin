@@ -625,7 +625,47 @@ def create_data_config(args):
 
 
 def data_out(data, **kwargs):
-### STOPPED HERE
+
+    """Function:  data_out
+
+    Description:  Outputs the data in a variety of formats and media.
+
+    Arguments:
+        (input) data -> JSON data document
+        (input) kwargs:
+            to_addr -> To email address
+            subj -> Email subject line
+            mailx -> True|False - Use mailx command
+            outfile -> Name of output file name
+            mode -> w|a => Write or append mode for file
+            expand -> True|False - Expand JSON format
+            indent -> Indentation of JSON document if expanded
+            suppress -> True|False - Suppress standard out
+            mongo -> Mongo config file - Insert into Mongo database
+            db_tbl -> database:table - Database name:Table name
+
+    """
+
+    data = dict(data)
+    mail = None
+
+    if kwargs.get("to_addr", False):
+        subj = kwargs.get("subj", "NoSubjectLinePassed")
+        mail = gen_class.setup_mail(kwargs.get("to_addr"), subj=subj)
+
+    status = gen_libs.dict_out(
+        data, ofile=kwargs.get("outfile"), mail=mail,
+        no_std==kwargs.get("suppress"), **kwargs)
+
+    if not status:
+        mail.send_mail(use_mailx=kwargs.get("mailx"))
+        dbs, tbl = kwargs.get("db_tbl").split(":")
+        status2 = mongo_libs.ins_doc(mongo, dbs, tbl, data)
+
+        if not status2[0]:
+            print("data_out:  Error:  %s" % (status2[1]))
+
+
 def analyze2(server, args, **kwargs):
 
     """Function:  analyze2
