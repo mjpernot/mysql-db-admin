@@ -18,6 +18,7 @@ Breaking Change
 - get_db_tbl: Determines which databases and tables will be checked.
 
 ### Changed
+- main: Added -n and -p options, removed the check for converting to JSON if -m option is used.
 - analyze: Refactored entire function.
 - Documentation updates.
 

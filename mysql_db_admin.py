@@ -33,6 +33,20 @@
         -A [database name(s)] => Analyze a table's key distribution, checks the
                 table's indexes.
             -t table name(s) => Table names to check.
+            -m file => Mongo config file.  Is loaded as a python, do not
+                include the .py extension with the name.
+                -i {database:collection} => Name of database and collection.
+                    Default: sysmon:mysql_db_admin
+            -o path/file => Directory path and file name for output.
+                -a => Append output to output file.
+            -e to_email_address(es) => Enables emailing and sends output to one
+                    or more email addresses.  Email addresses are delimited by
+                    a space.
+                -s subject_line => Subject line of email.
+                -u => Override the default mail command and use mailx.
+            -z => Suppress standard out.
+            -p => Expand the JSON format.
+                -n N => Indentation for expanded JSON format.  Default is 4.
 
         -S [database name(s)] => Return a checksum on a table.
             -t table name(s) => Table names to check.
@@ -608,7 +622,7 @@ def create_data_config(args):
         (output) data_config -> Dictionary of data_out config parameters
 
     """
-
+### STOPPED HERE
     data_config= dict()
     data_config["to_addr"] = TO_EMAIL_ADDRESS
     data_config["subj"] = SUBJECT_LINE
@@ -1020,10 +1034,10 @@ def main():
     func_dict = {
         "-A": analyze2, "-C": check, "-D": optimize, "-S": checksum,
         "-M": status, "-L": listdbs}
-    opt_con_req_list = {"-i": ["-m"], "-s": ["-e"], "-u": ["-e"]}
+    opt_con_req_list = {"-i": ["-m"], "-s": ["-e"], "-u": ["-e"], "-a": ["-o"]}
     opt_def_dict = {
-        "-t": None, "-A": [], "-C": [], "-D": [], "-S": [],
-        "-i": "sysmon:mysql_db_status"}
+        "-t": None, "-A": [], "-C": [], "-D": [], "-S": [], "-n": 4
+        "-i": "sysmon:mysql_db_admin"}
     opt_multi_list = ["-A", "-C", "-D", "-S", "-t", "-e", "-s"]
     opt_req_list = ["-c", "-d"]
     opt_val_list = [
@@ -1043,9 +1057,10 @@ def main():
         opt_def=opt_def_dict, do_parse=True)
 
     # Set JSON format for certain option settings
-    if args.arg_exist("-i") and args.arg_exist("-m") \
-       and not args.arg_exist("-j"):
-        args.insert_arg("-j", True)
+# Should no longer be needed once update is done to v4.0.0
+#    if args.arg_exist("-i") and args.arg_exist("-m") \
+#       and not args.arg_exist("-j"):
+#        args.insert_arg("-j", True)
 
     if not gen_libs.help_func(args, __version__, help_message)              \
        and args.arg_require(opt_req=opt_req_list)                           \
