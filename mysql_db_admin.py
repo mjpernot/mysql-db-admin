@@ -45,8 +45,8 @@
                 -s subject_line => Subject line of email.
                 -u => Override the default mail command and use mailx.
             -z => Suppress standard out.
-            -p => Unflatten the JSON format.
-                -n N => Indentation for unflattened JSON format.  Default is 4.
+            -p => Expand the JSON format.
+                -n N => Indentation for expanded JSON format.  Default is 4.
 
         -S [database name(s)] => Return a checksum on a table.
             -t table name(s) => Table names to check.
@@ -629,7 +629,7 @@ def create_data_config(args):
     data_config["mailx"] = args.get_val("-u", def_val=False)
     data_config["outfile"] = args.get_val("-o")
     data_config["mode"] = args.get_val("-a", def_val="a")
-    data_config["unflatten"] = args.get_val("-p", def_val=False)
+    data_config["expand"] = args.get_val("-p", def_val=False)
     data_config["indent"] = args.get_val("-n", def_val=4)
     data_config["suppress"] = args.get_val("-z", def_val=False)
     data_config["mongo"] = args.get_val("-m")
@@ -652,7 +652,7 @@ def data_out(data, **kwargs):
             mailx -> True|False - Use mailx command
             outfile -> Name of output file name
             mode -> w|a => Write or append mode for file
-            unflatten -> True|False - Unflatten the JSON format
+            expand -> True|False - Expand the JSON format
             indent -> Indentation of JSON document if expanded
             suppress -> True|False - Suppress standard out
             mongo -> Mongo config file - Insert into Mongo database
