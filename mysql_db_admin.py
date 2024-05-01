@@ -1036,7 +1036,7 @@ def main():
         "-M": status, "-L": listdbs}
     opt_con_req_list = {"-i": ["-m"], "-s": ["-e"], "-u": ["-e"], "-a": ["-o"]}
     opt_def_dict = {
-        "-t": None, "-A": [], "-C": [], "-D": [], "-S": [], "-n": 4
+        "-t": None, "-A": [], "-C": [], "-D": [], "-S": [], "-n": 4,
         "-i": "sysmon:mysql_db_admin"}
     opt_multi_list = ["-A", "-C", "-D", "-S", "-t", "-e", "-s"]
     opt_req_list = ["-c", "-d"]
