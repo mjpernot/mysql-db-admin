@@ -669,7 +669,7 @@ def data_out(data, **kwargs):
 
     status = gen_libs.dict_out(
         data, ofile=kwargs.get("outfile"), mail=mail,
-        no_std==kwargs.get("suppress"), **kwargs)
+        no_std=kwargs.get("suppress"), **kwargs)
 
     if not status:
         mail.send_mail(use_mailx=kwargs.get("mailx"))
