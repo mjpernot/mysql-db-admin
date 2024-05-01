@@ -619,21 +619,21 @@ def create_data_config(args):
 
     Arguments:
         (input) args -> ArgParser class instance
-        (output) data_config -> Dictionary of data_out config parameters
+        (output) data_config -> Dictionary for data_out config parameters
 
     """
-### STOPPED HERE
+
     data_config= dict()
-    data_config["to_addr"] = TO_EMAIL_ADDRESS
-    data_config["subj"] = SUBJECT_LINE
-    data_config["mailx"] = True|False - USE_MAILX
-    data_config["outfile"] = OUTPUT_FILE
-    data_config["mode"] = FILE_MODE
-    data_config["expand"] = True|False - EXPAND_JSON
-    data_config["indent"] = 4|N - JSON_INDENTATION
-    data_config["suppress"] = True|False - SUPPRESS_STANDARD_OUT
-    data_config["mongo"] = MONGO_CONFIG_FILE_NAME
-    data_config["db_tbl"] = MONGO_DB_TBL_NAME "db:tbl"
+    data_config["to_addr"] = args.get_val("-e")
+    data_config["subj"] = args.get_val("-s")
+    data_config["mailx"] = args.get_val("-u", def_val=False)
+    data_config["outfile"] = args.get_val("-o")
+    data_config["mode"] = args.get_val("-a", def_val="a")
+    data_config["expand"] = args.get_val("-p", def_val=False)
+    data_config["indent"] = args.get_val("-n", def_val=4)
+    data_config["suppress"] = args.get_val("-z", def_val=False)
+    data_config["mongo"] = args.get_val("-m")
+    data_config["db_tbl"] = args.get_val("-i")
 
     return data_config
 
