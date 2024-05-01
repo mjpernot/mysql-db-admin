@@ -230,6 +230,7 @@ from __future__ import absolute_import
 import sys
 import datetime
 import json
+import pprint
 
 # Local
 try:
@@ -676,7 +677,10 @@ def data_out(data, **kwargs):
 
     data = dict(data)
     mail = None
-    indent = kwargs.get("indent", 4) if kwargs.get("expand", False) else None
+
+    cfg = {"indent": kwargs.get("indent", 4)} if kwargs.get("indent", False) \
+        else dict()
+#    indent = kwargs.get("indent", 4) if kwargs.get("expand", False) else None
 
     if kwargs.get("to_addr", False):
         subj = kwargs.get("subj", "NoSubjectLinePassed")
@@ -690,7 +694,11 @@ def data_out(data, **kwargs):
             mode=kwargs.get("mode", "w"))
 
     if not kwargs.get("suppress", False):
-        gen_libs.print_data(json.dumps(data, indent=indent))
+        if kwargs.get("expand", False):
+            pprint.pprint(data)
+
+        else:
+            print(data)
 
     if kwargs.get("mongo", False):
         dbs, tbl = kwargs.get("db_tbl").split(":")
