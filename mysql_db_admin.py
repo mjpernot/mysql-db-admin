@@ -13,7 +13,10 @@
     Usage:
         mysql_db_admin.py -c mysql_cfg -d path
             {-C [db_name [db_name2 ...]] [-t table_name [table_name2 ...]] |
-             -A [db_name [db_name2 ...] [-t table_name [table_name2 ...]] |
+             -A [db_name [db_name2 ...] [-t table_name [table_name2 ...] |
+                 [-i [db_name:table_name] -m config_file] |
+                 [-e to_email [to_email2 ...] [-s subject_line] [-u]] |
+                 [-z] [-p [-n N]]] |
              -S [db_name [db_name2 ...]] [-t table_name [table_name2 ...]] |
              -D [db_name [db_name2 ...]] [-t table_name [table_name2 ...]] |
              -M [-j [-f]] | [-i [db_name:table_name] -m config_file] |
@@ -38,7 +41,8 @@
                 -i {database:collection} => Name of database and collection.
                     Default: sysmon:mysql_db_admin
             -o path/file => Directory path and file name for output.
-                -a => Append output to output file.
+                -w a|w => Append or write to output to output file. Default is
+                    write.
             -e to_email_address(es) => Enables emailing and sends output to one
                     or more email addresses.  Email addresses are delimited by
                     a space.
@@ -628,7 +632,7 @@ def create_data_config(args):
     data_config["subj"] = args.get_val("-s")
     data_config["mailx"] = args.get_val("-u", def_val=False)
     data_config["outfile"] = args.get_val("-o")
-    data_config["mode"] = args.get_val("-a", def_val="a")
+    data_config["mode"] = args.get_val("-w", def_val="w")
     data_config["expand"] = args.get_val("-p", def_val=False)
     data_config["indent"] = args.get_val("-n", def_val=4)
     data_config["suppress"] = args.get_val("-z", def_val=False)
@@ -657,28 +661,42 @@ def data_out(data, **kwargs):
             suppress -> True|False - Suppress standard out
             mongo -> Mongo config file - Insert into Mongo database
             db_tbl -> database:table - Database name:Table name
+        (output) status -> True|False - Successful operation
+        (output) msg -> Status or error message
 
     """
 
+    status = False
+    msg = None
+
+    if not isinstance(data, dict):
+        status = False
+        msg = "Error: Is not a dictionary: %s" % (data)
+        return status, msg
+
     data = dict(data)
     mail = None
+    indent = kwargs.get("indent", 4) if kwargs.get("expand", False) else None
 
     if kwargs.get("to_addr", False):
         subj = kwargs.get("subj", "NoSubjectLinePassed")
         mail = gen_class.setup_mail(kwargs.get("to_addr"), subj=subj)
+        mail.add_2_msg(json.dumps(data, indent=indent))
+        mail.send_mail(use_mailx=kwargs.get("mailx", False))
 
-    # Known bug: Cannot change indentation spacing for gen_libs.dict_out
-    status = gen_libs.dict_out(
-        data, ofile=kwargs.get("outfile"), mail=mail,
-        no_std=kwargs.get("suppress"), **kwargs)
+    if kwargs.get("outfile", False):
+        gen_libs.print_data(
+            json.dumps(data, indent=indent), ofile=kwargs.get("outfile"),
+            mode=kwargs.get("mode", "w"))
 
-    if not status:
-        mail.send_mail(use_mailx=kwargs.get("mailx"))
+    if not kwargs.get("suppress", False):
+        gen_libs.print_data(json.dumps(data, indent=indent))
+
+    if kwargs.get("mongo", False):
         dbs, tbl = kwargs.get("db_tbl").split(":")
-        status2 = mongo_libs.ins_doc(mongo, dbs, tbl, data)
+        status, msg = mongo_libs.ins_doc(mongo, dbs, tbl, data)
 
-        if not status2[0]:
-            print("data_out:  Error:  %s" % (status2[1]))
+    return status, msg
 
 
 def analyze2(server, args, **kwargs):
@@ -1035,7 +1053,7 @@ def main():
     func_dict = {
         "-A": analyze2, "-C": check, "-D": optimize, "-S": checksum,
         "-M": status, "-L": listdbs}
-    opt_con_req_list = {"-i": ["-m"], "-s": ["-e"], "-u": ["-e"], "-a": ["-o"]}
+    opt_con_req_list = {"-i": ["-m"], "-s": ["-e"], "-u": ["-e"], "-w": ["-o"]}
     opt_def_dict = {
         "-t": None, "-A": [], "-C": [], "-D": [], "-S": [], "-n": 4,
         "-i": "sysmon:mysql_db_admin"}
@@ -1043,7 +1061,7 @@ def main():
     opt_req_list = ["-c", "-d"]
     opt_val_list = [
         "-c", "-d", "-t", "-A", "-C", "-D", "-S", "-i", "-m", "-o", "-e", "-s",
-        "-y"]
+        "-y", "-w"]
     opt_xor_dict = {
         "-A": ["-C", "-D", "-M", "-S", "-L"],
         "-C": ["-A", "-D", "-M", "-S", "-L"],
