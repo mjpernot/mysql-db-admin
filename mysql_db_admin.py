@@ -50,7 +50,7 @@
                 -u => Override the default mail command and use mailx.
             -z => Suppress standard out.
             -p => Expand the JSON format.
-                -n N => Indentation for expanded JSON format.  Default is 4.
+                -n N => Indentation for expanded JSON format.
 
         -S [database name(s)] => Return a checksum on a table.
             -t table name(s) => Table names to check.
@@ -635,7 +635,7 @@ def create_data_config(args):
     data_config["outfile"] = args.get_val("-o")
     data_config["mode"] = args.get_val("-w", def_val="w")
     data_config["expand"] = args.get_val("-p", def_val=False)
-    data_config["indent"] = args.get_val("-n", def_val=4)
+    data_config["indent"] = args.get_val("-n")
     data_config["suppress"] = args.get_val("-z", def_val=False)
     data_config["mongo"] = args.get_val("-m")
     data_config["db_tbl"] = args.get_val("-i")
@@ -677,10 +677,8 @@ def data_out(data, **kwargs):
 
     data = dict(data)
     mail = None
-
     cfg = {"indent": kwargs.get("indent", 4)} if kwargs.get("indent", False) \
         else dict()
-#    indent = kwargs.get("indent", 4) if kwargs.get("expand", False) else None
 
     if kwargs.get("to_addr", False):
         subj = kwargs.get("subj", "NoSubjectLinePassed")
@@ -695,7 +693,7 @@ def data_out(data, **kwargs):
 
     if not kwargs.get("suppress", False):
         if kwargs.get("expand", False):
-            pprint.pprint(data)
+            pprint.pprint(data, **cfg)
 
         else:
             print(data)
