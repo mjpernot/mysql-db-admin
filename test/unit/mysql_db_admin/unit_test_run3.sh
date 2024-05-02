@@ -13,6 +13,7 @@ echo "Unit testing..."
 /usr/bin/python3 ./test/unit/mysql_db_admin/check.py
 /usr/bin/python3 ./test/unit/mysql_db_admin/checksum.py
 /usr/bin/python3 ./test/unit/mysql_db_admin/detect_dbs.py
+/usr/bin/python3 ./test/unit/mysql_db_admin/get_all_dbs_tbls.py
 /usr/bin/python3 ./test/unit/mysql_db_admin/listdbs.py
 /usr/bin/python3 ./test/unit/mysql_db_admin/optimize.py
 /usr/bin/python3 ./test/unit/mysql_db_admin/process_request.py
@@ -22,7 +23,6 @@ echo "Unit testing..."
 /usr/bin/python3 ./test/unit/mysql_db_admin/run_check.py
 /usr/bin/python3 ./test/unit/mysql_db_admin/run_checksum.py
 /usr/bin/python3 ./test/unit/mysql_db_admin/run_optimize.py
-/usr/bin/python3 ./test/unit/mysql_db_admin/run_analyze.py
 /usr/bin/python3 ./test/unit/mysql_db_admin/status.py
 /usr/bin/python3 ./test/unit/mysql_db_admin/run_program.py
 /usr/bin/python3 ./test/unit/mysql_db_admin/main.py

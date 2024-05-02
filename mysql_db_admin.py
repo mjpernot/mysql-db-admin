@@ -270,30 +270,6 @@ def help_message():
     print(__doc__)
 
 
-def run_analyze(server, dbs, tbl, **kwargs):
-
-    """Function:  run_analyze
-
-    Description:  Calls the analyze table command and prints the results.
-
-    Arguments:
-        (input) server -> Server instance
-        (input) dbs -> Database name
-        (input) tbl -> Table name
-        (input) **kwargs:
-            sys_dbs -> List of system databases to skip
-
-    """
-
-    global PRT_TEMPLATE
-
-    if dbs not in list(kwargs.get("sys_dbs", [])):
-
-        for item in mysql_libs.analyze_tbl(server, dbs, tbl):
-            print(PRT_TEMPLATE.format(dbs, tbl), end="")
-            gen_libs.prt_msg(item["Msg_type"], item["Msg_text"])
-
-
 def run_checksum(server, dbs, tbl, **kwargs):
 
     """Function:  run_checksum
@@ -700,9 +676,9 @@ def data_out(data, **kwargs):
     return status, msg
 
 
-def analyze2(server, args, **kwargs):
+def analyze(server, args, **kwargs):
 
-    """Function:  analyze2
+    """Function:  analyze
 
     Description:  Analzye the table(s) for problems.
 
@@ -732,24 +708,6 @@ def analyze2(server, args, **kwargs):
         results["Results"].append(t_results)
 
     data_out(results, **data_config)
-
-
-def analyze(server, args, **kwargs):
-
-    """Function:  analyze
-
-    Description:  Sets up the processing for the analyze table command.
-
-    Arguments:
-        (input) server -> Server instance
-        (input) args -> ArgParser class instance
-        (input) **kwargs:
-            sys_dbs -> List of system databases to skip
-
-    """
-
-    process_request(server, run_analyze, args.get_val("-A"),
-                    args.get_val("-t", def_val=None), **kwargs)
 
 
 def checksum(server, args, **kwargs):
@@ -1039,7 +997,7 @@ def main():
     file_perms = {"-o": 6}
     file_crt_list = ["-o"]
     func_dict = {
-        "-A": analyze2, "-C": check, "-D": optimize, "-S": checksum,
+        "-A": analyze, "-C": check, "-D": optimize, "-S": checksum,
         "-M": status, "-L": listdbs}
     opt_con_req_list = {"-i": ["-m"], "-s": ["-e"], "-u": ["-e"], "-w": ["-o"]}
     opt_def_dict = {

@@ -22,6 +22,9 @@ Breaking Change
 - analyze: Refactored to change output to JSON format and additional options for sending out.
 - Documentation updates.
 
+### Removed
+- run_analyze
+
 
 ## [3.3.4] - 2024-04-23
 - Updated mongo-lib to v4.3.0
