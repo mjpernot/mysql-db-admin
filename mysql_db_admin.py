@@ -726,16 +726,18 @@ def analyze2(server, args, **kwargs):
     data_config = dict(create_data_config(args))
 
     for dbn in db_dict:
-        t_results = dict()
-        t_results["Database"] = dbn
-        t_results["Tables"] = list()
+        t_results = {"Database": dbn, "Tables": list()}
+#        t_results = dict()
+#        t_results["Database"] = dbn
+#        t_results["Tables"] = list()
 
         for tbl in db_dict[dbn]:
             data = mysql_libs.analyze_tbl(server, dbn, tbl)[0]
-            temp = dict()
-            temp["TableName"] = tbl
-            temp["Status"] = data["Msg_text"]
+            temp = {"TableName": tbl, "Status": data["Msg_text"]}
             t_results["Tables"].append(temp)
+#            temp = dict()
+#            temp["TableName"] = tbl
+#            temp["Status"] = data["Msg_text"]
 
         results["Results"].append(t_results)
 
