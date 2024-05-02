@@ -400,7 +400,6 @@ def process_request(server, func_name, db_name=None, tbl_name=None, **kwargs):
         (input) tbl_name -> Table name
         (input) **kwargs:
             sys_dbs -> List of system databases
-            multi_val -> List of options that may have multiple values
 
     """
 
@@ -443,7 +442,6 @@ def _proc_all_dbs(server, func_name, db_list, dict_key, **kwargs):
         (input) dict_key -> Dictionary key for fetch_tbl_dict call
         (input) **kwargs:
             sys_dbs -> List of system databases
-            multi_val -> List of options that may have multiple values
 
     """
 
@@ -468,7 +466,6 @@ def _proc_all_tbls(server, func_name, db_list, db_name, dict_key, **kwargs):
         (input) dict_key -> Dictionary key for fetch_tbl_dict call
         (input) **kwargs:
             sys_dbs -> List of system databases
-            multi_val -> List of options that may have multiple values
 
     """
 
@@ -499,7 +496,6 @@ def _proc_some_tbls(server, func_name, db_list, db_name, tbl_name, dict_key,
         (input) dict_key -> Dictionary key for fetch_tbl_dict call
         (input) **kwargs:
             sys_dbs -> List of system databases
-            multi_val -> List of options that may have multiple values
 
     """
 
@@ -610,7 +606,7 @@ def get_json_template(server):
     """
 
     json_doc = dict()
-    json_doc["ServerName"] = server.name
+    json_doc["Server"] = server.name
     json_doc["AsOf"] = gen_libs.get_date() + "T" + gen_libs.get_time()
 
     return json_doc
@@ -727,17 +723,11 @@ def analyze2(server, args, **kwargs):
 
     for dbn in db_dict:
         t_results = {"Database": dbn, "Tables": list()}
-#        t_results = dict()
-#        t_results["Database"] = dbn
-#        t_results["Tables"] = list()
 
         for tbl in db_dict[dbn]:
             data = mysql_libs.analyze_tbl(server, dbn, tbl)[0]
-            temp = {"TableName": tbl, "Status": data["Msg_text"]}
-            t_results["Tables"].append(temp)
-#            temp = dict()
-#            temp["TableName"] = tbl
-#            temp["Status"] = data["Msg_text"]
+            t_results["Tables"].append(
+                {"TableName": tbl, "Status": data["Msg_text"]})
 
         results["Results"].append(t_results)
 
@@ -755,7 +745,6 @@ def analyze(server, args, **kwargs):
         (input) args -> ArgParser class instance
         (input) **kwargs:
             sys_dbs -> List of system databases to skip
-            multi_val -> List of options that may have multiple values
 
     """
 
@@ -772,8 +761,6 @@ def checksum(server, args, **kwargs):
     Arguments:
         (input) server -> Server instance
         (input) args -> ArgParser class instance
-        (input) **kwargs:
-            multi_val -> List of options that may have multiple values
 
     """
 
@@ -792,7 +779,6 @@ def optimize(server, args, **kwargs):
         (input) args -> ArgParser class instance
         (input) **kwargs:
             sys_dbs -> List of system databases
-            multi_val -> List of options that may have multiple values
 
     """
 
@@ -809,8 +795,6 @@ def check(server, args, **kwargs):
     Arguments:
         (input) server -> Server instance
         (input) args -> ArgParser class instance
-        (input) **kwargs:
-            multi_val -> List of options that may have multiple values
 
     """
 
@@ -979,7 +963,7 @@ def listdbs(server, args, **kwargs):
             print("    %s" % (item))
 
 
-def run_program(args, func_dict, **kwargs):
+def run_program(args, func_dict):
 
     """Function:  run_program
 
@@ -988,9 +972,6 @@ def run_program(args, func_dict, **kwargs):
     Arguments:
         (input) args -> ArgParser class instance
         (input) func_dict -> Dictionary of functions
-        (input) **kwargs:
-            sys_dbs -> List of system databases
-            multi_val -> List of options that may have multiple values
 
     """
 
@@ -1025,7 +1006,7 @@ def run_program(args, func_dict, **kwargs):
             sys_dbs = cfg.sys_dbs if hasattr(cfg, "sys_dbs") else SYS_DBS
             func_dict[item](
                 server, args, ofile=outfile, db_tbl=db_tbl, class_cfg=mongo,
-                mail=mail, sys_dbs=sys_dbs, **kwargs)
+                mail=mail, sys_dbs=sys_dbs)
 
         mysql_libs.disconnect(server)
 
@@ -1098,7 +1079,7 @@ def main():
         try:
             proglock = gen_class.ProgramLock(
                 sys.argv, args.get_val("-y", def_val=""))
-            run_program(args, func_dict, multi_val=opt_multi_list)
+            run_program(args, func_dict)
             del proglock
 
         except gen_class.SingleInstanceException:
