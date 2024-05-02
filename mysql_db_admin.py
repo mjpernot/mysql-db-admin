@@ -543,7 +543,7 @@ def get_db_tbl(server, args, db_list, **kwargs):
             db_list, kwargs.get("sys_dbs", list()))
 
         if not db_list:
-            print("Warning:  No non-system databases to process")
+            print("get_db_tbl 1: Warning:  No non-system databases to process")
 
         elif len(db_list) == 1 and args.get_val("-t"):
             db_tables = gen_libs.dict_2_list(
@@ -561,7 +561,7 @@ def get_db_tbl(server, args, db_list, **kwargs):
             db_list, kwargs.get("sys_dbs", list()))
 
         if not db_list:
-            print("Warning:  No non-system databases to process")
+            print("get_db_tbl 2: Warning:  No non-system databases to process")
 
         else:
             db_dict = get_all_dbs_tbls(server, db_list, dict_key)
