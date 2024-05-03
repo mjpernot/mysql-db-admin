@@ -85,9 +85,8 @@ class UnitTest(unittest.TestCase):
         self.results = {"db1": ["t2"]}
         self.results2 = {"db1": ["t2"], "db2": ["t1", "t2"]}
 
-    @mock.patch("mysql_db_admin.gen_libs.dict_2_list")
     @mock.patch("mysql_db_admin.mysql_libs.fetch_tbl_dict")
-    def test_multiple_dbs(self, mock_fetch, mock_convert):
+    def test_multiple_dbs(self, mock_fetch):
 
         """Function:  test_multiple_dbs
 
@@ -98,15 +97,13 @@ class UnitTest(unittest.TestCase):
         """
 
         mock_fetch.side_effect = [self.tbl_dict, self.tbl_dict2]
-        mock_convert.side_effect = [self.tbl_list, self.tbl_list2]
 
         self.assertEqual(
             mysql_db_admin.get_all_dbs_tbls(
                 self.server, self.db_list2, self.dict_key), self.results2)
 
-    @mock.patch("mysql_db_admin.gen_libs.dict_2_list")
     @mock.patch("mysql_db_admin.mysql_libs.fetch_tbl_dict")
-    def test_one_db(self, mock_fetch, mock_convert):
+    def test_one_db(self, mock_fetch):
 
         """Function:  test_one_db
 
@@ -117,7 +114,6 @@ class UnitTest(unittest.TestCase):
         """
 
         mock_fetch.return_value = self.tbl_dict
-        mock_convert.return_value = self.tbl_list
 
         self.assertEqual(
             mysql_db_admin.get_all_dbs_tbls(
