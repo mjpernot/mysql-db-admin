@@ -12,6 +12,7 @@ echo "Unit testing..."
 /usr/bin/python ./test/unit/mysql_db_admin/analyze.py
 /usr/bin/python ./test/unit/mysql_db_admin/check.py
 /usr/bin/python ./test/unit/mysql_db_admin/checksum.py
+/usr/bin/python ./test/unit/mysql_db_admin/create_data_config.py
 /usr/bin/python ./test/unit/mysql_db_admin/detect_dbs.py
 /usr/bin/python ./test/unit/mysql_db_admin/get_all_dbs_tbls.py
 /usr/bin/python ./test/unit/mysql_db_admin/get_db_tbl.py
