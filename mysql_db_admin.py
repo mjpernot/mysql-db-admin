@@ -639,7 +639,7 @@ def data_out(data, **kwargs):
 
     """
 
-    status = False
+    status = True
     msg = None
 
     if not isinstance(data, dict):
@@ -647,15 +647,15 @@ def data_out(data, **kwargs):
         msg = "Error: Is not a dictionary: %s" % (data)
         return status, msg
 
-    data = dict(data)
     mail = None
+    data = dict(data)
     cfg = {"indent": kwargs.get("indent", 4)} if kwargs.get("indent", False) \
         else dict()
 
     if kwargs.get("to_addr", False):
         subj = kwargs.get("subj", "NoSubjectLinePassed")
         mail = gen_class.setup_mail(kwargs.get("to_addr"), subj=subj)
-        mail.add_2_msg(json.dumps(data, indent=indent))
+        mail.add_2_msg(json.dumps(data, **cfg))
         mail.send_mail(use_mailx=kwargs.get("mailx", False))
 
     if kwargs.get("outfile", False):
