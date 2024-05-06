@@ -16,6 +16,7 @@ coverage run -a --source=mysql_db_admin test/unit/mysql_db_admin/check.py
 coverage run -a --source=mysql_db_admin test/unit/mysql_db_admin/checksum.py
 coverage run -a --source=mysql_db_admin test/unit/mysql_db_admin/detect_dbs.py
 coverage run -a --source=mysql_db_admin test/unit/mysql_db_admin/get_all_dbs_tbls.py
+coverage run -a --source=mysql_db_admin test/unit/mysql_db_admin/get_db_tbl.py
 coverage run -a --source=mysql_db_admin test/unit/mysql_db_admin/listdbs.py
 coverage run -a --source=mysql_db_admin test/unit/mysql_db_admin/optimize.py
 coverage run -a --source=mysql_db_admin test/unit/mysql_db_admin/process_request.py

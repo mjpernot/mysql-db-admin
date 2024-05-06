@@ -547,8 +547,8 @@ def get_db_tbl(server, args, db_list, **kwargs):
 
         elif len(db_list) == 1 and args.get_val("-t"):
             db_tables = gen_libs.dict_2_list(
-                mysql_libs.fetch_tbl_dict(server, db_list[0], dict_key))
-            tbl_list = list(set(args.get_val("-t")) - set(db_tables))
+                mysql_libs.fetch_tbl_dict(server, db_list[0]), dict_key)
+            tbl_list = gen_libs.del_not_in_list(args.get_val("-t"), db_tables)
             db_dict[db_list[0]] = tbl_list
 
         else:
