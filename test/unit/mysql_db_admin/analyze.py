@@ -22,6 +22,7 @@ import mock
 # Local
 sys.path.append(os.getcwd())
 import mysql_db_admin
+import lib.gen_libs as gen_libs
 import version
 
 __version__ = version.__version__
@@ -96,6 +97,8 @@ class UnitTest(unittest.TestCase):
 
     Methods:
         setUp
+        test_data_out_error
+        test_multiple_db_tbl
         test_one_db_multiple_tbl
         test_one_db_one_tbl
 
@@ -120,7 +123,33 @@ class UnitTest(unittest.TestCase):
         self.config = {"config": "value"}
         self.analyze = [{"Status": "analyze", "Msg_text": "OK"}]
 
-    @mock.patch("mysql_db_admin.data_out", mock.Mock(return_value=True))
+    @mock.patch("mysql_db_admin.data_out",
+                mock.Mock(return_value=(False, "Error Message")))
+    @mock.patch("mysql_db_admin.mysql_libs.analyze_tbl")
+    @mock.patch("mysql_db_admin.create_data_config")
+    @mock.patch("mysql_db_admin.get_json_template")
+    @mock.patch("mysql_db_admin.get_db_tbl")
+    def test_data_out_error(self, mock_dbdict, mock_template, mock_config,
+                            mock_analyze):
+
+        """Function:  test_data_out_error
+
+        Description:  Test with data_out return an error status.
+
+        Arguments:
+
+        """
+
+        mock_dbdict.return_value = self.db_tbl3
+        mock_template.return_value = self.template
+        mock_config.return_value = self.config
+        mock_analyze.return_value = self.analyze
+
+        with gen_libs.no_std_out():
+            self.assertFalse(mysql_db_admin.analyze(self.server, self.args))
+
+    @mock.patch("mysql_db_admin.data_out",
+                mock.Mock(return_value=(True, None)))
     @mock.patch("mysql_db_admin.mysql_libs.analyze_tbl")
     @mock.patch("mysql_db_admin.create_data_config")
     @mock.patch("mysql_db_admin.get_json_template")
@@ -143,7 +172,8 @@ class UnitTest(unittest.TestCase):
 
         self.assertFalse(mysql_db_admin.analyze(self.server, self.args))
 
-    @mock.patch("mysql_db_admin.data_out", mock.Mock(return_value=True))
+    @mock.patch("mysql_db_admin.data_out",
+                mock.Mock(return_value=(True, None)))
     @mock.patch("mysql_db_admin.mysql_libs.analyze_tbl")
     @mock.patch("mysql_db_admin.create_data_config")
     @mock.patch("mysql_db_admin.get_json_template")
@@ -166,7 +196,8 @@ class UnitTest(unittest.TestCase):
 
         self.assertFalse(mysql_db_admin.analyze(self.server, self.args))
 
-    @mock.patch("mysql_db_admin.data_out", mock.Mock(return_value=True))
+    @mock.patch("mysql_db_admin.data_out",
+                mock.Mock(return_value=(True, None)))
     @mock.patch("mysql_db_admin.mysql_libs.analyze_tbl")
     @mock.patch("mysql_db_admin.create_data_config")
     @mock.patch("mysql_db_admin.get_json_template")

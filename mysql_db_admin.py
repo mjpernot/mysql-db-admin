@@ -707,7 +707,10 @@ def analyze(server, args, **kwargs):
 
         results["Results"].append(t_results)
 
-    data_out(results, **data_config)
+    status = data_out(results, **data_config)
+
+    if not status[0]:
+        print("analyze: Error encountered: %s" % (status[1]))
 
 
 def checksum(server, args, **kwargs):
