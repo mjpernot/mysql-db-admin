@@ -319,26 +319,6 @@ analyze instead":
                 gen_libs.prt_msg(item["Msg_type"], item["Msg_text"])
 
 
-#def run_check(server, dbs, tbl, **kwargs):
-
-    """Function:  run_check
-
-    Description:  Calls the check table command and print the results.
-
-    Arguments:
-        (input) server -> Server instance
-        (input) dbs -> Database name
-        (input) tbl -> Table name
-
-    """
-
-#    global PRT_TEMPLATE
-
-#    for item in mysql_libs.check_tbl(server, dbs, tbl):
-#        print(PRT_TEMPLATE.format(dbs, tbl), end="")
-#        gen_libs.prt_msg(item["Msg_type"], item["Msg_text"])
-
-
 def detect_dbs(sub_db_list, full_db_list):
 
     """Function:  detect_dbs
@@ -782,22 +762,6 @@ def optimize(server, args, **kwargs):
 
     process_request(server, run_optimize, args.get_val("-D"),
                     args.get_val("-t", def_val=None), **kwargs)
-
-
-#def check(server, args, **kwargs):
-
-    """Function:  check
-
-    Description:  Sets up the processing for the check table command.
-
-    Arguments:
-        (input) server -> Server instance
-        (input) args -> ArgParser class instance
-
-    """
-
-#    process_request(server, run_check, args.get_val("-C"),
-#                    args.get_val("-t", def_val=None), **kwargs)
 
 
 def status(server, args, **kwargs):
