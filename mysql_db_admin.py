@@ -319,7 +319,7 @@ analyze instead":
                 gen_libs.prt_msg(item["Msg_type"], item["Msg_text"])
 
 
-def run_check(server, dbs, tbl, **kwargs):
+#def run_check(server, dbs, tbl, **kwargs):
 
     """Function:  run_check
 
@@ -332,11 +332,11 @@ def run_check(server, dbs, tbl, **kwargs):
 
     """
 
-    global PRT_TEMPLATE
+#    global PRT_TEMPLATE
 
-    for item in mysql_libs.check_tbl(server, dbs, tbl):
-        print(PRT_TEMPLATE.format(dbs, tbl), end="")
-        gen_libs.prt_msg(item["Msg_type"], item["Msg_text"])
+#    for item in mysql_libs.check_tbl(server, dbs, tbl):
+#        print(PRT_TEMPLATE.format(dbs, tbl), end="")
+#        gen_libs.prt_msg(item["Msg_type"], item["Msg_text"])
 
 
 def detect_dbs(sub_db_list, full_db_list):
@@ -680,7 +680,7 @@ def analyze(server, args, **kwargs):
 
     """Function:  analyze
 
-    Description:  Analzye the table(s) for problems.
+    Description:  Analzye the tables for problems.
 
     Arguments:
         (input) server -> Server instance
@@ -711,6 +711,43 @@ def analyze(server, args, **kwargs):
 
     if not status[0]:
         print("analyze: Error encountered: %s" % (status[1]))
+
+
+def check(server, args, **kwargs):
+
+    """Function:  check
+
+    Description:  Check the tables for errors.
+
+    Arguments:
+        (input) server -> Server instance
+        (input) args -> ArgParser class instance
+        (input) **kwargs:
+            sys_dbs -> List of system databases to skip
+
+    """
+
+    db_list = list(args.get_val("-C"))
+    db_dict = get_db_tbl(server, args, db_list, **kwargs)
+    results = get_json_template(server)
+    results["Type"] = "check"
+    results["Results"] = list()
+    data_config = dict(create_data_config(args))
+
+    for dbn in db_dict:
+        t_results = {"Database": dbn, "Tables": list()}
+
+        for tbl in db_dict[dbn]:
+            data = mysql_libs.check_tbl(server, dbn, tbl)[0]
+            t_results["Tables"].append(
+                {"TableName": tbl, "Status": data["Msg_text"]})
+
+        results["Results"].append(t_results)
+
+    status = data_out(results, **data_config)
+
+    if not status[0]:
+        print("check: Error encountered: %s" % (status[1]))
 
 
 def checksum(server, args, **kwargs):
@@ -747,7 +784,7 @@ def optimize(server, args, **kwargs):
                     args.get_val("-t", def_val=None), **kwargs)
 
 
-def check(server, args, **kwargs):
+#def check(server, args, **kwargs):
 
     """Function:  check
 
@@ -759,8 +796,8 @@ def check(server, args, **kwargs):
 
     """
 
-    process_request(server, run_check, args.get_val("-C"),
-                    args.get_val("-t", def_val=None), **kwargs)
+#    process_request(server, run_check, args.get_val("-C"),
+#                    args.get_val("-t", def_val=None), **kwargs)
 
 
 def status(server, args, **kwargs):
