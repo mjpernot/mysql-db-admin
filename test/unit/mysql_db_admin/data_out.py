@@ -161,8 +161,27 @@ class UnitTest(unittest.TestCase):
         self.results = (True, None)
         self.results2 = (
             False, "Error: Is not a dictionary: %s" % (self.data2))
+        self.results3 = (False, "Error Message")
 
-### STOPPED HERE
+    @mock.patch("mysql_db_admin.mongo_libs.ins_doc",
+                mock.Mock(return_value=(False, "Error Message")))
+    def test_mongo_error(self):
+
+        """Function:  test_mongo_error
+
+        Description:  Test with mongo option with an error status.
+
+        Arguments:
+
+        """
+
+        self.assertEqual(
+            mysql_db_admin.data_out(
+                self.data, suppress=self.suppress, mongo=self.mongo,
+                db_tbl=self.db_tbl), self.results3)
+
+    @mock.patch("mysql_db_admin.mongo_libs.ins_doc",
+                mock.Mock(return_value=(True, None)))
     def test_mongo(self):
 
         """Function:  test_mongo
@@ -175,8 +194,8 @@ class UnitTest(unittest.TestCase):
 
         self.assertEqual(
             mysql_db_admin.data_out(
-                self.data, suppress=self.suppress, mongo=self.mongo),
-            self.results)
+                self.data, suppress=self.suppress, mongo=self.mongo,
+                db_tbl=self.db_tbl), self.results)
 
     @mock.patch("mysql_db_admin.pprint.pprint", mock.Mock(return_value=True))
     @mock.patch("mysql_db_admin.open", mock.Mock(return_value=True))

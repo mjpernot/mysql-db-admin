@@ -671,7 +671,7 @@ def data_out(data, **kwargs):
 
     if kwargs.get("mongo", False):
         dbs, tbl = kwargs.get("db_tbl").split(":")
-        status, msg = mongo_libs.ins_doc(mongo, dbs, tbl, data)
+        status, msg = mongo_libs.ins_doc(kwargs.get("mongo"), dbs, tbl, data)
 
     return status, msg
 
