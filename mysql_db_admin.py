@@ -14,7 +14,7 @@
         mysql_db_admin.py -c mysql_cfg -d path
             {-C [db_name [db_name2 ...]] [-t table_name [table_name2 ...]] |
              -A [db_name [db_name2 ...] [-t table_name [table_name2 ...] |
-                 [-i [db_name:table_name] -m config_file] |
+                 [-m config_file -i db_name:table_name] |
                  [-e to_email [to_email2 ...] [-s subject_line] [-u]] |
                  [-z] [-p [-n N]]] |
              -S [db_name [db_name2 ...]] [-t table_name [table_name2 ...]] |
