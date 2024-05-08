@@ -19,7 +19,7 @@ Breaking Change
 
 ### Changed
 - main: Added -n and -p options, removed the check for converting to JSON if -m option is used.
-- analyze, check, optimize: Refactored to change output to JSON format and additional options for sending out.
+- analyze, check, optimize, checksum: Refactored to change output to JSON format and additional options for sending out.
 - Documentation updates.
 
 ### Removed
