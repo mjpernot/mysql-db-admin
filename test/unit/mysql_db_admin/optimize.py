@@ -97,8 +97,11 @@ class UnitTest(unittest.TestCase):
 
     Methods:
         setUp
-        test_db_tbl
-        test_db_only
+        test_multiline_return
+        test_data_out_error
+        test_multiple_db_tbl
+        test_one_db_multiple_tbl
+        test_one_db_one_tbl
 
     """
 

@@ -808,7 +808,7 @@ def checksum(server, args, **kwargs):
             t_data = {"TableName": tbl}
 
             for data in mysql_libs.checksum(server, dbn, tbl):
-                t_data[gen_libs.pascalize(data["Msg_type"])] = data["Msg_text"]
+                t_data["Checksum"] = data["Checksum"]
 
             t_results["Tables"].append(t_data)
 
