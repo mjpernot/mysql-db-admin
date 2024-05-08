@@ -687,6 +687,24 @@ def status(server, args, **kwargs):
     """
 
     server.upd_srv_stat()
+    results = get_json_template(server)
+    results["Type"] = "status"
+    results["Results"] = list()
+    data_config = dict(create_data_config(args))
+    results["Memory"] = {
+        "CurrentUsage": server.cur_mem_mb, "MaxUsage": server.max_mem_mb,
+        "PercentUsed": server.prct_mem}
+    results["UpTime"] = server.days_up
+    results["Connections"] = {
+        "CurrentConnected": server.cur_conn, "MaxConnections": server.max_conn,
+        "PercentUsed": server.prct_conn}
+    status = data_out(results, **data_config)
+
+    if not status[0]:
+        print("analyze: Error encountered: %s" % (status[1]))
+
+    """
+    server.upd_srv_stat()
     mode = "a" if args.arg_exist("-a") else "w"
     outdata = {
         "Application": "MySQL Database", "Server": server.name,
@@ -706,6 +724,7 @@ def status(server, args, **kwargs):
 
     else:
         _process_non_json(server, args, outdata, mode, **kwargs)
+    """
 
 
 def _process_json(args, outdata, mode, **kwargs):
