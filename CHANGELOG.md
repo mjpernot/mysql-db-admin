@@ -23,6 +23,7 @@ Breaking Change
 - Documentation updates.
 
 ### Removed
+- detect_dbs
 - process_request
 - \_proc_all_dbs
 - \_proc_all_tbls

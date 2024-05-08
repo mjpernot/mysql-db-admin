@@ -323,27 +323,6 @@ def help_message():
     print(__doc__)
 
 
-def detect_dbs(sub_db_list, full_db_list):
-
-    """Function:  detect_dbs
-
-    Description:  Finds which databases in Database list 1 are not present in
-        Database list 2.
-
-    Arguments:
-        (input) sub_db_list -> Subset Database list
-        (input) full_db_list -> Full Database list
-
-    """
-
-    sub_db_list = list(sub_db_list)
-    full_db_list = list(full_db_list)
-    dbs = list(set(sub_db_list) - set(full_db_list))
-
-    if dbs:
-        print("Warning: Database(s) that do not exist: %s." % (dbs))
-
-
 def get_all_dbs_tbls(server, db_list, dict_key):
 
     """Function:  get_all_dbs_tbls
