@@ -288,37 +288,6 @@ def run_checksum(server, dbs, tbl, **kwargs):
             dbs, tbl, item["Checksum"]))
 
 
-def run_optimize(server, dbs, tbl, **kwargs):
-
-    """Function:  run_optimize
-
-    Description:  Calls the optimize table command and print the results.
-
-    Arguments:
-        (input) server -> Server instance
-        (input) dbs -> Database name
-        (input) tbl -> Table name
-        (input) **kwargs:
-            sys_dbs -> List of system databases to skip
-
-    """
-
-    global PRT_TEMPLATE
-
-    if dbs not in list(kwargs.get("sys_dbs", [])):
-
-        for item in mysql_libs.optimize_tbl(server, dbs, tbl):
-            if item["Msg_type"] == "note" and item["Msg_text"] == \
-               "Table does not support optimize, doing recreate + \
-analyze instead":
-
-                continue
-
-            else:
-                print(PRT_TEMPLATE.format(dbs, tbl), end="")
-                gen_libs.prt_msg(item["Msg_type"], item["Msg_text"])
-
-
 def detect_dbs(sub_db_list, full_db_list):
 
     """Function:  detect_dbs
@@ -790,24 +759,6 @@ def checksum(server, args, **kwargs):
 
     process_request(server, run_checksum, args.get_val("-S"),
                     args.get_val("-t", def_val=None), **kwargs)
-
-
-#def optimize(server, args, **kwargs):
-
-    """Function:  optimize
-
-    Description:  Sets up the processing for the optimization table command.
-
-    Arguments:
-        (input) server -> Server instance
-        (input) args -> ArgParser class instance
-        (input) **kwargs:
-            sys_dbs -> List of system databases
-
-    """
-
-#    process_request(server, run_optimize, args.get_val("-D"),
-#                    args.get_val("-t", def_val=None), **kwargs)
 
 
 def status(server, args, **kwargs):
