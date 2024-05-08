@@ -20,10 +20,6 @@ echo "Unit testing..."
 /usr/bin/python ./test/unit/mysql_db_admin/get_json_template.py
 /usr/bin/python ./test/unit/mysql_db_admin/listdbs.py
 /usr/bin/python ./test/unit/mysql_db_admin/optimize.py
-/usr/bin/python ./test/unit/mysql_db_admin/process_request.py
-/usr/bin/python ./test/unit/mysql_db_admin/proc_all_dbs.py
-/usr/bin/python ./test/unit/mysql_db_admin/proc_all_tbls.py
-/usr/bin/python ./test/unit/mysql_db_admin/proc_some_tbls.py
 /usr/bin/python ./test/unit/mysql_db_admin/status.py
 /usr/bin/python ./test/unit/mysql_db_admin/run_program.py
 /usr/bin/python ./test/unit/mysql_db_admin/main.py

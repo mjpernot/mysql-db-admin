@@ -23,6 +23,10 @@ Breaking Change
 - Documentation updates.
 
 ### Removed
+- process_request
+- \_proc_all_dbs
+- \_proc_all_tbls
+- \_proc_some_tbls
 - run_checksum
 - run_optimize
 - run_check
