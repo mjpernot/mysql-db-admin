@@ -13,12 +13,21 @@
     Usage:
         mysql_db_admin.py -c mysql_cfg -d path
             {-C [db_name [db_name2 ...]] [-t table_name [table_name2 ...]] |
-             -A [db_name [db_name2 ...] [-t table_name [table_name2 ...] |
+                 [-m config_file -i db_name:table_name] |
+                 [-e to_email [to_email2 ...] [-s subject_line] [-u]] |
+                 [-z] [-p [-n N]]] |
+             -A [db_name [db_name2 ...]] [-t table_name [table_name2 ...]] |
                  [-m config_file -i db_name:table_name] |
                  [-e to_email [to_email2 ...] [-s subject_line] [-u]] |
                  [-z] [-p [-n N]]] |
              -S [db_name [db_name2 ...]] [-t table_name [table_name2 ...]] |
+                 [-m config_file -i db_name:table_name] |
+                 [-e to_email [to_email2 ...] [-s subject_line] [-u]] |
+                 [-z] [-p [-n N]]] |
              -D [db_name [db_name2 ...]] [-t table_name [table_name2 ...]] |
+                 [-m config_file -i db_name:table_name] |
+                 [-e to_email [to_email2 ...] [-s subject_line] [-u]] |
+                 [-z] [-p [-n N]]] |
              -M [-j [-f]] | [-i [db_name:table_name] -m config_file] |
                 [-e to_email [to_email2 ...] [-s subject_line] [-u]] | [-z] |
                 [-o dir_path/file [-a]] |
@@ -32,6 +41,21 @@
 
         -C [database name(s)] => Check a table for errors.
             -t table name(s) => Table names to check.
+            -m file => Mongo config file.  Is loaded as a python, do not
+                include the .py extension with the name.
+                -i {database:collection} => Name of database and collection.
+                    Default: sysmon:mysql_db_admin
+            -o path/file => Directory path and file name for output.
+                -w a|w => Append or write to output to output file. Default is
+                    write.
+            -e to_email_address(es) => Enables emailing and sends output to one
+                    or more email addresses.  Email addresses are delimited by
+                    a space.
+                -s subject_line => Subject line of email.
+                -u => Override the default mail command and use mailx.
+            -z => Suppress standard out.
+            -p => Expand the JSON format.
+                -n N => Indentation for expanded JSON format.
 
         -A [database name(s)] => Analyze a table's key distribution, checks the
                 table's indexes.
@@ -54,10 +78,40 @@
 
         -S [database name(s)] => Return a checksum on a table.
             -t table name(s) => Table names to check.
+            -m file => Mongo config file.  Is loaded as a python, do not
+                include the .py extension with the name.
+                -i {database:collection} => Name of database and collection.
+                    Default: sysmon:mysql_db_admin
+            -o path/file => Directory path and file name for output.
+                -w a|w => Append or write to output to output file. Default is
+                    write.
+            -e to_email_address(es) => Enables emailing and sends output to one
+                    or more email addresses.  Email addresses are delimited by
+                    a space.
+                -s subject_line => Subject line of email.
+                -u => Override the default mail command and use mailx.
+            -z => Suppress standard out.
+            -p => Expand the JSON format.
+                -n N => Indentation for expanded JSON format.
 
         -D [database name(s)] => Optimize/defragment a table, the command
                 runs an Alter Table and Analyze command on the table.
             -t table name(s) => Table names to check.
+            -m file => Mongo config file.  Is loaded as a python, do not
+                include the .py extension with the name.
+                -i {database:collection} => Name of database and collection.
+                    Default: sysmon:mysql_db_admin
+            -o path/file => Directory path and file name for output.
+                -w a|w => Append or write to output to output file. Default is
+                    write.
+            -e to_email_address(es) => Enables emailing and sends output to one
+                    or more email addresses.  Email addresses are delimited by
+                    a space.
+                -s subject_line => Subject line of email.
+                -u => Override the default mail command and use mailx.
+            -z => Suppress standard out.
+            -p => Expand the JSON format.
+                -n N => Indentation for expanded JSON format.
 
         -M => Display the current database status, such as uptime, memory
                 use, connection usage, and status.
@@ -252,7 +306,6 @@ except (ValueError, ImportError) as err:
 __version__ = version.__version__
 
 # Global
-PRT_TEMPLATE = "DB: {0:20} Table: {1:50}\t"
 SYS_DBS = ["performance_schema", "information_schema", "mysql", "sys"]
 
 
@@ -268,24 +321,6 @@ def help_message():
     """
 
     print(__doc__)
-
-
-def run_checksum(server, dbs, tbl, **kwargs):
-
-    """Function:  run_checksum
-
-    Description:  Calls the checksum table command and prints the results.
-
-    Arguments:
-        (input) server -> Server instance
-        (input) dbs -> Database name
-        (input) tbl -> Table name
-
-    """
-
-    for item in mysql_libs.checksum(server, dbs, tbl):
-        print("DB: {0:20} Table: {1:35}  CheckSum:\t{2}".format(
-            dbs, tbl, item["Checksum"]))
 
 
 def detect_dbs(sub_db_list, full_db_list):
@@ -749,16 +784,40 @@ def checksum(server, args, **kwargs):
 
     """Function:  checksum
 
-    Description:  Sets up the processing for the checksum table command.
+    Description:  Returns checksums of the tables.
 
     Arguments:
         (input) server -> Server instance
         (input) args -> ArgParser class instance
+        (input) **kwargs:
+            sys_dbs -> List of system databases to skip
 
     """
 
-    process_request(server, run_checksum, args.get_val("-S"),
-                    args.get_val("-t", def_val=None), **kwargs)
+    db_list = list(args.get_val("-S"))
+    db_dict = get_db_tbl(server, args, db_list, **kwargs)
+    results = get_json_template(server)
+    results["Type"] = "checksum"
+    results["Results"] = list()
+    data_config = dict(create_data_config(args))
+
+    for dbn in db_dict:
+        t_results = {"Database": dbn, "Tables": list()}
+
+        for tbl in db_dict[dbn]:
+            t_data = {"TableName": tbl}
+
+            for data in mysql_libs.checksum(server, dbn, tbl):
+                t_data[gen_libs.pascalize(data["Msg_type"])] = data["Msg_text"]
+
+            t_results["Tables"].append(t_data)
+
+        results["Results"].append(t_results)
+
+    status = data_out(results, **data_config)
+
+    if not status[0]:
+        print("optimize: Error encountered: %s" % (status[1]))
 
 
 def status(server, args, **kwargs):

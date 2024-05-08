@@ -114,18 +114,13 @@ class UnitTest(unittest.TestCase):
 
         self.server = Server()
         self.args = ArgParser()
-        self.args.args_array["-D"] = ["db_name"]
-        self.run_optimize = True
-
-        self.server = Server()
-        self.args = ArgParser()
         self.db_tbl = {"db1": ["tbl1"]}
         self.db_tbl2 = {"db1": ["tbl1", "tbl2"]}
         self.db_tbl3 = {"db1": ["tbl1", "tbl2"], "db2": ["tbl3", "tbl4"]}
         self.template = {"Server": "ServerName"}
         self.config = {"config": "value"}
-        self.check = [{"Msg_type": "status", "Msg_text": "OK"}]
-        self.check2 = [
+        self.optimize = [{"Msg_type": "status", "Msg_text": "OK"}]
+        self.optimize2 = [
             {"Msg_type": "status", "Msg_text": "OK"},
             {"Msg_type": "note", "Msg_text": "Message Here"}]
 
@@ -149,7 +144,7 @@ class UnitTest(unittest.TestCase):
         mock_dbdict.return_value = self.db_tbl
         mock_template.return_value = self.template
         mock_config.return_value = self.config
-        mock_check.return_value = self.check2
+        mock_check.return_value = self.optimize2
 
         self.assertFalse(mysql_db_admin.optimize(self.server, self.args))
 
@@ -173,7 +168,7 @@ class UnitTest(unittest.TestCase):
         mock_dbdict.return_value = self.db_tbl3
         mock_template.return_value = self.template
         mock_config.return_value = self.config
-        mock_check.return_value = self.check
+        mock_check.return_value = self.optimize
 
         with gen_libs.no_std_out():
             self.assertFalse(mysql_db_admin.optimize(self.server, self.args))
@@ -198,7 +193,7 @@ class UnitTest(unittest.TestCase):
         mock_dbdict.return_value = self.db_tbl3
         mock_template.return_value = self.template
         mock_config.return_value = self.config
-        mock_check.return_value = self.check
+        mock_check.return_value = self.optimize
 
         self.assertFalse(mysql_db_admin.optimize(self.server, self.args))
 
@@ -222,7 +217,7 @@ class UnitTest(unittest.TestCase):
         mock_dbdict.return_value = self.db_tbl2
         mock_template.return_value = self.template
         mock_config.return_value = self.config
-        mock_check.return_value = self.check
+        mock_check.return_value = self.optimize
 
         self.assertFalse(mysql_db_admin.optimize(self.server, self.args))
 
@@ -246,7 +241,7 @@ class UnitTest(unittest.TestCase):
         mock_dbdict.return_value = self.db_tbl
         mock_template.return_value = self.template
         mock_config.return_value = self.config
-        mock_check.return_value = self.check
+        mock_check.return_value = self.optimize
 
         self.assertFalse(mysql_db_admin.optimize(self.server, self.args))
 

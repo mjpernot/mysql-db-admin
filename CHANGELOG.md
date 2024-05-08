@@ -23,6 +23,7 @@ Breaking Change
 - Documentation updates.
 
 ### Removed
+- run_checksum
 - run_optimize
 - run_check
 - run_analyze
