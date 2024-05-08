@@ -123,12 +123,12 @@
                 Default: sysmon:mysql_db_status
             -o path/file => Directory path and file name for output.
                 -a => Append output to output file.
-            -s subject_line => Subject line of email.  Optional, will create
-                own subject line if one is not provided.
             -e to_email_address(es) => Enables emailing capability for an
                     option if the option allows it.  Sends output to one or
                     more email addresses.  Email addresses are delimited by
                     spaces.
+                -s subject_line => Subject line of email.  Optional, will
+                    create own subject line if one is not provided.
                 -u => Override the default mail command and use mailx.
             -z => Suppress standard out.
 
@@ -412,6 +412,7 @@ def get_json_template(server):
     """
 
     json_doc = dict()
+    json_doc["Platform"] = "MySQL"
     json_doc["Server"] = server.name
     json_doc["AsOf"] = gen_libs.get_date() + "T" + gen_libs.get_time()
 

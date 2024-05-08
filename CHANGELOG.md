@@ -18,6 +18,7 @@ Breaking Change
 - get_db_tbl: Determines which databases and tables will be checked.
 
 ### Changed
+- config/mongo.py.TEMPLATE: Added sys_dbs entry for system database list.
 - main: Added -n and -p options, removed the check for converting to JSON if -m option is used.
 - analyze, check, optimize, checksum: Refactored to change output to JSON format and additional options for sending out.
 - Documentation updates.
