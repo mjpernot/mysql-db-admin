@@ -736,6 +736,46 @@ def check(server, args, **kwargs):
         print("check: Error encountered: %s" % (status[1]))
 
 
+def optimize(server, args, **kwargs):
+
+    """Function:  optimize
+
+    Description:  Optimizes the tables for best performance.
+
+    Arguments:
+        (input) server -> Server instance
+        (input) args -> ArgParser class instance
+        (input) **kwargs:
+            sys_dbs -> List of system databases to skip
+
+    """
+
+    db_list = list(args.get_val("-D"))
+    db_dict = get_db_tbl(server, args, db_list, **kwargs)
+    results = get_json_template(server)
+    results["Type"] = "optimize"
+    results["Results"] = list()
+    data_config = dict(create_data_config(args))
+
+    for dbn in db_dict:
+        t_results = {"Database": dbn, "Tables": list()}
+
+        for tbl in db_dict[dbn]:
+            t_data = {"TableName": tbl}
+
+            for data in mysql_libs.optimize_tbl(server, dbn, tbl):
+                t_data[gen_libs.pascalize(data["Msg_type"])] = data["Msg_text"]
+
+            t_results["Tables"].append(t_data)
+
+        results["Results"].append(t_results)
+
+    status = data_out(results, **data_config)
+
+    if not status[0]:
+        print("optimize: Error encountered: %s" % (status[1]))
+
+
 def checksum(server, args, **kwargs):
 
     """Function:  checksum
@@ -752,7 +792,7 @@ def checksum(server, args, **kwargs):
                     args.get_val("-t", def_val=None), **kwargs)
 
 
-def optimize(server, args, **kwargs):
+#def optimize(server, args, **kwargs):
 
     """Function:  optimize
 
@@ -766,8 +806,8 @@ def optimize(server, args, **kwargs):
 
     """
 
-    process_request(server, run_optimize, args.get_val("-D"),
-                    args.get_val("-t", def_val=None), **kwargs)
+#    process_request(server, run_optimize, args.get_val("-D"),
+#                    args.get_val("-t", def_val=None), **kwargs)
 
 
 def status(server, args, **kwargs):
