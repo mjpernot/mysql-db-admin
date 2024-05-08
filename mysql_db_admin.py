@@ -681,9 +681,12 @@ def analyze(server, args, **kwargs):
         t_results = {"Database": dbn, "Tables": list()}
 
         for tbl in db_dict[dbn]:
-            data = mysql_libs.analyze_tbl(server, dbn, tbl)[0]
-            t_results["Tables"].append(
-                {"TableName": tbl, "Status": data["Msg_text"]})
+            t_data = {"TableName": tbl}
+
+            for data in mysql_libs.analyze_tbl(server, dbn, tbl):
+                t_data[gen_libs.pascalize(data["Msg_type"])] = data["Msg_text"]
+
+            t_results["Tables"].append(t_data)
 
         results["Results"].append(t_results)
 
@@ -718,9 +721,12 @@ def check(server, args, **kwargs):
         t_results = {"Database": dbn, "Tables": list()}
 
         for tbl in db_dict[dbn]:
-            data = mysql_libs.check_tbl(server, dbn, tbl)[0]
-            t_results["Tables"].append(
-                {"TableName": tbl, "Status": data["Msg_text"]})
+            t_data = {"TableName": tbl}
+
+            for data in mysql_libs.check_tbl(server, dbn, tbl):
+                t_data[gen_libs.pascalize(data["Msg_type"])] = data["Msg_text"]
+
+            t_results["Tables"].append(t_data)
 
         results["Results"].append(t_results)
 
