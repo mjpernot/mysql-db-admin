@@ -51,7 +51,7 @@ class ArgParser(object):
 
         """
 
-        self.args_array = {"-c": "mysql_cfg", "-d": "config", "-S": True}
+        self.args_array = {"-c": "mysql_cfg", "-d": "config", "-M": True}
 
     def arg_exist(self, arg):
 
@@ -147,6 +147,8 @@ class UnitTest(unittest.TestCase):
 
         self.server = Server()
         self.args = ArgParser()
+        self.template = {"Server": "ServerName"}
+        self.config = {"config": "value"}
 
     @mock.patch("mysql_db_admin.data_out",
                 mock.Mock(return_value=(False, "Error Message")))
@@ -166,7 +168,7 @@ class UnitTest(unittest.TestCase):
         mock_config.return_value = self.config
 
         with gen_libs.no_std_out():
-            self.assertFalse(mysql_db_admin.checksum(self.server, self.args))
+            self.assertFalse(mysql_db_admin.status(self.server, self.args))
 
     @mock.patch("mysql_db_admin.data_out",
                 mock.Mock(return_value=(True, None)))
@@ -185,7 +187,7 @@ class UnitTest(unittest.TestCase):
         mock_template.return_value = self.template
         mock_config.return_value = self.config
 
-        self.assertFalse(mysql_db_admin.checksum(self.server, self.args))
+        self.assertFalse(mysql_db_admin.status(self.server, self.args))
 
 
 if __name__ == "__main__":

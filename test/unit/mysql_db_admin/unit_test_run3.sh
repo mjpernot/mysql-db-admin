@@ -6,8 +6,6 @@
 
 echo ""
 echo "Unit testing..."
-/usr/bin/python3 ./test/unit/mysql_db_admin/_process_json.py
-/usr/bin/python3 ./test/unit/mysql_db_admin/_process_non_json.py
 /usr/bin/python3 ./test/unit/mysql_db_admin/help_message.py
 /usr/bin/python3 ./test/unit/mysql_db_admin/analyze.py
 /usr/bin/python3 ./test/unit/mysql_db_admin/check.py

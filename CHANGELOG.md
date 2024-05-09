@@ -24,6 +24,8 @@ Breaking Change
 - Documentation updates.
 
 ### Removed
+- \_process_non_json
+- \_process_json
 - detect_dbs
 - process_request
 - \_proc_all_dbs
