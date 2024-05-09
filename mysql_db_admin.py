@@ -686,7 +686,6 @@ def status(server, args, **kwargs):
     server.upd_srv_stat()
     results = get_json_template(server)
     results["Type"] = "status"
-    results["Results"] = list()
     data_config = dict(create_data_config(args))
     results["Memory"] = {
         "CurrentUsage": server.cur_mem_mb, "MaxUsage": server.max_mem_mb,
