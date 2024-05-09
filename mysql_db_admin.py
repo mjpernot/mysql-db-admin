@@ -28,10 +28,10 @@
                  [-m config_file -i db_name:table_name] |
                  [-e to_email [to_email2 ...] [-s subject_line] [-u]] |
                  [-z] [-p [-n N]]] |
-             -M [-j [-f]] | [-i [db_name:table_name] -m config_file] |
-                [-e to_email [to_email2 ...] [-s subject_line] [-u]] | [-z] |
-                [-o dir_path/file [-a]] |
-             -L [-a]}
+             -M [-m config_file -i [db_name:table_name]] |
+                 [-e to_email [to_email2 ...] [-s subject_line] [-u]] |
+                 [-z] [-p [-n N]]] |
+             -L [-k]}
             [-y flavor_id]
             [-v | -h]
 
@@ -117,20 +117,19 @@
                 use, connection usage, and status.
             -m file => Mongo config file.  Is loaded as a python, do not
                 include the .py extension with the name.
-            -j => Convert output to JSON format.
-                -f => Flatten the JSON data structure to file and standard out.
-            -i {database:collection} => Name of database and collection.
-                Default: sysmon:mysql_db_status
+                -i {database:collection} => Name of database and collection.
+                    Default: sysmon:mysql_db_admin
             -o path/file => Directory path and file name for output.
-                -a => Append output to output file.
-            -e to_email_address(es) => Enables emailing capability for an
-                    option if the option allows it.  Sends output to one or
-                    more email addresses.  Email addresses are delimited by
-                    spaces.
-                -s subject_line => Subject line of email.  Optional, will
-                    create own subject line if one is not provided.
+                -w a|w => Append or write to output to output file. Default is
+                    write.
+            -e to_email_address(es) => Enables emailing and sends output to one
+                    or more email addresses.  Email addresses are delimited by
+                    a space.
+                -s subject_line => Subject line of email.
                 -u => Override the default mail command and use mailx.
             -z => Suppress standard out.
+            -p => Expand the JSON format.
+                -n N => Indentation for expanded JSON format.
 
         -L => Display list of user databases.
             -k => Include system databases in the list.
@@ -147,9 +146,7 @@
             also pass multiple table names to the option, must be space
             delimited.  If no -t option is used, will do all tables in the
             database.
-        NOTE 4:  Default output is in standard output, unless -j option
-            is selected.
-        NOTE 5:  -t option only works if passing in a single database name.
+        NOTE 4:  -t option only works if passing in a single database name.
 
     Notes:
         Database configuration file format (config/mysql_cfg.py.TEMPLATE):
@@ -946,12 +943,6 @@ def main():
     args = gen_class.ArgParser(
         sys.argv, opt_val=opt_val_list, multi_val=opt_multi_list,
         opt_def=opt_def_dict, do_parse=True)
-
-    # Set JSON format for certain option settings
-# Should no longer be needed once update is done to v4.0.0
-#    if args.arg_exist("-i") and args.arg_exist("-m") \
-#       and not args.arg_exist("-j"):
-#        args.insert_arg("-j", True)
 
     if not gen_libs.help_func(args, __version__, help_message)              \
        and args.arg_require(opt_req=opt_req_list)                           \
