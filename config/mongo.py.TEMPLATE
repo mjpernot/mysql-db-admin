@@ -27,6 +27,9 @@ auth_db = "admin"
 #   NOTE 3:  MONGODB-CR is not suppoerted in Mongodb 4.0 and better.
 auth_mech = "SCRAM-SHA-1"
 
+# List of databases to ignore during operations.
+sys_dbs = ["performance_schema", "information_schema", "mysql", "sys"]
+
 # Replica Set Mongo configuration settings.
 # By default all settings are set to None.
 #    None means the Mongo database is not part of a replica set.

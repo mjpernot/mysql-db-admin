@@ -220,8 +220,6 @@ class UnitTest(unittest.TestCase):
         test_cfg_sys_dbs
         test_connect_failure
         test_connect_success
-        test_email
-        test_mongo
         test_run_program
 
     """
@@ -324,52 +322,6 @@ class UnitTest(unittest.TestCase):
         mock_inst.return_value = self.server
         mock_disconn.return_value = True
         mock_cfg.return_value = self.cfg
-
-        self.assertFalse(mysql_db_admin.run_program(self.args, self.func_list))
-
-    @mock.patch("mysql_db_admin.mysql_libs.disconnect")
-    @mock.patch("mysql_db_admin.gen_libs.load_module")
-    @mock.patch("mysql_db_admin.mysql_libs.create_instance")
-    def test_email(self, mock_inst, mock_mongo, mock_disconn):
-
-        """Function:  test_email
-
-        Description:  Test with email option.
-
-        Arguments:
-
-        """
-
-        self.args.args_array["-C"] = True
-        self.args.args_array["-m"] = True
-        self.args.args_array["-e"] = "ToEmail"
-        self.args.args_array["-s"] = "SubjectLine"
-
-        mock_inst.return_value = self.server
-        mock_mongo.side_effect = [True, self.cfg]
-        mock_disconn.return_value = True
-
-        self.assertFalse(mysql_db_admin.run_program(self.args, self.func_list))
-
-    @mock.patch("mysql_db_admin.mysql_libs.disconnect")
-    @mock.patch("mysql_db_admin.gen_libs.load_module")
-    @mock.patch("mysql_db_admin.mysql_libs.create_instance")
-    def test_mongo(self, mock_inst, mock_mongo, mock_disconn):
-
-        """Function:  test_mongo
-
-        Description:  Test with mongo option.
-
-        Arguments:
-
-        """
-
-        self.args.args_array["-C"] = True
-        self.args.args_array["-m"] = True
-
-        mock_inst.return_value = self.server
-        mock_mongo.side_effect = [True, self.cfg]
-        mock_disconn.return_value = True
 
         self.assertFalse(mysql_db_admin.run_program(self.args, self.func_list))
 

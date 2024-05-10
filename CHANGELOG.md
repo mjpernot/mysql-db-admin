@@ -4,6 +4,39 @@ All notable changes to this project will be documented in this file.
 The format is based on "Keep a Changelog".  This project adheres to Semantic Versioning.
 
 
+## [4.0.0] - 2024-04-24
+Breaking Change
+
+- Change output to a JSON format.
+- Add ability to email, insert into Mongo, save to file and/or display to standard out.
+
+### Added
+- data_out: Outputs the data in a variety of formats and media.
+- create_data_config: Create data_out config parameters.
+- get_json_template: Return a JSON template format.
+- get_all_dbs_tbls: Return a dictionary of databases with table lists.
+- get_db_tbl: Determines which databases and tables will be checked.
+
+### Changed
+- config/mongo.py.TEMPLATE: Added sys_dbs entry for system database list.
+- main: Added -n and -p options, removed the check for converting to JSON if -m option is used.
+- analyze, check, optimize, checksum: Refactored to change output to JSON format and additional options for sending out.
+- Documentation updates.
+
+### Removed
+- \_process_non_json
+- \_process_json
+- detect_dbs
+- process_request
+- \_proc_all_dbs
+- \_proc_all_tbls
+- \_proc_some_tbls
+- run_checksum
+- run_optimize
+- run_check
+- run_analyze
+
+
 ## [3.3.4] - 2024-04-23
 - Updated mongo-lib to v4.3.0
 - Added TLS capability for Mongo
