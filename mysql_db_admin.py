@@ -279,7 +279,6 @@ from __future__ import absolute_import
 
 # Standard
 import sys
-import datetime
 import json
 import pprint
 
@@ -428,7 +427,7 @@ def create_data_config(args):
 
     """
 
-    data_config= dict()
+    data_config = dict()
     data_config["to_addr"] = args.get_val("-e")
     data_config["subj"] = args.get_val("-s")
     data_config["mailx"] = args.get_val("-u", def_val=False)
@@ -462,18 +461,16 @@ def data_out(data, **kwargs):
             suppress -> True|False - Suppress standard out
             mongo -> Mongo config file - Insert into Mongo database
             db_tbl -> database:table - Database name:Table name
-        (output) status -> True|False - Successful operation
-        (output) msg -> Status or error message
+        (output) state -> True|False - Successful operation
+        (output) msg -> None or error message
 
     """
 
-    status = True
+    state = True
     msg = None
 
     if not isinstance(data, dict):
-        status = False
-        msg = "Error: Is not a dictionary: %s" % (data)
-        return status, msg
+        return False, "Error: Is not a dictionary: %s" % (data)
 
     mail = None
     data = dict(data)
@@ -499,9 +496,9 @@ def data_out(data, **kwargs):
 
     if kwargs.get("mongo", False):
         dbs, tbl = kwargs.get("db_tbl").split(":")
-        status, msg = mongo_libs.ins_doc(kwargs.get("mongo"), dbs, tbl, data)
+        state, msg = mongo_libs.ins_doc(kwargs.get("mongo"), dbs, tbl, data)
 
-    return status, msg
+    return state, msg
 
 
 def analyze(server, args, **kwargs):
@@ -538,10 +535,10 @@ def analyze(server, args, **kwargs):
 
         results["Results"].append(t_results)
 
-    status = data_out(results, **data_config)
+    state = data_out(results, **data_config)
 
-    if not status[0]:
-        print("analyze: Error encountered: %s" % (status[1]))
+    if not state[0]:
+        print("analyze: Error encountered: %s" % (state[1]))
 
 
 def check(server, args, **kwargs):
@@ -578,10 +575,10 @@ def check(server, args, **kwargs):
 
         results["Results"].append(t_results)
 
-    status = data_out(results, **data_config)
+    state = data_out(results, **data_config)
 
-    if not status[0]:
-        print("check: Error encountered: %s" % (status[1]))
+    if not state[0]:
+        print("check: Error encountered: %s" % (state[1]))
 
 
 def optimize(server, args, **kwargs):
@@ -618,10 +615,10 @@ def optimize(server, args, **kwargs):
 
         results["Results"].append(t_results)
 
-    status = data_out(results, **data_config)
+    state = data_out(results, **data_config)
 
-    if not status[0]:
-        print("optimize: Error encountered: %s" % (status[1]))
+    if not state[0]:
+        print("optimize: Error encountered: %s" % (state[1]))
 
 
 def checksum(server, args, **kwargs):
@@ -658,10 +655,10 @@ def checksum(server, args, **kwargs):
 
         results["Results"].append(t_results)
 
-    status = data_out(results, **data_config)
+    state = data_out(results, **data_config)
 
-    if not status[0]:
-        print("optimize: Error encountered: %s" % (status[1]))
+    if not state[0]:
+        print("optimize: Error encountered: %s" % (state[1]))
 
 
 def status(server, args, **kwargs):
@@ -676,10 +673,7 @@ def status(server, args, **kwargs):
         (input) server -> Server instance
         (input) args -> ArgParser class instance
         (input) **kwargs:
-            ofile -> file name - Name of output file
-            db_tbl database:table_name -> Mongo database and table name
-            class_cfg -> Mongo server configuration
-            mail -> Mail instance
+            sys_dbs -> List of system databases to skip
 
     """
 
@@ -694,10 +688,10 @@ def status(server, args, **kwargs):
     results["Connections"] = {
         "CurrentConnected": server.cur_conn, "MaxConnections": server.max_conn,
         "PercentUsed": server.prct_conn}
-    status = data_out(results, **data_config)
+    state = data_out(results, **data_config)
 
-    if not status[0]:
-        print("analyze: Error encountered: %s" % (status[1]))
+    if not state[0]:
+        print("analyze: Error encountered: %s" % (state[1]))
 
 
 def listdbs(server, args, **kwargs):
@@ -755,26 +749,11 @@ def run_program(args, func_dict):
               (server.name, server.conn_msg))
 
     else:
-        outfile = args.get_val("-o", def_val=None)
-        db_tbl = args.get_val("-i", def_val=None)
-        mongo = None
-        mail = None
-
-        if args.arg_exist("-m"):
-            mongo = gen_libs.load_module(
-                args.get_val("-m"), args.get_val("-d"))
-
-        if args.arg_exist("-e"):
-            mail = gen_class.setup_mail(
-                args.get_val("-e"), subj=args.get_val("-s", def_val=None))
-
         # Intersect args.args_array & func_dict to determine functions to call
         for item in set(args.get_args_keys()) & set(func_dict.keys()):
             cfg = gen_libs.load_module(args.get_val("-c"), args.get_val("-d"))
             sys_dbs = cfg.sys_dbs if hasattr(cfg, "sys_dbs") else SYS_DBS
-            func_dict[item](
-                server, args, ofile=outfile, db_tbl=db_tbl, class_cfg=mongo,
-                mail=mail, sys_dbs=sys_dbs)
+            func_dict[item](server, args, sys_dbs=sys_dbs)
 
         mysql_libs.disconnect(server)
 
