@@ -1,11 +1,11 @@
 # Classification (U)
 
-"""Program:  run_analyze.py
+"""Program:  get_json_template.py
 
-    Description:  Unit testing of run_analyze in mysql_db_admin.py.
+    Description:  Unit testing of get_json_template in mysql_db_admin.py.
 
     Usage:
-        test/unit/mysql_db_admin/run_analyze.py
+        test/unit/mysql_db_admin/get_json_template.py
 
     Arguments:
 
@@ -17,12 +17,10 @@
 import sys
 import os
 import unittest
-import mock
 
 # Local
 sys.path.append(os.getcwd())
 import mysql_db_admin
-import lib.gen_libs as gen_libs
 import version
 
 __version__ = version.__version__
@@ -49,7 +47,7 @@ class Server(object):
 
         """
 
-        pass
+        self.name = "ServerName"
 
 
 class UnitTest(unittest.TestCase):
@@ -60,7 +58,8 @@ class UnitTest(unittest.TestCase):
 
     Methods:
         setUp
-        test_run_analyze
+        test_for_dtg
+        test_for_servername
 
     """
 
@@ -75,28 +74,34 @@ class UnitTest(unittest.TestCase):
         """
 
         self.server = Server()
+        self.results = "ServerName"
 
-        self.analyze_tables = [{"Msg_type": "Type", "Msg_text": "Message"},
-                               {"Msg_type": "Type2", "Msg_text": "Message2"}]
+    def test_for_dtg(self):
 
-    @mock.patch("mysql_db_admin.gen_libs.prt_msg")
-    @mock.patch("mysql_db_admin.mysql_libs.analyze_tbl")
-    def test_run_analyze(self, mock_analyze, mock_prt):
+        """Function:  test_for_dtg
 
-        """Function:  test_run_analyze
-
-        Description:  Test run_analyze function.
+        Description:  Test for date time group.
 
         Arguments:
 
         """
 
-        mock_analyze.return_value = self.analyze_tables
-        mock_prt.return_value = True
+        self.assertTrue(
+            "AsOf" in mysql_db_admin.get_json_template(self.server))
 
-        with gen_libs.no_std_out():
-            self.assertFalse(mysql_db_admin.run_analyze(self.server, "db",
-                                                        "tbl"))
+    def test_for_servername(self):
+
+        """Function:  test_for_servername
+
+        Description:  Test for server name.
+
+        Arguments:
+
+        """
+
+        self.assertEqual(
+            mysql_db_admin.get_json_template(self.server)["Server"],
+            self.results)
 
 
 if __name__ == "__main__":

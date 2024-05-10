@@ -51,7 +51,7 @@ class ArgParser(object):
 
         """
 
-        self.args_array = {"-c": "mysql_cfg", "-d": "config"}
+        self.args_array = {"-c": "mysql_cfg", "-d": "config", "-M": True}
 
     def arg_exist(self, arg):
 
@@ -76,65 +76,6 @@ class ArgParser(object):
         """
 
         return self.args_array.get(skey, def_val)
-
-
-class Mail(object):
-
-    """Class:  Mail
-
-    Description:  Class stub holder for gen_class.Mail class.
-
-    Methods:
-        __init__
-        add_2_msg
-        send_mail
-
-    """
-
-    def __init__(self, lag_time=1):
-
-        """Method:  __init__
-
-        Description:  Class initialization.
-
-        Arguments:
-
-        """
-
-        self.lag_time = lag_time
-        self.data = None
-
-    def add_2_msg(self, data):
-
-        """Method:  add_2_msg
-
-        Description:  Stub method holder for Mail.add_2_msg.
-
-        Arguments:
-
-        """
-
-        self.data = data
-
-        return True
-
-    def send_mail(self, use_mailx=False):
-
-        """Method:  get_name
-
-        Description:  Stub method holder for Mail.send_mail.
-
-        Arguments:
-            (input) use_mailx
-
-        """
-
-        status = True
-
-        if use_mailx:
-            status = True
-
-        return status
 
 
 class Server(object):
@@ -189,21 +130,8 @@ class UnitTest(unittest.TestCase):
 
     Methods:
         setUp
-        test_mailx_non_json
-        test_mail_non_json
-        test_file_non_json
-        test_stdout_suppress_non_json
-        test_stdout
-        test_stdout_suppress_json
-        test_mailx
-        test_mail
-        test_file
-        test_append_to_file
-        test_mongo_fail
-        test_mongo
-        test_non_json
-        test_json
-        test_flatten_json
+        test_data_out_error
+        test_status
 
     """
 
@@ -218,289 +146,46 @@ class UnitTest(unittest.TestCase):
         """
 
         self.server = Server()
-        self.mail = Mail()
         self.args = ArgParser()
+        self.template = {"Server": "ServerName"}
+        self.config = {"config": "value"}
 
-    def test_mailx_non_json(self):
+    @mock.patch("mysql_db_admin.data_out",
+                mock.Mock(return_value=(False, "Error Message")))
+    @mock.patch("mysql_db_admin.create_data_config")
+    @mock.patch("mysql_db_admin.get_json_template")
+    def test_data_out_error(self, mock_template, mock_config):
 
-        """Function:  test_mailx_non_json
+        """Function:  test_data_out_error
 
-        Description:  Test with using mailx out for non-json format.
-
-        Arguments:
-
-        """
-
-        self.args.args_array["-u"] = True
-        self.args.args_array["-z"] = True
-
-        self.assertFalse(
-            mysql_db_admin.status(self.server, self.args, mail=self.mail))
-
-    def test_mail_non_json(self):
-
-        """Function:  test_mail_non_json
-
-        Description:  Test with emailing out for non-json format.
+        Description:  Test with data_out return an error status.
 
         Arguments:
 
         """
 
-        self.args.args_array["-u"] = True
-        self.args.args_array["-z"] = True
-
-        self.assertFalse(
-            mysql_db_admin.status(self.server, self.args, mail=self.mail))
-
-    @mock.patch("mysql_db_admin.gen_libs.write_file")
-    def test_file_non_json(self, mock_write):
-
-        """Function:  test_file_non_json
-
-        Description:  Test with writing to file for standard format.
-
-        Arguments:
-
-        """
-
-        self.args.args_array["-u"] = True
-        self.args.args_array["-z"] = True
-
-        mock_write.return_value = True
-
-        self.assertFalse(
-            mysql_db_admin.status(self.server, self.args, ofile="FileName"))
-
-    def test_stdout_suppress_non_json(self):
-
-        """Function:  test_stdout_suppress_non_json
-
-        Description:  Test with standard out being suppressed.
-
-        Arguments:
-
-        """
-
-        self.args.args_array["-u"] = True
-        self.args.args_array["-z"] = True
-
-        self.assertFalse(mysql_db_admin.status(self.server, self.args))
-
-    @mock.patch("mysql_db_admin.gen_libs.print_data",
-                mock.Mock(return_value=True))
-    def test_stdout(self):
-
-        """Function:  test_stdout
-
-        Description:  Test with standard out.
-
-        Arguments:
-
-        """
-
-        self.args.args_array["-j"] = True
-
-        self.assertFalse(mysql_db_admin.status(self.server, self.args))
-
-    def test_stdout_suppress_json(self):
-
-        """Function:  test_stdout_suppress_json
-
-        Description:  Test with standard out being suppressed.
-
-        Arguments:
-
-        """
-
-        self.args.args_array["-j"] = True
-        self.args.args_array["-z"] = True
-
-        self.assertFalse(mysql_db_admin.status(self.server, self.args))
-
-    @mock.patch("mysql_db_admin.mongo_libs.ins_doc")
-    @mock.patch("mysql_db_admin.gen_libs.write_file")
-    def test_mailx(self, mock_write, mock_mongo):
-
-        """Function:  test_mailx
-
-        Description:  Test with using mailx.
-
-        Arguments:
-
-        """
-
-        self.args.args_array["-j"] = True
-        self.args.args_array["-z"] = True
-        self.args.args_array["-u"] = True
-
-        mock_write.return_value = True
-        mock_mongo.return_value = (True, None)
-
-        self.assertFalse(
-            mysql_db_admin.status(self.server, self.args, mail=self.mail))
-
-    @mock.patch("mysql_db_admin.mongo_libs.ins_doc")
-    @mock.patch("mysql_db_admin.gen_libs.write_file")
-    def test_mail(self, mock_write, mock_mongo):
-
-        """Function:  test_mail
-
-        Description:  Test with emailing out.
-
-        Arguments:
-
-        """
-
-        self.args.args_array["-j"] = True
-        self.args.args_array["-z"] = True
-
-        mock_write.return_value = True
-        mock_mongo.return_value = (True, None)
-
-        self.assertFalse(
-            mysql_db_admin.status(self.server, self.args, mail=self.mail))
-
-    @mock.patch("mysql_db_admin.mongo_libs.ins_doc")
-    @mock.patch("mysql_db_admin.gen_libs.write_file")
-    def test_file(self, mock_write, mock_mongo):
-
-        """Function:  test_file
-
-        Description:  Test with writing to file.
-
-        Arguments:
-
-        """
-
-        self.args.args_array["-j"] = True
-        self.args.args_array["-z"] = True
-
-        mock_write.return_value = True
-        mock_mongo.return_value = (True, None)
-
-        self.assertFalse(
-            mysql_db_admin.status(self.server, self.args, ofile="FileName"))
-
-    @mock.patch("mysql_db_admin.mongo_libs.ins_doc")
-    @mock.patch("mysql_db_admin.gen_libs.write_file")
-    def test_append_to_file(self, mock_write, mock_mongo):
-
-        """Function:  test_append_to_file
-
-        Description:  Test with appending to file.
-
-        Arguments:
-
-        """
-
-        self.args.args_array["-j"] = True
-        self.args.args_array["-z"] = True
-        self.args.args_array["-a"] = True
-
-        mock_write.return_value = True
-        mock_mongo.return_value = (True, None)
-
-        self.assertFalse(
-            mysql_db_admin.status(self.server, self.args, ofile="FileName"))
-
-    @mock.patch("mysql_db_admin.mongo_libs.ins_doc")
-    @mock.patch("mysql_db_admin.gen_libs.write_file")
-    def test_mongo_fail(self, mock_write, mock_mongo):
-
-        """Function:  test_mongo_fail
-
-        Description:  Test with mongo connection.
-
-        Arguments:
-
-        """
-
-        self.args.args_array["-j"] = True
-        self.args.args_array["-z"] = True
-
-        mock_write.return_value = True
-        mock_mongo.return_value = (False, "Error Message")
-
-        with gen_libs.no_std_out():
-            self.assertFalse(
-                mysql_db_admin.status(
-                    self.server, self.args, class_cfg="Cfg", db_tbl="db:tbl"))
-
-    @mock.patch("mysql_db_admin.mongo_libs.ins_doc")
-    @mock.patch("mysql_db_admin.gen_libs.write_file")
-    def test_mongo(self, mock_write, mock_mongo):
-
-        """Function:  test_mongo
-
-        Description:  Test with mongo connection.
-
-        Arguments:
-
-        """
-
-        self.args.args_array["-j"] = True
-        self.args.args_array["-z"] = True
-
-        mock_write.return_value = True
-        mock_mongo.return_value = (True, None)
-
-        self.assertFalse(
-            mysql_db_admin.status(
-                self.server, self.args, class_cfg="Cfg", db_tbl="db:tbl"))
-
-    def test_non_json(self):
-
-        """Function:  test_non_json
-
-        Description:  Test with in non-JSON format.
-
-        Arguments:
-
-        """
+        mock_template.return_value = self.template
+        mock_config.return_value = self.config
 
         with gen_libs.no_std_out():
             self.assertFalse(mysql_db_admin.status(self.server, self.args))
 
-    @mock.patch("mysql_db_admin.gen_libs.print_data",
-                mock.Mock(return_value=True))
-    @mock.patch("mysql_db_admin.mongo_libs.ins_doc")
-    @mock.patch("mysql_db_admin.gen_libs.write_file")
-    def test_json(self, mock_write, mock_mongo):
+    @mock.patch("mysql_db_admin.data_out",
+                mock.Mock(return_value=(True, None)))
+    @mock.patch("mysql_db_admin.create_data_config")
+    @mock.patch("mysql_db_admin.get_json_template")
+    def test_status(self, mock_template, mock_config):
 
-        """Function:  test_json
+        """Function:  test_status
 
-        Description:  Test with in JSON format.
-
-        Arguments:
-
-        """
-
-        self.args.args_array["-j"] = True
-
-        mock_write.return_value = True
-        mock_mongo.return_value = (True, None)
-
-        self.assertFalse(mysql_db_admin.status(self.server, self.args))
-
-    @mock.patch("mysql_db_admin.mongo_libs.ins_doc")
-    @mock.patch("mysql_db_admin.gen_libs.write_file")
-    def test_flatten_json(self, mock_write, mock_mongo):
-
-        """Function:  test_flatten_json
-
-        Description:  Test with flatten option for JSON format.
+        Description:  Test status function.
 
         Arguments:
 
         """
 
-        self.args.args_array["-j"] = True
-        self.args.args_array["-z"] = True
-        self.args.args_array["-f"] = True
-
-        mock_write.return_value = True
-        mock_mongo.return_value = (True, None)
+        mock_template.return_value = self.template
+        mock_config.return_value = self.config
 
         self.assertFalse(mysql_db_admin.status(self.server, self.args))
 

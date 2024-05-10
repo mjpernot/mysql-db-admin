@@ -229,8 +229,6 @@ class UnitTest(unittest.TestCase):
 
     Methods:
         setUp
-        test_add_j_option
-        test_miss_j_option
         test_help_true
         test_help_false
         test_arg_req_false
@@ -262,53 +260,6 @@ class UnitTest(unittest.TestCase):
 
         self.proglock = ProgramLock(["cmdline"], "FlavorID")
         self.args = ArgParser()
-
-    @mock.patch("mysql_db_admin.run_program", mock.Mock(return_value=True))
-    @mock.patch("mysql_db_admin.gen_libs.help_func",
-                mock.Mock(return_value=False))
-    @mock.patch("mysql_db_admin.gen_class.ProgramLock")
-    @mock.patch("mysql_db_admin.gen_class.ArgParser")
-    def test_add_j_option(self, mock_arg, mock_lock):
-
-        """Function:  test_add_j_option
-
-        Description:  Test with -j option already present.
-
-        Arguments:
-
-        """
-
-        self.args.args_array["-j"] = True
-        self.args.args_array["-i"] = True
-        self.args.args_array["-m"] = True
-
-        mock_arg.return_value = self.args
-        mock_lock.return_value = self.proglock
-
-        self.assertFalse(mysql_db_admin.main())
-
-    @mock.patch("mysql_db_admin.run_program", mock.Mock(return_value=True))
-    @mock.patch("mysql_db_admin.gen_libs.help_func",
-                mock.Mock(return_value=False))
-    @mock.patch("mysql_db_admin.gen_class.ProgramLock")
-    @mock.patch("mysql_db_admin.gen_class.ArgParser")
-    def test_miss_j_option(self, mock_arg, mock_lock):
-
-        """Function:  test_miss_j_option
-
-        Description:  Test with adding missing -j option.
-
-        Arguments:
-
-        """
-
-        self.args.args_array["-i"] = True
-        self.args.args_array["-m"] = True
-
-        mock_arg.return_value = self.args
-        mock_lock.return_value = self.proglock
-
-        self.assertFalse(mysql_db_admin.main())
 
     @mock.patch("mysql_db_admin.gen_libs.help_func")
     @mock.patch("mysql_db_admin.gen_class.ArgParser")

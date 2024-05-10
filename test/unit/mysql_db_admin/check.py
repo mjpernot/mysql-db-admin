@@ -22,6 +22,7 @@ import mock
 # Local
 sys.path.append(os.getcwd())
 import mysql_db_admin
+import lib.gen_libs as gen_libs
 import version
 
 __version__ = version.__version__
@@ -49,7 +50,7 @@ class ArgParser(object):
 
         """
 
-        self.args_array = {"-c": "mysql_cfg", "-d": "config"}
+        self.args_array = {"-c": "mysql_cfg", "-d": "config", "-C": ["dbname"]}
 
     def get_val(self, skey, def_val=None):
 
@@ -96,8 +97,11 @@ class UnitTest(unittest.TestCase):
 
     Methods:
         setUp
-        test_db_tbl
-        test_db_only
+        test_multiline_return
+        test_data_out_error
+        test_multiple_db_tbl
+        test_one_db_multiple_tbl
+        test_one_db_one_tbl
 
     """
 
@@ -113,38 +117,134 @@ class UnitTest(unittest.TestCase):
 
         self.server = Server()
         self.args = ArgParser()
-        self.args.args_array["-C"] = ["db_name"]
-        self.run_check = True
+        self.db_tbl = {"db1": ["tbl1"]}
+        self.db_tbl2 = {"db1": ["tbl1", "tbl2"]}
+        self.db_tbl3 = {"db1": ["tbl1", "tbl2"], "db2": ["tbl3", "tbl4"]}
+        self.template = {"Server": "ServerName"}
+        self.config = {"config": "value"}
+        self.check = [{"Msg_type": "status", "Msg_text": "OK"}]
+        self.check2 = [
+            {"Msg_type": "status", "Msg_text": "OK"},
+            {"Msg_type": "note", "Msg_text": "Message Here"}]
 
-    @mock.patch("mysql_db_admin.process_request")
-    def test_db_tbl(self, mock_process):
+    @mock.patch("mysql_db_admin.data_out",
+                mock.Mock(return_value=(True, None)))
+    @mock.patch("mysql_db_admin.mysql_libs.check_tbl")
+    @mock.patch("mysql_db_admin.create_data_config")
+    @mock.patch("mysql_db_admin.get_json_template")
+    @mock.patch("mysql_db_admin.get_db_tbl")
+    def test_multiline_return(self, mock_dbdict, mock_template, mock_config,
+                              mock_check):
 
-        """Function:  test_db_tbl
+        """Function:  test_multiline_return
 
-        Description:  Test check function with database and table names.
+        Description:  Test with analyze table returning multiple lines.
 
         Arguments:
 
         """
 
-        self.args.args_array["-t"] = ["tbl_name"]
-
-        mock_process.return_value = True
+        mock_dbdict.return_value = self.db_tbl
+        mock_template.return_value = self.template
+        mock_config.return_value = self.config
+        mock_check.return_value = self.check2
 
         self.assertFalse(mysql_db_admin.check(self.server, self.args))
 
-    @mock.patch("mysql_db_admin.process_request")
-    def test_db_only(self, mock_process):
+    @mock.patch("mysql_db_admin.data_out",
+                mock.Mock(return_value=(False, "Error Message")))
+    @mock.patch("mysql_db_admin.mysql_libs.check_tbl")
+    @mock.patch("mysql_db_admin.create_data_config")
+    @mock.patch("mysql_db_admin.get_json_template")
+    @mock.patch("mysql_db_admin.get_db_tbl")
+    def test_data_out_error(self, mock_dbdict, mock_template, mock_config,
+                            mock_check):
 
-        """Function:  test_db_only
+        """Function:  test_data_out_error
 
-        Description:  Test check function with database name only.
+        Description:  Test with data_out return an error status.
 
         Arguments:
 
         """
 
-        mock_process.return_value = True
+        mock_dbdict.return_value = self.db_tbl3
+        mock_template.return_value = self.template
+        mock_config.return_value = self.config
+        mock_check.return_value = self.check
+
+        with gen_libs.no_std_out():
+            self.assertFalse(mysql_db_admin.check(self.server, self.args))
+
+    @mock.patch("mysql_db_admin.data_out",
+                mock.Mock(return_value=(True, None)))
+    @mock.patch("mysql_db_admin.mysql_libs.check_tbl")
+    @mock.patch("mysql_db_admin.create_data_config")
+    @mock.patch("mysql_db_admin.get_json_template")
+    @mock.patch("mysql_db_admin.get_db_tbl")
+    def test_multiple_db_tbl(self, mock_dbdict, mock_template, mock_config,
+                             mock_check):
+
+        """Function:  test_multiple_db_tbl
+
+        Description:  Test with multiple databases and multiple tables.
+
+        Arguments:
+
+        """
+
+        mock_dbdict.return_value = self.db_tbl3
+        mock_template.return_value = self.template
+        mock_config.return_value = self.config
+        mock_check.return_value = self.check
+
+        self.assertFalse(mysql_db_admin.check(self.server, self.args))
+
+    @mock.patch("mysql_db_admin.data_out",
+                mock.Mock(return_value=(True, None)))
+    @mock.patch("mysql_db_admin.mysql_libs.check_tbl")
+    @mock.patch("mysql_db_admin.create_data_config")
+    @mock.patch("mysql_db_admin.get_json_template")
+    @mock.patch("mysql_db_admin.get_db_tbl")
+    def test_one_db_multiple_tbl(self, mock_dbdict, mock_template, mock_config,
+                                 mock_check):
+
+        """Function:  test_one_db_multiple_tbl
+
+        Description:  Test with one database and multiple tables.
+
+        Arguments:
+
+        """
+
+        mock_dbdict.return_value = self.db_tbl2
+        mock_template.return_value = self.template
+        mock_config.return_value = self.config
+        mock_check.return_value = self.check
+
+        self.assertFalse(mysql_db_admin.check(self.server, self.args))
+
+    @mock.patch("mysql_db_admin.data_out",
+                mock.Mock(return_value=(True, None)))
+    @mock.patch("mysql_db_admin.mysql_libs.check_tbl")
+    @mock.patch("mysql_db_admin.create_data_config")
+    @mock.patch("mysql_db_admin.get_json_template")
+    @mock.patch("mysql_db_admin.get_db_tbl")
+    def test_one_db_one_tbl(self, mock_dbdict, mock_template, mock_config,
+                            mock_check):
+
+        """Function:  test_one_db_one_tbl
+
+        Description:  Test with one database and one table.
+
+        Arguments:
+
+        """
+
+        mock_dbdict.return_value = self.db_tbl
+        mock_template.return_value = self.template
+        mock_config.return_value = self.config
+        mock_check.return_value = self.check
 
         self.assertFalse(mysql_db_admin.check(self.server, self.args))
 
