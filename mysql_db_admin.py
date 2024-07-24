@@ -436,7 +436,8 @@ def create_data_config(args):
     data_config["expand"] = args.get_val("-p", def_val=False)
     data_config["indent"] = args.get_val("-n")
     data_config["suppress"] = args.get_val("-z", def_val=False)
-    data_config["mongo"] = args.get_val("-m")
+    data_config["mongo"] = gen_libs.load_module(
+        args.get_val("-m"), args.get_val("-d"))
     data_config["db_tbl"] = args.get_val("-i")
 
     return data_config
@@ -459,7 +460,7 @@ def data_out(data, **kwargs):
             expand -> True|False - Expand the JSON format
             indent -> Indentation of JSON document if expanded
             suppress -> True|False - Suppress standard out
-            mongo -> Mongo config file - Insert into Mongo database
+            mongo -> Mongo server configuration - Insert into Mongo database
             db_tbl -> database:table - Database name:Table name
         (output) state -> True|False - Successful operation
         (output) msg -> None or error message
@@ -808,9 +809,10 @@ def main():
     # Process argument list from command line.
     args = gen_class.ArgParser(
         sys.argv, opt_val=opt_val_list, multi_val=opt_multi_list,
-        opt_def=opt_def_dict, do_parse=True)
+        opt_def=opt_def_dict)
 
-    if not gen_libs.help_func(args, __version__, help_message)              \
+    if args.arg_parse2()                                                    \
+       and not gen_libs.help_func(args, __version__, help_message)          \
        and args.arg_require(opt_req=opt_req_list)                           \
        and args.arg_xor_dict(opt_xor_val=opt_xor_dict)                      \
        and args.arg_cond_req(opt_con_req=opt_con_req_list)                  \
