@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 The format is based on "Keep a Changelog".  This project adheres to Semantic Versioning.
 
 
+## [4.0.1] - 2024-07-23
+
+### Fixed
+- create_data_config: Set mongo entry to the Mongo configuration.
+
+### Changed
+- main: Removed parsing from gen_class.ArgParser call and called arg_parse2 as part of "if" statement.
+
+
 ## [4.0.0] - 2024-04-24
 Breaking Change
 
