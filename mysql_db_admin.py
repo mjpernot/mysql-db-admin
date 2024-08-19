@@ -436,9 +436,11 @@ def create_data_config(args):
     data_config["expand"] = args.get_val("-p", def_val=False)
     data_config["indent"] = args.get_val("-n")
     data_config["suppress"] = args.get_val("-z", def_val=False)
-    data_config["mongo"] = gen_libs.load_module(
-        args.get_val("-m"), args.get_val("-d"))
     data_config["db_tbl"] = args.get_val("-i")
+
+    if args.get_val("-m", def_val=False):
+        data_config["mongo"] = gen_libs.load_module(
+            args.get_val("-m"), args.get_val("-d"))
 
     return data_config
 
