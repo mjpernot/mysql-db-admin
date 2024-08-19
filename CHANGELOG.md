@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on "Keep a Changelog".  This project adheres to Semantic Versioning.
 
 
+## [4.0.2] - 2024-08-19
+- Updated simplejson to 3.13.2 for Python 2.
+
+### Fixed
+- create_data_config:  Only set "mongo" entry if mongo config file is passed.
+
+
 ## [4.0.1] - 2024-07-23
 
 ### Fixed
