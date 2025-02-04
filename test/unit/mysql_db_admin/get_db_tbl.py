@@ -21,14 +21,14 @@ import mock
 
 # Local
 sys.path.append(os.getcwd())
-import mysql_db_admin
-import lib.gen_libs as gen_libs
-import version
+import mysql_db_admin                           # pylint:disable=E0401,C0413
+import lib.gen_libs as gen_libs             # pylint:disable=E0401,C0413,R0402
+import version                                  # pylint:disable=E0401,C0413
 
 __version__ = version.__version__
 
 
-class ArgParser(object):
+class ArgParser():                                      # pylint:disable=R0903
 
     """Class:  ArgParser
 
@@ -65,7 +65,7 @@ class ArgParser(object):
         return self.args_array.get(skey, def_val)
 
 
-class Server(object):
+class Server():                                         # pylint:disable=R0903
 
     """Class:  Server
 
@@ -129,7 +129,7 @@ class UnitTest(unittest.TestCase):
         self.fetch_db = [{"Database": "db1"}]
         self.fetch_db2 = [{"Database": "db1"}, {"Database": "db2"}]
         self.fetch_db3 = [{"Database": "systemdb"}]
-        self.db_list = list()
+        self.db_list = []
         self.db_list2 = ["db1"]
         self.db_list3 = ["systemdb"]
         self.db_list4 = ["systemdb", "db1"]
@@ -144,7 +144,7 @@ class UnitTest(unittest.TestCase):
         self.sys_dbs = ["systemdb"]
         self.results = {"db1": ["t2"]}
         self.results2 = {"db1": ["t2"], "db2": ["t1"]}
-        self.results3 = dict()
+        self.results3 = {}
         self.results4 = {"db1": ["t1", "t2"]}
 
     @mock.patch("mysql_db_admin.mysql_libs.fetch_tbl_dict")

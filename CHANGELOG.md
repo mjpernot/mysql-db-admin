@@ -3,6 +3,27 @@ All notable changes to this project will be documented in this file.
 
 The format is based on "Keep a Changelog".  This project adheres to Semantic Versioning.
 
+## [5.0.0] - 2024-12-03
+Breaking Changes
+
+- Removed support for Python 2.7.
+- Removed Mongo insert option.
+- Updated mysql-lib v5.4.0
+- Updated python-lib v4.0.0
+
+### Fixed
+- data_out:  Added call to gen_libs.write_file to write flatten JSON objects.
+
+### Changed
+- data_out: Replaced open call with a "with open" call.
+- create_data_config, data_out: Removed Mongo code.
+- Replaced dict() with {} and list() with [].
+- Converted strings to f-strings.
+- Documentation changes.
+
+### Deprecated
+- Support for MySQL 5.6/5.7
+
 
 ## [4.0.5] - 2024-11-18
 - Updated python-lib to v3.0.8
