@@ -12,9 +12,10 @@ Breaking Changes
 - Updated python-lib v4.0.0
 
 ### Fixed
-- data_out:  Replaced open/pprint call with call to gen_libs.write_file.
+- data_out:  Added call to gen_libs.write_file to write flatten JSON objects.
 
 ### Changed
+- data_out: Replaced open call with a "with open" call.
 - create_data_config, data_out: Removed Mongo code.
 - Replaced dict() with {} and list() with [].
 - Converted strings to f-strings.

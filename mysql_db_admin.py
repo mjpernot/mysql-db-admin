@@ -392,9 +392,15 @@ def data_out(data, **kwargs):
         mail.send_mail(use_mailx=kwargs.get("mailx", False))
 
     if kwargs.get("outfile", False):
-        gen_libs.write_file(
-            kwargs.get("outfile"), kwargs.get("mode")
-            , json.dumps(data, indent=kwargs.get("indent")))
+        if kwargs.get("expand", False):
+            with open(kwargs.get("outfile"), kwargs.get("mode", "w"),
+                      encoding="UTF-8") as outfile:
+                pprint.pprint(data, stream=outfile, **cfg)
+
+        else:
+            gen_libs.write_file(
+                kwargs.get("outfile"), kwargs.get("mode"),
+                json.dumps(data, indent=kwargs.get("indent")))
 
     if not kwargs.get("suppress", False):
         if kwargs.get("expand", False):
