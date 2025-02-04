@@ -378,7 +378,7 @@ def data_out(data, **kwargs):
     msg = None
 
     if not isinstance(data, dict):
-        return False, "Error: Is not a dictionary: %s" % (data)
+        return False, f"Error: Is not a dictionary: {data}"
 
     mail = None
     data = dict(data)
@@ -393,7 +393,8 @@ def data_out(data, **kwargs):
 
     if kwargs.get("outfile", False):
         gen_libs.write_file(
-            kwargs.get("outfile"), mode, json.dumps(data, indent=indent))
+            kwargs.get("outfile"), kwargs.get("mode")
+            , json.dumps(data, indent=kwargs.get("indent")))
 
     if not kwargs.get("suppress", False):
         if kwargs.get("expand", False):
@@ -426,7 +427,7 @@ def analyze(server, args, **kwargs):
     results["Results"] = []
     data_config = dict(create_data_config(args))
 
-    for dbn in db_dict:
+    for dbn in db_dict:                                 # pylint:disable=C0206
         t_results = {"Database": dbn, "Tables": []}
 
         for tbl in db_dict[dbn]:
@@ -466,7 +467,7 @@ def check(server, args, **kwargs):
     results["Results"] = []
     data_config = dict(create_data_config(args))
 
-    for dbn in db_dict:
+    for dbn in db_dict:                                 # pylint:disable=C0206
         t_results = {"Database": dbn, "Tables": []}
 
         for tbl in db_dict[dbn]:
@@ -506,7 +507,7 @@ def optimize(server, args, **kwargs):
     results["Results"] = []
     data_config = dict(create_data_config(args))
 
-    for dbn in db_dict:
+    for dbn in db_dict:                                 # pylint:disable=C0206
         t_results = {"Database": dbn, "Tables": []}
 
         for tbl in db_dict[dbn]:
@@ -546,7 +547,7 @@ def checksum(server, args, **kwargs):
     results["Results"] = []
     data_config = dict(create_data_config(args))
 
-    for dbn in db_dict:
+    for dbn in db_dict:                                 # pylint:disable=C0206
         t_results = {"Database": dbn, "Tables": []}
 
         for tbl in db_dict[dbn]:
@@ -565,7 +566,7 @@ def checksum(server, args, **kwargs):
         print(f"optimize: Error encountered: {state[1]}")
 
 
-def status(server, args, **kwargs):
+def status(server, args, **kwargs):                     # pylint:disable=W0613
 
     """Function:  status
 
@@ -620,13 +621,13 @@ def listdbs(server, args, **kwargs):
         print("List of user and system databases:")
 
         for item in db_list:
-            print("    {item}")
+            print(f"    {item}")
 
     else:
         print("List of user databases:")
 
         for item in gen_libs.del_not_and_list(db_list, sys_dbs):
-            print("    {item}")
+            print(f"    {item}")
 
 
 def run_program(args, func_dict):
