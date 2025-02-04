@@ -28,7 +28,7 @@ import version                                  # pylint:disable=E0401,C0413
 __version__ = version.__version__
 
 
-class ArgParser():
+class ArgParser():                                      # pylint:disable=R0903
 
     """Class:  ArgParser
 
@@ -37,7 +37,6 @@ class ArgParser():
     Methods:
         __init__
         arg_exist
-        get_val
 
     """
 
@@ -63,7 +62,7 @@ class ArgParser():
 
         """
 
-        return True if arg in self.args_array else False
+        return arg in self.args_array
 
 
 class Server():                                         # pylint:disable=R0903

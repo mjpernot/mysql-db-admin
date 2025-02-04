@@ -86,8 +86,6 @@ class Server():                                         # pylint:disable=R0903
 
         """
 
-        pass
-
 
 class UnitTest(unittest.TestCase):
 
