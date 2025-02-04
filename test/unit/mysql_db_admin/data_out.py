@@ -225,8 +225,8 @@ class UnitTest(unittest.TestCase):
 
         self.assertEqual(
             mysql_db_admin.data_out(
-                self.data, suppress=self.suppress, outfile=self.outfile
-                , expand=True), self.results)
+                self.data, suppress=self.suppress, outfile=self.outfile,
+                expand=True), self.results)
 
     @mock.patch("mysql_db_admin.gen_libs.write_file",
                 mock.Mock(return_value=True))
