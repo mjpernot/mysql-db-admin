@@ -21,9 +21,9 @@ import mock
 
 # Local
 sys.path.append(os.getcwd())
-import mysql_db_admin
-import lib.gen_libs as gen_libs
-import version
+import mysql_db_admin                           # pylint:disable=E0401,C0413
+import lib.gen_libs as gen_libs             # pylint:disable=E0401,C0413,R0402
+import version                                  # pylint:disable=E0401,C0413
 
 __version__ = version.__version__
 
@@ -53,7 +53,7 @@ def check(server, args, **kwargs):
     return status
 
 
-class ArgParser(object):
+class ArgParser():
 
     """Class:  ArgParser
 
@@ -116,7 +116,7 @@ class ArgParser(object):
         return list(self.args_array.keys())
 
 
-class Server(object):
+class Server():                                         # pylint:disable=R0903
 
     """Class:  Server
 
@@ -158,7 +158,7 @@ class Server(object):
         return status
 
 
-class Cfg(object):
+class Cfg():                                            # pylint:disable=R0903
 
     """Class:  Cfg
 
@@ -183,7 +183,7 @@ class Cfg(object):
             "performance_schema", "information_schema", "mysql", "sys"]
 
 
-class Cfg2(object):
+class Cfg2():                                           # pylint:disable=R0903
 
     """Class:  Cfg
 
