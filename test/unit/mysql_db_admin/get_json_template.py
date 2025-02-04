@@ -86,8 +86,7 @@ class UnitTest(unittest.TestCase):
 
         """
 
-        self.assertAssertIn(
-            "AsOf", mysql_db_admin.get_json_template(self.server))
+        self.assertIn("AsOf", mysql_db_admin.get_json_template(self.server))
 
     def test_for_servername(self):
 
