@@ -13,23 +13,18 @@
     Usage:
         mysql_db_admin.py -c mysql_cfg -d path
             {-C [db_name [db_name2 ...]] [-t table_name [table_name2 ...]] |
-                 [-m config_file -i db_name:table_name] |
                  [-e to_email [to_email2 ...] [-s subject_line] [-u]] |
                  [-z] [-p [-n N]]] |
              -A [db_name [db_name2 ...]] [-t table_name [table_name2 ...]] |
-                 [-m config_file -i db_name:table_name] |
                  [-e to_email [to_email2 ...] [-s subject_line] [-u]] |
                  [-z] [-p [-n N]]] |
              -S [db_name [db_name2 ...]] [-t table_name [table_name2 ...]] |
-                 [-m config_file -i db_name:table_name] |
                  [-e to_email [to_email2 ...] [-s subject_line] [-u]] |
                  [-z] [-p [-n N]]] |
              -D [db_name [db_name2 ...]] [-t table_name [table_name2 ...]] |
-                 [-m config_file -i db_name:table_name] |
                  [-e to_email [to_email2 ...] [-s subject_line] [-u]] |
                  [-z] [-p [-n N]]] |
-             -M [-m config_file -i [db_name:table_name]] |
-                 [-e to_email [to_email2 ...] [-s subject_line] [-u]] |
+             -M [[-e to_email [to_email2 ...] [-s subject_line] [-u]] |
                  [-z] [-p [-n N]]] |
              -L [-k]}
             [-y flavor_id]
@@ -41,10 +36,6 @@
 
         -C [database name(s)] => Check a table for errors.
             -t table name(s) => Table names to check.
-            -m file => Mongo config file.  Is loaded as a python, do not
-                include the .py extension with the name.
-                -i {database:collection} => Name of database and collection.
-                    Default: sysmon:mysql_db_admin
             -o path/file => Directory path and file name for output.
                 -w a|w => Append or write to output to output file. Default is
                     write.
@@ -60,10 +51,6 @@
         -A [database name(s)] => Analyze a table's key distribution, checks the
                 table's indexes.
             -t table name(s) => Table names to check.
-            -m file => Mongo config file.  Is loaded as a python, do not
-                include the .py extension with the name.
-                -i {database:collection} => Name of database and collection.
-                    Default: sysmon:mysql_db_admin
             -o path/file => Directory path and file name for output.
                 -w a|w => Append or write to output to output file. Default is
                     write.
@@ -78,10 +65,6 @@
 
         -S [database name(s)] => Return a checksum on a table.
             -t table name(s) => Table names to check.
-            -m file => Mongo config file.  Is loaded as a python, do not
-                include the .py extension with the name.
-                -i {database:collection} => Name of database and collection.
-                    Default: sysmon:mysql_db_admin
             -o path/file => Directory path and file name for output.
                 -w a|w => Append or write to output to output file. Default is
                     write.
@@ -97,10 +80,6 @@
         -D [database name(s)] => Optimize/defragment a table, the command
                 runs an Alter Table and Analyze command on the table.
             -t table name(s) => Table names to check.
-            -m file => Mongo config file.  Is loaded as a python, do not
-                include the .py extension with the name.
-                -i {database:collection} => Name of database and collection.
-                    Default: sysmon:mysql_db_admin
             -o path/file => Directory path and file name for output.
                 -w a|w => Append or write to output to output file. Default is
                     write.
@@ -115,10 +94,6 @@
 
         -M => Display the current database status, such as uptime, memory
                 use, connection usage, and status.
-            -m file => Mongo config file.  Is loaded as a python, do not
-                include the .py extension with the name.
-                -i {database:collection} => Name of database and collection.
-                    Default: sysmon:mysql_db_admin
             -o path/file => Directory path and file name for output.
                 -w a|w => Append or write to output to output file. Default is
                     write.
@@ -202,71 +177,8 @@
         NOTE 3:  Socket use is only required to be set in certain conditions
             when connecting using localhost.
 
-        Mongo configuration file format (config/mongo.py.TEMPLATE).  The
-            configuration file format for the Mongo connection used for
-            inserting data into a database.
-            There are two ways to connect:  single or replica set.
-
-            Single database connection:
-
-            # Single Configuration file for Mongo Database Server.
-            user = "USER"
-            japd = "PSWORD"
-            host = "HOST_IP"
-            name = "HOSTNAME"
-            port = 27017
-            conf_file = None
-            auth = True
-            auth_db = "admin"
-            auth_mech = "SCRAM-SHA-1"
-
-            Replica Set connection:  Same format as above, but with these
-                additional entries at the end of the configuration file:
-
-            repset = "REPLICA_SET_NAME"
-            repset_hosts = "HOST1:PORT, HOST2:PORT, HOST3:PORT, [...]"
-            db_auth = "AUTHENTICATION_DATABASE"
-
-            If Mongo is set to use TLS or SSL connections, then one or more of
-                the following entries will need to be completed to connect
-                using TLS or SSL protocols.
-                Note:  Read the configuration file to determine which entries
-                    will need to be set.
-
-                SSL:
-                    auth_type = None
-                    ssl_client_ca = None
-                    ssl_client_key = None
-                    ssl_client_cert = None
-                    ssl_client_phrase = None
-                TLS:
-                    auth_type = None
-                    tls_ca_certs = None
-                    tls_certkey = None
-                    tls_certkey_phrase = None
-
-            Note:  FIPS Environment for Mongo.
-              If operating in a FIPS 104-2 environment, this package will
-              require at least a minimum of pymongo==3.8.0 or better.  It will
-              also require a manual change to the auth.py module in the pymongo
-              package.  See below for changes to auth.py.
-
-            - Locate the auth.py file python installed packages on the system
-                in the pymongo package directory.
-            - Edit the file and locate the "_password_digest" function.
-            - In the "_password_digest" function there is an line that should
-                match: "md5hash = hashlib.md5()".  Change it to
-                "md5hash = hashlib.md5(usedforsecurity=False)".
-            - Lastly, it will require the Mongo configuration file entry
-                auth_mech to be set to: SCRAM-SHA-1 or SCRAM-SHA-256.
-
         Configuration modules -> name is runtime dependent as it can be
             used to connect to different databases with different names.
-
-        Global variables:
-            SYS_DBS -> Is a list of databases to be skipped under some options,
-                but is overridden if set within the configration file
-                (sys_dbs).
 
     Example:
         mysql_db_admin.py -c mysql -d config -D test -t users
@@ -274,13 +186,15 @@
 """
 
 # Libraries and Global Variables
-from __future__ import print_function
-from __future__ import absolute_import
 
 # Standard
 import sys
-import json
 import pprint
+
+try:
+    import simplejson as json
+except ImportError:
+    import json
 
 # Local
 try:
@@ -288,21 +202,18 @@ try:
     from .lib import gen_class
     from .mysql_lib import mysql_class
     from .mysql_lib import mysql_libs
-    from .mongo_lib import mongo_libs
     from . import version
 
 except (ValueError, ImportError) as err:
-    import lib.gen_libs as gen_libs
-    import lib.gen_class as gen_class
-    import mysql_lib.mysql_class as mysql_class
-    import mysql_lib.mysql_libs as mysql_libs
-    import mongo_lib.mongo_libs as mongo_libs
+    import lib.gen_libs as gen_libs                     # pylint:disable=R0402
+    import lib.gen_class as gen_class                   # pylint:disable=R0402
+    import mysql_lib.mysql_class as mysql_class         # pylint:disable=R0402
+    import mysql_lib.mysql_libs as mysql_libs           # pylint:disable=R0402
     import version
 
 __version__ = version.__version__
 
 # Global
-SYS_DBS = ["performance_schema", "information_schema", "mysql", "sys"]
 
 
 def help_message():
@@ -333,7 +244,7 @@ def get_all_dbs_tbls(server, db_list, dict_key):
 
     """
 
-    db_dict = dict()
+    db_dict = {}
     db_list = list(db_list)
 
     for dbs in db_list:
@@ -360,13 +271,13 @@ def get_db_tbl(server, args, db_list, **kwargs):
 
     """
 
-    db_dict = dict()
+    db_dict = {}
     db_list = list(db_list)
     dict_key = "TABLE_NAME" if server.version >= (8, 0) else "table_name"
 
     if db_list:
         db_list = gen_libs.del_not_and_list(
-            db_list, kwargs.get("sys_dbs", list()))
+            db_list, kwargs.get("sys_dbs", []))
 
         if not db_list:
             print("get_db_tbl 1: Warning:  No non-system databases to process")
@@ -384,7 +295,7 @@ def get_db_tbl(server, args, db_list, **kwargs):
         db_list = gen_libs.dict_2_list(
             mysql_libs.fetch_db_dict(server), "Database")
         db_list = gen_libs.del_not_and_list(
-            db_list, kwargs.get("sys_dbs", list()))
+            db_list, kwargs.get("sys_dbs", []))
 
         if not db_list:
             print("get_db_tbl 2: Warning:  No non-system databases to process")
@@ -407,7 +318,7 @@ def get_json_template(server):
 
     """
 
-    json_doc = dict()
+    json_doc = {}
     json_doc["Platform"] = "MySQL"
     json_doc["Server"] = server.name
     json_doc["AsOf"] = gen_libs.get_date() + "T" + gen_libs.get_time()
@@ -427,7 +338,7 @@ def create_data_config(args):
 
     """
 
-    data_config = dict()
+    data_config = {}
     data_config["to_addr"] = args.get_val("-e")
     data_config["subj"] = args.get_val("-s")
     data_config["mailx"] = args.get_val("-u", def_val=False)
@@ -436,11 +347,6 @@ def create_data_config(args):
     data_config["expand"] = args.get_val("-p", def_val=False)
     data_config["indent"] = args.get_val("-n")
     data_config["suppress"] = args.get_val("-z", def_val=False)
-    data_config["db_tbl"] = args.get_val("-i")
-
-    if args.get_val("-m", def_val=False):
-        data_config["mongo"] = gen_libs.load_module(
-            args.get_val("-m"), args.get_val("-d"))
 
     return data_config
 
@@ -462,7 +368,6 @@ def data_out(data, **kwargs):
             expand -> True|False - Expand the JSON format
             indent -> Indentation of JSON document if expanded
             suppress -> True|False - Suppress standard out
-            mongo -> Mongo server configuration - Insert into Mongo database
             db_tbl -> database:table - Database name:Table name
         (output) state -> True|False - Successful operation
         (output) msg -> None or error message
@@ -473,12 +378,12 @@ def data_out(data, **kwargs):
     msg = None
 
     if not isinstance(data, dict):
-        return False, "Error: Is not a dictionary: %s" % (data)
+        return False, f"Error: Is not a dictionary: {data}"
 
     mail = None
     data = dict(data)
     cfg = {"indent": kwargs.get("indent", 4)} if kwargs.get("indent", False) \
-        else dict()
+        else {}
 
     if kwargs.get("to_addr", False):
         subj = kwargs.get("subj", "NoSubjectLinePassed")
@@ -487,8 +392,15 @@ def data_out(data, **kwargs):
         mail.send_mail(use_mailx=kwargs.get("mailx", False))
 
     if kwargs.get("outfile", False):
-        outfile = open(kwargs.get("outfile"), kwargs.get("mode", "w"))
-        pprint.pprint(data, stream=outfile, **cfg)
+        if kwargs.get("expand", False):
+            with open(kwargs.get("outfile"), kwargs.get("mode", "w"),
+                      encoding="UTF-8") as outfile:
+                pprint.pprint(data, stream=outfile, **cfg)
+
+        else:
+            gen_libs.write_file(
+                kwargs.get("outfile"), kwargs.get("mode"),
+                json.dumps(data, indent=kwargs.get("indent")))
 
     if not kwargs.get("suppress", False):
         if kwargs.get("expand", False):
@@ -496,10 +408,6 @@ def data_out(data, **kwargs):
 
         else:
             print(data)
-
-    if kwargs.get("mongo", False):
-        dbs, tbl = kwargs.get("db_tbl").split(":")
-        state, msg = mongo_libs.ins_doc(kwargs.get("mongo"), dbs, tbl, data)
 
     return state, msg
 
@@ -522,11 +430,11 @@ def analyze(server, args, **kwargs):
     db_dict = get_db_tbl(server, args, db_list, **kwargs)
     results = get_json_template(server)
     results["Type"] = "analyze"
-    results["Results"] = list()
+    results["Results"] = []
     data_config = dict(create_data_config(args))
 
-    for dbn in db_dict:
-        t_results = {"Database": dbn, "Tables": list()}
+    for dbn in db_dict:                                 # pylint:disable=C0206
+        t_results = {"Database": dbn, "Tables": []}
 
         for tbl in db_dict[dbn]:
             t_data = {"TableName": tbl}
@@ -541,7 +449,7 @@ def analyze(server, args, **kwargs):
     state = data_out(results, **data_config)
 
     if not state[0]:
-        print("analyze: Error encountered: %s" % (state[1]))
+        print(f"analyze: Error encountered: {state[1]}")
 
 
 def check(server, args, **kwargs):
@@ -562,11 +470,11 @@ def check(server, args, **kwargs):
     db_dict = get_db_tbl(server, args, db_list, **kwargs)
     results = get_json_template(server)
     results["Type"] = "check"
-    results["Results"] = list()
+    results["Results"] = []
     data_config = dict(create_data_config(args))
 
-    for dbn in db_dict:
-        t_results = {"Database": dbn, "Tables": list()}
+    for dbn in db_dict:                                 # pylint:disable=C0206
+        t_results = {"Database": dbn, "Tables": []}
 
         for tbl in db_dict[dbn]:
             t_data = {"TableName": tbl}
@@ -581,7 +489,7 @@ def check(server, args, **kwargs):
     state = data_out(results, **data_config)
 
     if not state[0]:
-        print("check: Error encountered: %s" % (state[1]))
+        print(f"check: Error encountered: {state[1]}")
 
 
 def optimize(server, args, **kwargs):
@@ -602,11 +510,11 @@ def optimize(server, args, **kwargs):
     db_dict = get_db_tbl(server, args, db_list, **kwargs)
     results = get_json_template(server)
     results["Type"] = "optimize"
-    results["Results"] = list()
+    results["Results"] = []
     data_config = dict(create_data_config(args))
 
-    for dbn in db_dict:
-        t_results = {"Database": dbn, "Tables": list()}
+    for dbn in db_dict:                                 # pylint:disable=C0206
+        t_results = {"Database": dbn, "Tables": []}
 
         for tbl in db_dict[dbn]:
             t_data = {"TableName": tbl}
@@ -621,7 +529,7 @@ def optimize(server, args, **kwargs):
     state = data_out(results, **data_config)
 
     if not state[0]:
-        print("optimize: Error encountered: %s" % (state[1]))
+        print(f"optimize: Error encountered: {state[1]}")
 
 
 def checksum(server, args, **kwargs):
@@ -642,11 +550,11 @@ def checksum(server, args, **kwargs):
     db_dict = get_db_tbl(server, args, db_list, **kwargs)
     results = get_json_template(server)
     results["Type"] = "checksum"
-    results["Results"] = list()
+    results["Results"] = []
     data_config = dict(create_data_config(args))
 
-    for dbn in db_dict:
-        t_results = {"Database": dbn, "Tables": list()}
+    for dbn in db_dict:                                 # pylint:disable=C0206
+        t_results = {"Database": dbn, "Tables": []}
 
         for tbl in db_dict[dbn]:
             t_data = {"TableName": tbl}
@@ -661,10 +569,10 @@ def checksum(server, args, **kwargs):
     state = data_out(results, **data_config)
 
     if not state[0]:
-        print("optimize: Error encountered: %s" % (state[1]))
+        print(f"optimize: Error encountered: {state[1]}")
 
 
-def status(server, args, **kwargs):
+def status(server, args, **kwargs):                     # pylint:disable=W0613
 
     """Function:  status
 
@@ -694,7 +602,7 @@ def status(server, args, **kwargs):
     state = data_out(results, **data_config)
 
     if not state[0]:
-        print("analyze: Error encountered: %s" % (state[1]))
+        print(f"analyze: Error encountered: {state[1]}")
 
 
 def listdbs(server, args, **kwargs):
@@ -712,20 +620,20 @@ def listdbs(server, args, **kwargs):
     """
 
     sys_dbs = list(kwargs.get("sys_dbs", []))
-    db_list = gen_libs.dict_2_list(mysql_libs.fetch_db_dict(server),
-                                   "Database")
+    db_list = gen_libs.dict_2_list(
+        mysql_libs.fetch_db_dict(server), "Database")
 
     if args.arg_exist("-k"):
         print("List of user and system databases:")
 
         for item in db_list:
-            print("    %s" % (item))
+            print(f"    {item}")
 
     else:
         print("List of user databases:")
 
         for item in gen_libs.del_not_and_list(db_list, sys_dbs):
-            print("    %s" % (item))
+            print(f"    {item}")
 
 
 def run_program(args, func_dict):
@@ -740,7 +648,7 @@ def run_program(args, func_dict):
 
     """
 
-    global SYS_DBS
+    sysdbs = ["performance_schema", "information_schema", "mysql", "sys"]
 
     func_dict = dict(func_dict)
     server = mysql_libs.create_instance(
@@ -748,14 +656,14 @@ def run_program(args, func_dict):
     server.connect(silent=True)
 
     if server.conn_msg:
-        print("run_program:  Error encountered on server(%s):  %s" %
-              (server.name, server.conn_msg))
+        print(f"run_program:  Error encountered on server: {server.name}:"
+              f" {server.conn_msg}")
 
     else:
         # Intersect args.args_array & func_dict to determine functions to call
         for item in set(args.get_args_keys()) & set(func_dict.keys()):
             cfg = gen_libs.load_module(args.get_val("-c"), args.get_val("-d"))
-            sys_dbs = cfg.sys_dbs if hasattr(cfg, "sys_dbs") else SYS_DBS
+            sys_dbs = cfg.sys_dbs if hasattr(cfg, "sys_dbs") else sysdbs
             func_dict[item](server, args, sys_dbs=sys_dbs)
 
         mysql_libs.disconnect(server)
@@ -791,15 +699,14 @@ def main():
     func_dict = {
         "-A": analyze, "-C": check, "-D": optimize, "-S": checksum,
         "-M": status, "-L": listdbs}
-    opt_con_req_list = {"-i": ["-m"], "-s": ["-e"], "-u": ["-e"], "-w": ["-o"]}
+    opt_con_req_list = {"-s": ["-e"], "-u": ["-e"], "-w": ["-o"]}
     opt_def_dict = {
-        "-t": None, "-A": [], "-C": [], "-D": [], "-S": [], "-n": 4,
-        "-i": "sysmon:mysql_db_admin"}
+        "-t": None, "-A": [], "-C": [], "-D": [], "-S": [], "-n": 4}
     opt_multi_list = ["-A", "-C", "-D", "-S", "-t", "-e", "-s"]
     opt_req_list = ["-c", "-d"]
     opt_val_list = [
-        "-c", "-d", "-t", "-A", "-C", "-D", "-S", "-i", "-m", "-o", "-e", "-s",
-        "-y", "-w", "-n"]
+        "-c", "-d", "-t", "-A", "-C", "-D", "-S", "-o", "-e", "-s", "-y", "-w",
+        "-n"]
     opt_xor_dict = {
         "-A": ["-C", "-D", "-M", "-S", "-L"],
         "-C": ["-A", "-D", "-M", "-S", "-L"],
@@ -828,8 +735,8 @@ def main():
             del proglock
 
         except gen_class.SingleInstanceException:
-            print("WARNING:  lock in place for mysql_db_admin with id of: %s"
-                  % (args.get_val("-y", def_val="")))
+            print(f'WARNING:  lock in place for mysql_db_admin with id of:'
+                  f'{args.get_val("-y", def_val="")}')
 
 
 if __name__ == "__main__":
