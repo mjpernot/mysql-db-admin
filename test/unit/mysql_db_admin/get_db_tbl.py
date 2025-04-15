@@ -97,8 +97,6 @@ class UnitTest(unittest.TestCase):
 
     Methods:
         setUp
-        test_pre_802
-        test_pre_80
         test_812
         test_81
         test_802
@@ -138,7 +136,6 @@ class UnitTest(unittest.TestCase):
         self.tbl_list2 = ["t1", "t2"]
         self.tbl_dict = [{"TABLE_NAME": "t2"}]
         self.tbl_dict2 = [{"TABLE_NAME": "t1"}, {"TABLE_NAME": "t2"}]
-        self.tbl_dict56 = [{"table_name": "t1"}, {"table_name": "t2"}]
         self.all_tbls = {"db1": ["t2"]}
         self.all_tbls2 = {"db1": ["t2"], "db2": ["t1"]}
         self.sys_dbs = ["systemdb"]
@@ -146,48 +143,6 @@ class UnitTest(unittest.TestCase):
         self.results2 = {"db1": ["t2"], "db2": ["t1"]}
         self.results3 = {}
         self.results4 = {"db1": ["t1", "t2"]}
-
-    @mock.patch("mysql_db_admin.mysql_libs.fetch_tbl_dict")
-    def test_pre_802(self, mock_fetch):
-
-        """Function:  test_pre_802
-
-        Description:  Test in pre-8.0 version.
-
-        Arguments:
-
-        """
-
-        self.server.version = (5, 6)
-        self.args.args_array["-t"] = self.tbl_list2
-
-        mock_fetch.return_value = self.tbl_dict56
-
-        self.assertEqual(
-            mysql_db_admin.get_db_tbl(
-                self.server, self.args, self.db_list2, sys_dbs=self.sys_dbs),
-            self.results4)
-
-    @mock.patch("mysql_db_admin.mysql_libs.fetch_tbl_dict")
-    def test_pre_80(self, mock_fetch):
-
-        """Function:  test_pre_80
-
-        Description:  Test in pre-8.0 version.
-
-        Arguments:
-
-        """
-
-        self.server.version = (5, 6)
-        self.args.args_array["-t"] = self.tbl_list
-
-        mock_fetch.return_value = self.tbl_dict56
-
-        self.assertEqual(
-            mysql_db_admin.get_db_tbl(
-                self.server, self.args, self.db_list2, sys_dbs=self.sys_dbs),
-            self.results)
 
     @mock.patch("mysql_db_admin.mysql_libs.fetch_tbl_dict")
     def test_812(self, mock_fetch):
