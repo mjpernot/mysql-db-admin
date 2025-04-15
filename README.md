@@ -21,7 +21,7 @@
   * Return a checksum on a table.
   * Optimize/defragment a table.
   * Display the current database status, such as uptime, memory use, connection usage, and status.
-  * Send output to standard out or file.
+  * Send output to standard out, file and/or email.
 
 # Prerequisites:
 
@@ -91,8 +91,8 @@ Create MySQL configuration file and make the appropriate change to the environme
 
 ```
 cp config/mysql_cfg.py.TEMPLATE config/mysql_cfg.py
-vim config/mysql_cfg.py
 chmod 600 config/mysql_cfg.py
+vim config/mysql_cfg.py
 ```
 
 Create MySQL definition file and make the appropriate change to the environment.
@@ -103,8 +103,8 @@ Create MySQL definition file and make the appropriate change to the environment.
 
 ```
 cp config/mysql.cfg.TEMPLATE config/mysql.cfg
-vim config/mysql.cfg
 chmod 600 config/mysql.cfg
+vim config/mysql.cfg
 ```
 
 
