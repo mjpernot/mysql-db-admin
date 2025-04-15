@@ -3,6 +3,20 @@ All notable changes to this project will be documented in this file.
 
 The format is based on "Keep a Changelog".  This project adheres to Semantic Versioning.
 
+## [5.1.0] - 2025-04-15
+- Removed support for any pre-MySQL 8.0 versions.
+- Updated python-lib v4.0.1
+- Updated mysql-lib v5.5.0
+
+### Changed
+- get_db_tbl: Removed check for pre-MySQL v8.0 when setting dict_key variable.
+- data_out: Added default of "w" mode for gen_libs.write_file call.
+- Documentation updates.
+
+### Removed
+- Support for MySQL 5.6/5.7
+
+
 ## [5.0.0] - 2024-12-03
 Breaking Changes
 

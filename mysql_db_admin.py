@@ -273,7 +273,7 @@ def get_db_tbl(server, args, db_list, **kwargs):
 
     db_dict = {}
     db_list = list(db_list)
-    dict_key = "TABLE_NAME" if server.version >= (8, 0) else "table_name"
+    dict_key = "TABLE_NAME"
 
     if db_list:
         db_list = gen_libs.del_not_and_list(
@@ -399,7 +399,7 @@ def data_out(data, **kwargs):
 
         else:
             gen_libs.write_file(
-                kwargs.get("outfile"), kwargs.get("mode"),
+                kwargs.get("outfile"), kwargs.get("mode", "w"),
                 json.dumps(data, indent=kwargs.get("indent")))
 
     if not kwargs.get("suppress", False):
