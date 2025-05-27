@@ -7,7 +7,7 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 - Updated mysql-lib to v5.5.1
 
 ### Changed
-- analyze: Replaced get_db_tbl with mysql_libs.get_db_tbl call and set up ign_db and tbls arguments for call.
+- analyze, check, optimize, checksum: Replaced get_db_tbl with mysql_libs.get_db_tbl call and set up ign_db and tbls arguments for call.
 
 
 ## [5.1.0] - 2025-04-15

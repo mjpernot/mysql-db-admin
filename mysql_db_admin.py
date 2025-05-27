@@ -474,7 +474,14 @@ def check(server, args, **kwargs):
     """
 
     db_list = list(args.get_val("-C"))
-    db_dict = get_db_tbl(server, args, db_list, **kwargs)
+
+    ign_dbs = list(kwargs.get("sys_dbs", []))
+    tbls = args.get_val("-t", def_val=[])
+    db_dict = mysql_libs.get_db_tbl(
+        server, db_list, tbls=tbls, ign_dbs=ign_dbs)
+
+#    db_dict = get_db_tbl(server, args, db_list, **kwargs)
+
     results = get_json_template(server)
     results["Type"] = "check"
     results["Results"] = []
@@ -514,7 +521,14 @@ def optimize(server, args, **kwargs):
     """
 
     db_list = list(args.get_val("-D"))
-    db_dict = get_db_tbl(server, args, db_list, **kwargs)
+
+    ign_dbs = list(kwargs.get("sys_dbs", []))
+    tbls = args.get_val("-t", def_val=[])
+    db_dict = mysql_libs.get_db_tbl(
+        server, db_list, tbls=tbls, ign_dbs=ign_dbs)
+
+#    db_dict = get_db_tbl(server, args, db_list, **kwargs)
+
     results = get_json_template(server)
     results["Type"] = "optimize"
     results["Results"] = []
@@ -554,7 +568,14 @@ def checksum(server, args, **kwargs):
     """
 
     db_list = list(args.get_val("-S"))
-    db_dict = get_db_tbl(server, args, db_list, **kwargs)
+
+    ign_dbs = list(kwargs.get("sys_dbs", []))
+    tbls = args.get_val("-t", def_val=[])
+    db_dict = mysql_libs.get_db_tbl(
+        server, db_list, tbls=tbls, ign_dbs=ign_dbs)
+
+#    db_dict = get_db_tbl(server, args, db_list, **kwargs)
+
     results = get_json_template(server)
     results["Type"] = "checksum"
     results["Results"] = []
