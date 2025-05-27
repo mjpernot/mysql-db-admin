@@ -9,6 +9,10 @@ The format is based on "Keep a Changelog".  This project adheres to Semantic Ver
 ### Changed
 - analyze, check, optimize, checksum: Replaced get_db_tbl with mysql_libs.get_db_tbl call and set up ign_db and tbls arguments for call.
 
+### Removed
+- get_db_tbl function
+- get_all_dbs_tbls function
+
 
 ## [5.1.0] - 2025-04-15
 - Removed support for any pre-MySQL 8.0 versions.
