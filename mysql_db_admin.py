@@ -427,7 +427,14 @@ def analyze(server, args, **kwargs):
     """
 
     db_list = list(args.get_val("-A"))
-    db_dict = get_db_tbl(server, args, db_list, **kwargs)
+
+    ign_dbs = list(kwargs.get("sys_dbs", []))
+    tbls = args.get_val("-t", def_val=[])
+    db_dict = mysql_libs.get_db_tbl(
+        server, db_list, tbls=tbls, ign_dbs=ign_dbs)
+
+#    db_dict = get_db_tbl(server, args, db_list, **kwargs)
+
     results = get_json_template(server)
     results["Type"] = "analyze"
     results["Results"] = []
