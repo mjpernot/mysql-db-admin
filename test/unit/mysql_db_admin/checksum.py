@@ -126,7 +126,7 @@ class UnitTest(unittest.TestCase):
     @mock.patch("mysql_db_admin.mysql_libs.checksum")
     @mock.patch("mysql_db_admin.create_data_config")
     @mock.patch("mysql_db_admin.get_json_template")
-    @mock.patch("mysql_db_admin.get_db_tbl")
+    @mock.patch("mysql_db_admin.mysql_libs.get_db_tbl")
     def test_data_out_error(self, mock_dbdict, mock_template, mock_config,
                             mock_check):
 
@@ -151,7 +151,7 @@ class UnitTest(unittest.TestCase):
     @mock.patch("mysql_db_admin.mysql_libs.checksum")
     @mock.patch("mysql_db_admin.create_data_config")
     @mock.patch("mysql_db_admin.get_json_template")
-    @mock.patch("mysql_db_admin.get_db_tbl")
+    @mock.patch("mysql_db_admin.mysql_libs.get_db_tbl")
     def test_multiple_db_tbl(self, mock_dbdict, mock_template, mock_config,
                              mock_check):
 
@@ -175,7 +175,7 @@ class UnitTest(unittest.TestCase):
     @mock.patch("mysql_db_admin.mysql_libs.checksum")
     @mock.patch("mysql_db_admin.create_data_config")
     @mock.patch("mysql_db_admin.get_json_template")
-    @mock.patch("mysql_db_admin.get_db_tbl")
+    @mock.patch("mysql_db_admin.mysql_libs.get_db_tbl")
     def test_one_db_multiple_tbl(self, mock_dbdict, mock_template, mock_config,
                                  mock_check):
 
@@ -199,7 +199,7 @@ class UnitTest(unittest.TestCase):
     @mock.patch("mysql_db_admin.mysql_libs.checksum")
     @mock.patch("mysql_db_admin.create_data_config")
     @mock.patch("mysql_db_admin.get_json_template")
-    @mock.patch("mysql_db_admin.get_db_tbl")
+    @mock.patch("mysql_db_admin.mysql_libs.get_db_tbl")
     def test_one_db_one_tbl(self, mock_dbdict, mock_template, mock_config,
                             mock_check):
 

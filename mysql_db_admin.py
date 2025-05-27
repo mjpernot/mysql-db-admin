@@ -230,82 +230,6 @@ def help_message():
     print(__doc__)
 
 
-def get_all_dbs_tbls(server, db_list, dict_key):
-
-    """Function:  get_all_dbs_tbls
-
-    Description:  Return a dictionary of databases with table lists.
-
-    Arguments:
-        (input) server -> Server instance
-        (input) db_list -> List of database names
-        (input) dict_key -> Dictionary key that is tuned to the Mysql version
-        (output) db_dict -> Dictionary of databases and lists of tables
-
-    """
-
-    db_dict = {}
-    db_list = list(db_list)
-
-    for dbs in db_list:
-        tbl_list = gen_libs.dict_2_list(
-            mysql_libs.fetch_tbl_dict(server, dbs), dict_key)
-        db_dict[dbs] = tbl_list
-
-    return db_dict
-
-
-def get_db_tbl(server, args, db_list, **kwargs):
-
-    """Function:  get_db_tbl
-
-    Description:  Determines which databases and tables will be checked.
-
-    Arguments:
-        (input) server -> Server instance
-        (input) args -> ArgParser class instance
-        (input) db_list -> List of database names
-        (input) **kwargs:
-            sys_dbs -> List of system databases to skip
-        (output) db_dict -> Dictionary of databases and lists of tables
-
-    """
-
-    db_dict = {}
-    db_list = list(db_list)
-    dict_key = "TABLE_NAME"
-
-    if db_list:
-        db_list = gen_libs.del_not_and_list(
-            db_list, kwargs.get("sys_dbs", []))
-
-        if not db_list:
-            print("get_db_tbl 1: Warning:  No non-system databases to process")
-
-        elif len(db_list) == 1 and args.get_val("-t"):
-            db_tables = gen_libs.dict_2_list(
-                mysql_libs.fetch_tbl_dict(server, db_list[0]), dict_key)
-            tbl_list = gen_libs.del_not_in_list(args.get_val("-t"), db_tables)
-            db_dict[db_list[0]] = tbl_list
-
-        else:
-            db_dict = get_all_dbs_tbls(server, db_list, dict_key)
-
-    else:
-        db_list = gen_libs.dict_2_list(
-            mysql_libs.fetch_db_dict(server), "Database")
-        db_list = gen_libs.del_not_and_list(
-            db_list, kwargs.get("sys_dbs", []))
-
-        if not db_list:
-            print("get_db_tbl 2: Warning:  No non-system databases to process")
-
-        else:
-            db_dict = get_all_dbs_tbls(server, db_list, dict_key)
-
-    return db_dict
-
-
 def get_json_template(server):
 
     """Function:  get_json_template
@@ -427,7 +351,10 @@ def analyze(server, args, **kwargs):
     """
 
     db_list = list(args.get_val("-A"))
-    db_dict = get_db_tbl(server, args, db_list, **kwargs)
+    ign_dbs = list(kwargs.get("sys_dbs", []))
+    tbls = args.get_val("-t", def_val=[])
+    db_dict = mysql_libs.get_db_tbl(
+        server, db_list, tbls=tbls, ign_dbs=ign_dbs)
     results = get_json_template(server)
     results["Type"] = "analyze"
     results["Results"] = []
@@ -467,7 +394,10 @@ def check(server, args, **kwargs):
     """
 
     db_list = list(args.get_val("-C"))
-    db_dict = get_db_tbl(server, args, db_list, **kwargs)
+    ign_dbs = list(kwargs.get("sys_dbs", []))
+    tbls = args.get_val("-t", def_val=[])
+    db_dict = mysql_libs.get_db_tbl(
+        server, db_list, tbls=tbls, ign_dbs=ign_dbs)
     results = get_json_template(server)
     results["Type"] = "check"
     results["Results"] = []
@@ -507,7 +437,10 @@ def optimize(server, args, **kwargs):
     """
 
     db_list = list(args.get_val("-D"))
-    db_dict = get_db_tbl(server, args, db_list, **kwargs)
+    ign_dbs = list(kwargs.get("sys_dbs", []))
+    tbls = args.get_val("-t", def_val=[])
+    db_dict = mysql_libs.get_db_tbl(
+        server, db_list, tbls=tbls, ign_dbs=ign_dbs)
     results = get_json_template(server)
     results["Type"] = "optimize"
     results["Results"] = []
@@ -547,7 +480,10 @@ def checksum(server, args, **kwargs):
     """
 
     db_list = list(args.get_val("-S"))
-    db_dict = get_db_tbl(server, args, db_list, **kwargs)
+    ign_dbs = list(kwargs.get("sys_dbs", []))
+    tbls = args.get_val("-t", def_val=[])
+    db_dict = mysql_libs.get_db_tbl(
+        server, db_list, tbls=tbls, ign_dbs=ign_dbs)
     results = get_json_template(server)
     results["Type"] = "checksum"
     results["Results"] = []
