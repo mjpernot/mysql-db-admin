@@ -162,7 +162,6 @@
             of the --defaults-extra-file option (i.e. extra_def_file) in the
             database configuration file.  See below for the
             defaults-extra-file format.
-        NOTE 3:  Ignore the rep_user and rep_japd entries.  Not required.
 
         Defaults Extra File format (config/mysql.cfg.TEMPLATE)
             password="PSWORD"
